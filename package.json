@@ -1,0 +1,79 @@
+{
+  "name": "sakuga-ui",
+  "version": "0.1.0",
+  "description": "Web components with anime key-animation energy: cel-style effects, katakana lettering and synthesised sound, sharing one small core.",
+  "type": "module",
+  "license": "MIT",
+  "author": "LeeHongji (https://github.com/LeeHongji)",
+  "homepage": "https://leehongji.github.io/sakuga-ui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeHongji/sakuga-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LeeHongji/sakuga-ui/issues"
+  },
+  "main": "./dist/sakuga.js",
+  "module": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "unpkg": "./dist/sakuga.iife.js",
+  "jsdelivr": "./dist/sakuga.iife.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./src/index.js",
+      "default": "./dist/sakuga.js"
+    },
+    "./core": {
+      "types": "./types/index.d.ts",
+      "import": "./src/core/index.js",
+      "default": "./dist/sakuga.core.js"
+    },
+    "./components/*": "./src/components/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "dist",
+    "types",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "./src/index.js",
+    "./src/components/*.js",
+    "./src/core/tokens.js",
+    "./dist/*.js"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "docs": "python3 scripts/serve.py 8823",
+    "prepublishOnly": "npm run build",
+    "test": "python3 _tools/site_smoke.py && python3 _tools/spring_check.py",
+    "perf": "python3 _tools/perf.py",
+    "audit": "python3 _tools/audit.py",
+    "contrast": "python3 _tools/contrast.py",
+    "padding": "python3 _tools/padding.py && python3 _tools/padding_dom.py"
+  },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "ui",
+    "component-library",
+    "animation",
+    "spring",
+    "sakuga",
+    "anime",
+    "manga",
+    "sound",
+    "webaudio"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

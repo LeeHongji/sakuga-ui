@@ -1,0 +1,28 @@
+{
+  "music": {
+    "source": "code-original",
+    "script": "tools/score.py",
+    "duration": 52.8,
+    "bpm": 150,
+    "key": "A major",
+    "sections": [
+      {"bars": "0-2.5", "seconds": "0-4.0", "what": "pluck pickup and riser, hit on the cover press at 1.6 s, snare fill into the page turn"},
+      {"bars": "2.5-9", "seconds": "4.0-14.4", "what": "groove A: four-on-the-floor, offbeat brass stabs, octave bass"},
+      {"bars": "9-12", "seconds": "14.4-19.2", "what": "drums under the lettering beats, tom fill, then silence for シーン… (18.2-19.2 s)"},
+      {"bars": "12-19", "seconds": "19.2-30.4", "what": "groove B with sixteenth arpeggio and lead melody"},
+      {"bars": "19-23", "seconds": "30.4-36.8", "what": "groove A, a stab on every palette swap"},
+      {"bars": "23-26", "seconds": "36.8-41.6", "what": "half-time feel under the dialog"},
+      {"bars": "26-29", "seconds": "41.6-46.4", "what": "driving montage, snare roll and riser"},
+      {"bars": "29-33", "seconds": "46.4-52.8", "what": "chorus, logo hit at 50.0 s, A major ring-out"}
+    ]
+  },
+  "sfx": [
+    {
+      "role": "every component sound in the film",
+      "source": "sakuga-ui's own WebAudio recipes (src/core/sound.js), captured while rendering: tools/render.py replaces AudioContext with an OfflineAudioContext whose clock is the film clock",
+      "license": "MIT (the library itself)",
+      "files": "assets/sfx-product.wav, cut per key action into assets/sfx/ by tools/cues.py"
+    }
+  ],
+  "builtInSkillSfx": "not used: the product has its own synthesised sounds, which is one of the things the film is about"
+}

@@ -1,0 +1,25 @@
+name: Bug report / 问题反馈
+description: Something looks or moves wrong. / 显示或动效不对。
+labels: [bug]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component / 组件
+      placeholder: sk-dialog
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected / 实际看到的与期望的
+      description: A screen recording helps a lot for motion bugs. / 动效问题最好附一段录屏。
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version / 浏览器与版本
+      placeholder: Chrome 131 on macOS
+    validations:
+      required: true

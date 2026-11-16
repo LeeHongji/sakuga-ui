@@ -1,0 +1,861 @@
+{
+  "demo": false,
+  "product": "Sakuga UI · 第 1 话：一按，即原画",
+  "style": "repo",
+  "width": 1920,
+  "height": 1080,
+  "fps": 60,
+  "duration": 52.8,
+  "repo": "..",
+  "scope": {
+    "versions": "v0.1.0",
+    "platforms": [
+      "web"
+    ]
+  },
+  "audioRequired": true,
+  "sfxRequired": true,
+  "typography": {
+    "mode": "bilingual",
+    "zhFont": "ZCOOL QingKe HuangYou（标题）/ ZCOOL KuaiLe（说明），来自 sakuga-ui 文档站",
+    "enFont": "Bangers（标题）/ Comic Neue（说明），来自 sakuga-ui 文档站",
+    "zhStyle": "sans-serif"
+  },
+  "audio": {
+    "ducking": {
+      "enabled": true
+    },
+    "music": {
+      "file": "assets/music.wav",
+      "gain": 0.6
+    },
+    "beatGrid": {
+      "bpm": 150,
+      "offset": 0
+    },
+    "cues": [
+      {
+        "at": 0.0,
+        "actionId": "cover-press",
+        "file": "assets/sfx/00-cover-press.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-cover",
+        "syncOffset": 1.594
+      },
+      {
+        "at": 4.744,
+        "actionId": "press-save",
+        "file": "assets/sfx/01-press-save.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-press",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 5.945,
+        "actionId": "press-like",
+        "file": "assets/sfx/02-press-like.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-press",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 7.183,
+        "actionId": "press-hold",
+        "file": "assets/sfx/03-press-hold.wav",
+        "gain": 1.32,
+        "role": "sfx",
+        "kind": "product-press",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 8.29,
+        "actionId": "press-slash",
+        "file": "assets/sfx/04-press-slash.wav",
+        "gain": 1.05,
+        "role": "sfx",
+        "kind": "product-press",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 10.397,
+        "actionId": "forms-switch",
+        "file": "assets/sfx/05-forms-switch.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-forms",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 11.125,
+        "actionId": "forms-check",
+        "file": "assets/sfx/06-forms-check.wav",
+        "gain": 1.62,
+        "role": "sfx",
+        "kind": "product-forms",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 11.95,
+        "actionId": "forms-drag",
+        "file": "assets/sfx/07-forms-drag.wav",
+        "gain": 3.47,
+        "role": "sfx",
+        "kind": "product-forms",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 13.145,
+        "actionId": "forms-rate",
+        "file": "assets/sfx/08-forms-rate.wav",
+        "gain": 2.98,
+        "role": "sfx",
+        "kind": "product-forms",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 14.761,
+        "actionId": "let-don",
+        "file": "assets/sfx/09-let-don.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 15.164,
+        "actionId": "let-zuba",
+        "file": "assets/sfx/10-let-zuba.wav",
+        "gain": 1.63,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 15.561,
+        "actionId": "let-kachi",
+        "file": "assets/sfx/11-let-kachi.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 15.962,
+        "actionId": "let-kira",
+        "file": "assets/sfx/12-let-kira.wav",
+        "gain": 1.98,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 16.362,
+        "actionId": "let-gogo",
+        "file": "assets/sfx/13-let-gogo.wav",
+        "gain": 1.06,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 16.761,
+        "actionId": "let-pon",
+        "file": "assets/sfx/14-let-pon.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 17.166,
+        "actionId": "let-shu",
+        "file": "assets/sfx/15-let-shu.wav",
+        "gain": 1.15,
+        "role": "sfx",
+        "kind": "product-let",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 25.945,
+        "actionId": "load-poke1",
+        "file": "assets/sfx/16-load-poke1.wav",
+        "gain": 1.38,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 26.345,
+        "actionId": "load-poke2",
+        "file": "assets/sfx/17-load-poke2.wav",
+        "gain": 1.28,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 26.745,
+        "actionId": "load-poke3",
+        "file": "assets/sfx/18-load-poke3.wav",
+        "gain": 1.45,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 27.145,
+        "actionId": "load-poke4",
+        "file": "assets/sfx/19-load-poke4.wav",
+        "gain": 1.18,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 28.347,
+        "actionId": "load-flip",
+        "file": "assets/sfx/20-load-flip.wav",
+        "gain": 2.79,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 29.145,
+        "actionId": "load-wave",
+        "file": "assets/sfx/21-load-wave.wav",
+        "gain": 2.22,
+        "role": "sfx",
+        "kind": "product-load",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 31.015,
+        "actionId": "pal-shonen",
+        "file": "assets/sfx/22-pal-shonen.wav",
+        "gain": 2.4,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 31.816,
+        "actionId": "pal-soda",
+        "file": "assets/sfx/23-pal-soda.wav",
+        "gain": 1.59,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 32.616,
+        "actionId": "pal-sunset",
+        "file": "assets/sfx/24-pal-sunset.wav",
+        "gain": 1.99,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 33.416,
+        "actionId": "pal-mono",
+        "file": "assets/sfx/25-pal-mono.wav",
+        "gain": 2.2,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 34.361,
+        "actionId": "pal-dark",
+        "file": "assets/sfx/26-pal-dark.wav",
+        "gain": 2.04,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 35.015,
+        "actionId": "pal-sakuga-dark",
+        "file": "assets/sfx/27-pal-sakuga-dark.wav",
+        "gain": 2.32,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 35.815,
+        "actionId": "pal-soda-dark",
+        "file": "assets/sfx/28-pal-soda-dark.wav",
+        "gain": 2.1,
+        "role": "sfx",
+        "kind": "product-pal",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 37.544,
+        "actionId": "ov-open",
+        "file": "assets/sfx/29-ov-open.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-ov",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 39.145,
+        "actionId": "ov-confirm",
+        "file": "assets/sfx/30-ov-confirm.wav",
+        "gain": 1.54,
+        "role": "sfx",
+        "kind": "product-ov",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 39.975,
+        "actionId": "ov-toast",
+        "file": "assets/sfx/31-ov-toast.wav",
+        "gain": 1.86,
+        "role": "sfx",
+        "kind": "product-ov",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 41.948,
+        "actionId": "mt-tabs",
+        "file": "assets/sfx/32-mt-tabs.wav",
+        "gain": 3.94,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 42.75,
+        "actionId": "mt-seg",
+        "file": "assets/sfx/33-mt-seg.wav",
+        "gain": 2.51,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 43.545,
+        "actionId": "mt-cal",
+        "file": "assets/sfx/34-mt-cal.wav",
+        "gain": 1.58,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 44.345,
+        "actionId": "mt-steps",
+        "file": "assets/sfx/35-mt-steps.wav",
+        "gain": 1.01,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 45.145,
+        "actionId": "mt-count",
+        "file": "assets/sfx/36-mt-count.wav",
+        "gain": 2.28,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 45.95,
+        "actionId": "mt-acc",
+        "file": "assets/sfx/37-mt-acc.wav",
+        "gain": 2.72,
+        "role": "sfx",
+        "kind": "product-mt",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 47.145,
+        "actionId": "end-copy",
+        "file": "assets/sfx/38-end-copy.wav",
+        "gain": 1.2,
+        "role": "sfx",
+        "kind": "product-end",
+        "syncOffset": 0.05
+      },
+      {
+        "at": 49.961,
+        "actionId": "end-logo",
+        "file": "assets/sfx/39-end-logo.wav",
+        "gain": 1.0,
+        "role": "sfx",
+        "kind": "product-end",
+        "syncOffset": 0.05
+      }
+    ]
+  },
+  "shots": [
+    {
+      "id": "cover",
+      "start": 0,
+      "end": 4.0,
+      "type": "title",
+      "headlineEn": "Sakuga UI — every press is a key frame",
+      "headline": "一按，即原画",
+      "description": "每按一下，都是一格原画。",
+      "descriptionAt": 0,
+      "claim": false,
+      "source": [],
+      "component": "repo:src/components/actions.js",
+      "plainExplanation": "杂志封面上的按钮被按下，组件库的爆炸特效和拟声词 ドン! 一起出现。",
+      "actions": [
+        {
+          "id": "cover-press",
+          "at": 1.594,
+          "what": "按下封面按钮，boom + ドン!",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "press",
+      "start": 4.0,
+      "end": 9.6,
+      "type": "workspace",
+      "headlineEn": "Every press is a key frame",
+      "headline": "每一下按压，都是一张原画",
+      "description": "按钮会被压扁再弹回；点赞会炸开；长按要把力蓄满，才「ザンッ!」地斩开。",
+      "descriptionAt": 0.5,
+      "claim": true,
+      "source": [
+        "repo:src/components/actions.js"
+      ],
+      "component": "repo:src/components/actions.js",
+      "plainExplanation": "sk-button、sk-like、sk-hold-button 三个真实组件被鼠标点击和长按，各自播放自带的形变、特效和合成音。",
+      "actions": [
+        {
+          "id": "press-save",
+          "at": 0.794,
+          "what": "点击 Save 按钮",
+          "soundRequired": true
+        },
+        {
+          "id": "press-like",
+          "at": 1.995,
+          "what": "点赞，心形爆开，计数 +1",
+          "soundRequired": true
+        },
+        {
+          "id": "press-hold",
+          "at": 3.233,
+          "what": "按住长按按钮开始蓄力",
+          "soundRequired": true
+        },
+        {
+          "id": "press-slash",
+          "at": 4.34,
+          "what": "蓄满后斩开 ザンッ!",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "forms",
+      "start": 9.6,
+      "end": 14.4,
+      "type": "workspace",
+      "headlineEn": "Forms with weight",
+      "headline": "表单也有手感",
+      "description": "开关会弹，勾选会「カチッ」，滑块拖动时有摩擦声，评分的星星依次点亮，音阶上升。",
+      "descriptionAt": 0,
+      "claim": true,
+      "source": [
+        "repo:src/components/forms.js"
+      ],
+      "component": "repo:src/components/forms.js",
+      "plainExplanation": "开关、复选框、滑块、评分四个表单组件被真实点击和拖动。",
+      "actions": [
+        {
+          "id": "forms-in",
+          "at": 0,
+          "what": "四格分镜砸入",
+          "soundRequired": false
+        },
+        {
+          "id": "forms-switch",
+          "at": 0.847,
+          "what": "打开开关",
+          "soundRequired": true
+        },
+        {
+          "id": "forms-check",
+          "at": 1.575,
+          "what": "勾选复选框 カチッ",
+          "soundRequired": true
+        },
+        {
+          "id": "forms-drag",
+          "at": 2.4,
+          "what": "拖动滑块 30→90",
+          "soundRequired": true
+        },
+        {
+          "id": "forms-rate",
+          "at": 3.595,
+          "what": "点第五颗星",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "lettering",
+      "start": 14.4,
+      "end": 19.2,
+      "type": "macro",
+      "headlineEn": "Lettering built in",
+      "headline": "拟声词就是字幕",
+      "description": "sfx('ドン!', { voice: 'impact' })：10 种声线，每个词有自己的字体、描边、入场和声音。",
+      "descriptionAt": 0.25,
+      "claim": true,
+      "source": [
+        "repo:src/core/lettering.js"
+      ],
+      "component": "repo:src/core/lettering.js",
+      "plainExplanation": "调用库的 sfx() 函数，按节拍依次打出七个拟声词，每个词带自己的声音；最后的 シーン… 是安静。",
+      "actions": [
+        {
+          "id": "let-don",
+          "at": 0.411,
+          "what": "ドン!",
+          "soundRequired": true
+        },
+        {
+          "id": "let-zuba",
+          "at": 0.814,
+          "what": "ズバッ",
+          "soundRequired": true
+        },
+        {
+          "id": "let-kachi",
+          "at": 1.211,
+          "what": "カチッ",
+          "soundRequired": true
+        },
+        {
+          "id": "let-kira",
+          "at": 1.612,
+          "what": "キラッ",
+          "soundRequired": true
+        },
+        {
+          "id": "let-gogo",
+          "at": 2.012,
+          "what": "ゴゴゴ",
+          "soundRequired": true
+        },
+        {
+          "id": "let-pon",
+          "at": 2.411,
+          "what": "ポン!",
+          "soundRequired": true
+        },
+        {
+          "id": "let-shu",
+          "at": 2.816,
+          "what": "シュッ",
+          "soundRequired": true
+        },
+        {
+          "id": "let-shiin",
+          "at": 4.0,
+          "what": "シーン…（安静）",
+          "soundRequired": false
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "start": 19.2,
+      "end": 24.0,
+      "type": "detail",
+      "headlineEn": "Icons wind up first",
+      "headline": "图标先蓄力，再弹回",
+      "description": "24 个手绘图标：先用 70 毫秒压进预备姿势，再沿库里的同一条弹簧曲线弹回。",
+      "descriptionAt": 0.4,
+      "claim": true,
+      "source": [
+        "repo:src/components/icons.js",
+        "repo:src/core/spring.js"
+      ],
+      "component": "repo:src/components/icons.js",
+      "plainExplanation": "24 个 sk-icon 依次播放，鼠标划过时也会播放；右边的曲线由 SPRINGS.spring 的 linear() 数据画出，播放头和铃铛同步走 803 毫秒。",
+      "actions": [
+        {
+          "id": "icons-wave",
+          "at": 0.4,
+          "what": "图标沿对角线依次播放",
+          "soundRequired": false
+        },
+        {
+          "id": "icons-hover",
+          "at": 1.3,
+          "what": "鼠标划过一行图标",
+          "soundRequired": false
+        },
+        {
+          "id": "icons-bell",
+          "at": 2.8,
+          "what": "铃铛播放，曲线同步画出",
+          "soundRequired": false
+        }
+      ]
+    },
+    {
+      "id": "loaders",
+      "start": 24.0,
+      "end": 30.4,
+      "type": "workspace",
+      "headlineEn": "Waiting can be fun",
+      "headline": "等待也可以好玩",
+      "description": "四种加载动画，戳一下会回应，连戳还会计连击。",
+      "descriptionAt": 0.6,
+      "claim": true,
+      "source": [
+        "repo:src/components/loaders.js"
+      ],
+      "component": "repo:src/components/loaders.js",
+      "plainExplanation": "sk-loader 的弹跳球、翻页、波浪字、铅笔四种变体；鼠标连戳弹跳球四下，出现连击数，再戳翻页和波浪字。",
+      "actions": [
+        {
+          "id": "load-in",
+          "at": 0,
+          "what": "分镜砸入",
+          "soundRequired": false
+        },
+        {
+          "id": "load-poke1",
+          "at": 1.995,
+          "what": "戳球",
+          "soundRequired": true
+        },
+        {
+          "id": "load-poke2",
+          "at": 2.395,
+          "what": "连戳 ×2",
+          "soundRequired": true
+        },
+        {
+          "id": "load-poke3",
+          "at": 2.795,
+          "what": "连戳 ×3",
+          "soundRequired": true
+        },
+        {
+          "id": "load-poke4",
+          "at": 3.195,
+          "what": "连戳 ×4",
+          "soundRequired": true
+        },
+        {
+          "id": "load-flip",
+          "at": 4.397,
+          "what": "戳翻页 ペラッ",
+          "soundRequired": true
+        },
+        {
+          "id": "load-wave",
+          "at": 5.195,
+          "what": "戳波浪字",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "palettes",
+      "start": 30.4,
+      "end": 36.8,
+      "type": "workspace",
+      "headlineEn": "Five palettes, light and dark",
+      "headline": "五套配色，一行切换",
+      "description": "Sakuga.setPalette('soda')：控制台一行切换，整页组件一起变色；主题开关切到暗色。",
+      "descriptionAt": 0.1,
+      "claim": true,
+      "source": [
+        "repo:src/core/palettes.js",
+        "repo:src/core/theme.js"
+      ],
+      "component": "repo:src/core/palettes.js",
+      "plainExplanation": "调用 setPalette() 依次切换 sakuga、shonen、soda、sunset、mono 五套配色，再点主题开关进入暗色。",
+      "actions": [
+        {
+          "id": "pal-shonen",
+          "at": 0.665,
+          "what": "切到 shonen",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-soda",
+          "at": 1.466,
+          "what": "切到 soda",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-sunset",
+          "at": 2.266,
+          "what": "切到 sunset",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-mono",
+          "at": 3.066,
+          "what": "切到 mono",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-dark",
+          "at": 4.011,
+          "what": "点主题开关，进入暗色",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-sakuga-dark",
+          "at": 4.665,
+          "what": "暗色 sakuga",
+          "soundRequired": true
+        },
+        {
+          "id": "pal-soda-dark",
+          "at": 5.465,
+          "what": "暗色 soda",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "overlays",
+      "start": 36.8,
+      "end": 41.6,
+      "type": "workspace",
+      "headlineEn": "Pop-ups that land",
+      "headline": "弹层会「落地」",
+      "description": "对话框带着冲击落下，拟声词由组件自己打出；通知从屏幕边缘弹进来。",
+      "descriptionAt": 0.4,
+      "claim": true,
+      "source": [
+        "repo:src/components/overlay.js",
+        "repo:src/components/feedback.js"
+      ],
+      "component": "repo:src/components/overlay.js",
+      "plainExplanation": "点击删除按钮打开 sk-dialog（word=バーン!），确认后对话框关闭，toast() 弹出成功和提示两条通知。",
+      "actions": [
+        {
+          "id": "ov-open",
+          "at": 0.794,
+          "what": "打开对话框 バーン!",
+          "soundRequired": true
+        },
+        {
+          "id": "ov-confirm",
+          "at": 2.395,
+          "what": "确认删除，成功通知",
+          "soundRequired": true
+        },
+        {
+          "id": "ov-toast",
+          "at": 3.225,
+          "what": "第二条通知",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "montage",
+      "start": 41.6,
+      "end": 46.4,
+      "type": "montage",
+      "headlineEn": "49 tags, zero dependencies",
+      "headline": "49 个标签，零依赖",
+      "description": "49 个标签，零依赖。",
+      "descriptionAt": 0,
+      "claim": true,
+      "source": [
+        "repo:src/components/navigation.js",
+        "repo:src/components/display.js",
+        "repo:package.json"
+      ],
+      "component": "repo:src/components/navigation.js",
+      "plainExplanation": "六个组件快切：标签页、分段选择、日历盖章、步骤条、数字滚动、手风琴，每个都被真实点击一次。",
+      "actions": [
+        {
+          "id": "mt-tabs",
+          "at": 0.398,
+          "what": "切标签页",
+          "soundRequired": true
+        },
+        {
+          "id": "mt-seg",
+          "at": 1.2,
+          "what": "分段选择",
+          "soundRequired": true
+        },
+        {
+          "id": "mt-cal",
+          "at": 1.995,
+          "what": "日历盖章",
+          "soundRequired": true
+        },
+        {
+          "id": "mt-steps",
+          "at": 2.795,
+          "what": "步骤条下一步",
+          "soundRequired": true
+        },
+        {
+          "id": "mt-count",
+          "at": 3.595,
+          "what": "数字滚动到 9,999",
+          "soundRequired": true
+        },
+        {
+          "id": "mt-acc",
+          "at": 4.4,
+          "what": "展开手风琴",
+          "soundRequired": true
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "start": 46.4,
+      "end": 52.8,
+      "type": "end",
+      "headlineEn": "Sakuga UI on GitHub",
+      "headline": "github.com/LeeHongji/sakuga-ui",
+      "description": "npm i github:LeeHongji/sakuga-ui · 44 个组件 · 0 依赖 · 57 kB gzip",
+      "descriptionAt": 0.6,
+      "claim": true,
+      "source": [
+        "repo:README.md",
+        "repo:package.json"
+      ],
+      "component": "repo:src/components/actions.js",
+      "plainExplanation": "点击 sk-copy 复制安装命令；数据条逐个出现；标志落版。",
+      "actions": [
+        {
+          "id": "end-copy",
+          "at": 0.795,
+          "what": "复制安装命令",
+          "soundRequired": true
+        },
+        {
+          "id": "end-logo",
+          "at": 3.611,
+          "what": "标志落版 ドン!",
+          "soundRequired": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,282 @@
+[
+  {
+    "action": "cover-press",
+    "actionTime": 1.594,
+    "firstSound": 1.594,
+    "offsetMs": 0,
+    "peak": 0.719
+  },
+  {
+    "action": "press-save",
+    "actionTime": 4.794,
+    "firstSound": 4.794,
+    "offsetMs": 0,
+    "peak": 0.324
+  },
+  {
+    "action": "press-like",
+    "actionTime": 5.995,
+    "firstSound": 5.996,
+    "offsetMs": 0,
+    "peak": 0.333
+  },
+  {
+    "action": "press-hold",
+    "actionTime": 7.233,
+    "firstSound": 7.233,
+    "offsetMs": 0,
+    "peak": 0.397
+  },
+  {
+    "action": "press-slash",
+    "actionTime": 8.34,
+    "firstSound": 8.29,
+    "offsetMs": -50,
+    "peak": 0.37
+  },
+  {
+    "action": "forms-switch",
+    "actionTime": 10.447,
+    "firstSound": 10.447,
+    "offsetMs": 0,
+    "peak": 0.305
+  },
+  {
+    "action": "forms-check",
+    "actionTime": 11.175,
+    "firstSound": 11.175,
+    "offsetMs": 0,
+    "peak": 0.17
+  },
+  {
+    "action": "forms-drag",
+    "actionTime": 12.0,
+    "firstSound": 12.134,
+    "offsetMs": 134,
+    "peak": 0.225
+  },
+  {
+    "action": "forms-rate",
+    "actionTime": 13.195,
+    "firstSound": 13.196,
+    "offsetMs": 0,
+    "peak": 0.175
+  },
+  {
+    "action": "let-don",
+    "actionTime": 14.811,
+    "firstSound": 14.811,
+    "offsetMs": 0,
+    "peak": 0.631
+  },
+  {
+    "action": "let-zuba",
+    "actionTime": 15.214,
+    "firstSound": 15.214,
+    "offsetMs": 0,
+    "peak": 0.178
+  },
+  {
+    "action": "let-kachi",
+    "actionTime": 15.611,
+    "firstSound": 15.611,
+    "offsetMs": 0,
+    "peak": 0.299
+  },
+  {
+    "action": "let-kira",
+    "actionTime": 16.012,
+    "firstSound": 16.012,
+    "offsetMs": 0,
+    "peak": 0.135
+  },
+  {
+    "action": "let-gogo",
+    "actionTime": 16.412,
+    "firstSound": 16.412,
+    "offsetMs": 0,
+    "peak": 0.316
+  },
+  {
+    "action": "let-pon",
+    "actionTime": 16.811,
+    "firstSound": 16.811,
+    "offsetMs": 0,
+    "peak": 0.289
+  },
+  {
+    "action": "let-shu",
+    "actionTime": 17.216,
+    "firstSound": 17.216,
+    "offsetMs": 0,
+    "peak": 0.167
+  },
+  {
+    "action": "load-poke1",
+    "actionTime": 25.995,
+    "firstSound": 25.995,
+    "offsetMs": 0,
+    "peak": 0.278
+  },
+  {
+    "action": "load-poke2",
+    "actionTime": 26.395,
+    "firstSound": 26.395,
+    "offsetMs": 0,
+    "peak": 0.278
+  },
+  {
+    "action": "load-poke3",
+    "actionTime": 26.795,
+    "firstSound": 26.795,
+    "offsetMs": 0,
+    "peak": 0.278
+  },
+  {
+    "action": "load-poke4",
+    "actionTime": 27.195,
+    "firstSound": 27.195,
+    "offsetMs": 0,
+    "peak": 0.278
+  },
+  {
+    "action": "load-flip",
+    "actionTime": 28.397,
+    "firstSound": 28.397,
+    "offsetMs": 0,
+    "peak": 0.122
+  },
+  {
+    "action": "load-wave",
+    "actionTime": 29.195,
+    "firstSound": 29.195,
+    "offsetMs": 0,
+    "peak": 0.174
+  },
+  {
+    "action": "pal-shonen",
+    "actionTime": 31.065,
+    "firstSound": 31.065,
+    "offsetMs": 0,
+    "peak": 0.144
+  },
+  {
+    "action": "pal-soda",
+    "actionTime": 31.866,
+    "firstSound": 31.866,
+    "offsetMs": 0,
+    "peak": 0.146
+  },
+  {
+    "action": "pal-sunset",
+    "actionTime": 32.666,
+    "firstSound": 32.666,
+    "offsetMs": 0,
+    "peak": 0.136
+  },
+  {
+    "action": "pal-mono",
+    "actionTime": 33.466,
+    "firstSound": 33.466,
+    "offsetMs": 0,
+    "peak": 0.14
+  },
+  {
+    "action": "pal-dark",
+    "actionTime": 34.411,
+    "firstSound": 34.411,
+    "offsetMs": 0,
+    "peak": 0.311
+  },
+  {
+    "action": "pal-sakuga-dark",
+    "actionTime": 35.065,
+    "firstSound": 35.065,
+    "offsetMs": 0,
+    "peak": 0.105
+  },
+  {
+    "action": "pal-soda-dark",
+    "actionTime": 35.865,
+    "firstSound": 35.865,
+    "offsetMs": 0,
+    "peak": 0.133
+  },
+  {
+    "action": "ov-open",
+    "actionTime": 37.594,
+    "firstSound": 37.594,
+    "offsetMs": 0,
+    "peak": 0.654
+  },
+  {
+    "action": "ov-confirm",
+    "actionTime": 39.195,
+    "firstSound": 39.195,
+    "offsetMs": 0,
+    "peak": 0.187
+  },
+  {
+    "action": "ov-toast",
+    "actionTime": 40.025,
+    "firstSound": 40.025,
+    "offsetMs": 0,
+    "peak": 0.187
+  },
+  {
+    "action": "mt-tabs",
+    "actionTime": 41.998,
+    "firstSound": 41.998,
+    "offsetMs": 0,
+    "peak": 0.225
+  },
+  {
+    "action": "mt-seg",
+    "actionTime": 42.8,
+    "firstSound": 42.8,
+    "offsetMs": 0,
+    "peak": 0.186
+  },
+  {
+    "action": "mt-cal",
+    "actionTime": 43.595,
+    "firstSound": 43.595,
+    "offsetMs": 0,
+    "peak": 0.257
+  },
+  {
+    "action": "mt-steps",
+    "actionTime": 44.395,
+    "firstSound": 44.395,
+    "offsetMs": 0,
+    "peak": 0.334
+  },
+  {
+    "action": "mt-count",
+    "actionTime": 45.195,
+    "firstSound": 45.195,
+    "offsetMs": 0,
+    "peak": 0.275
+  },
+  {
+    "action": "mt-acc",
+    "actionTime": 46.0,
+    "firstSound": 46.0,
+    "offsetMs": 0,
+    "peak": 0.148
+  },
+  {
+    "action": "end-copy",
+    "actionTime": 47.195,
+    "firstSound": 47.195,
+    "offsetMs": 0,
+    "peak": 0.306
+  },
+  {
+    "action": "end-logo",
+    "actionTime": 50.011,
+    "firstSound": 50.011,
+    "offsetMs": 0,
+    "peak": 0.64
+  }
+]

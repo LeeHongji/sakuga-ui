@@ -1,0 +1,106 @@
+/* Frame system for the film. Laid out at 960x540 CSS px and rendered at device pixel ratio 2 (1920x1080),
+   so every component and every effect particle is twice its real size. Colours are the library's own tokens. */
+@property --r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; overflow: hidden; }
+:root {
+  --en: "Bangers", Impact, sans-serif;
+  --zh: "ZCOOL QingKe HuangYou", "PingFang SC", sans-serif;
+  --tx: "Comic Neue", "ZCOOL KuaiLe", "PingFang SC", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --k: 3px;
+}
+#stage { position: fixed; left: 0; top: 0; width: 960px; height: 540px; overflow: hidden; background: var(--sk-paper); }
+#tone { position: fixed; inset: 0; pointer-events: none; z-index: 50; --r: 0px;
+  background: radial-gradient(circle, var(--sk-ink) var(--r), transparent calc(var(--r) + .6px)) 0 0 / 22px 22px; }
+
+/* a page of the manga: screentone paper */
+.pg { position: absolute; inset: 0; overflow: hidden; color: var(--sk-ink); font-family: var(--tx);
+  background-color: color-mix(in srgb, var(--sk-lav) 36%, var(--sk-paper));
+  background-image: radial-gradient(color-mix(in srgb, var(--sk-violet) 34%, transparent) 1.1px, transparent 1.5px);
+  background-size: 9px 9px; backface-visibility: hidden; }
+.pg .no { position: absolute; right: 22px; bottom: 10px; font: 14px/1 var(--en); letter-spacing: .06em; color: var(--sk-ink); opacity: .7; }
+
+/* a panel */
+.koma { position: absolute; background: var(--sk-surface); border: var(--k) solid var(--sk-ink); box-shadow: 5px 5px 0 var(--sk-ink);
+  display: grid; place-items: center; }
+.koma.tone { background-color: var(--sk-surface);
+  background-image: radial-gradient(color-mix(in srgb, var(--sk-lav) 80%, transparent) 1.3px, transparent 1.7px); background-size: 8px 8px; }
+.koma.lines { background: repeating-conic-gradient(from 0deg at var(--fx, 50%) var(--fy, 50%), var(--sk-surface) 0 2.2deg, color-mix(in srgb, var(--sk-lav) 70%, var(--sk-surface)) 2.2deg 2.9deg, var(--sk-surface) 2.9deg 5deg); }
+.lbl { position: absolute; left: -3px; top: -3px; padding: 4px 8px 4px 7px; background: var(--sk-ink); color: var(--sk-surface);
+  font: 700 11px/1 var(--mono); letter-spacing: .02em; }
+
+/* title: the narration box, English over Chinese */
+.ttl { position: absolute; padding: 12px 18px 12px 16px; background: var(--sk-surface); border: var(--k) solid var(--sk-ink);
+  box-shadow: 5px 5px 0 var(--sk-lav); display: flex; flex-direction: column; gap: 6px; }
+.ttl .en { font: 40px/.92 var(--en); letter-spacing: .035em; color: var(--sk-ink); }
+.ttl .en em { font-style: normal; color: var(--sk-pink); -webkit-text-stroke: 0; }
+.ttl .zh { font: 25px/1.1 var(--zh); letter-spacing: .04em; color: var(--sk-violet); }
+.cap { position: absolute; padding: 8px 14px 9px; background: var(--sk-surface); border: 2px solid var(--sk-ink);
+  font: 400 15px/1.45 var(--tx); letter-spacing: .03em; color: var(--sk-ink); }
+.cap code { font: 700 13.5px/1 var(--mono); background: color-mix(in srgb, var(--sk-lav) 55%, transparent); padding: 1px 4px; border-radius: 3px; }
+.tag { position: absolute; padding: 5px 14px 3px; background: var(--sk-pink); color: var(--sk-on-hot); font: 20px/1 var(--en);
+  letter-spacing: .06em; transform: skewX(-10deg); box-shadow: 3px 3px 0 var(--sk-ink); }
+.tag i { display: inline-block; transform: skewX(10deg); font-style: normal; }
+
+/* the cursor: an inked arrow */
+#cur { position: fixed; left: 0; top: 0; width: 30px; height: 36px; pointer-events: none; transform-origin: 3px 3px; z-index: 60; }
+#cur svg { display: block; overflow: visible; }
+
+/* cover */
+.cover .bar { position: absolute; left: 0; right: 0; top: 0; height: 34px; background: var(--sk-ink); color: var(--sk-surface);
+  display: flex; align-items: center; gap: 16px; padding: 0 22px; font: 17px/1 var(--en); letter-spacing: .08em; }
+.cover .bar .c { background: var(--sk-pink); color: var(--sk-on-hot); padding: 4px 12px 2px; transform: skewX(-12deg); }
+.cover .bar .zh { font: 16px/1 var(--zh); letter-spacing: .1em; }
+.cover .bar .sp { flex: 1; }
+.cover .logo { position: absolute; left: 34px; top: 66px; font: 168px/.84 var(--en); letter-spacing: .01em; color: var(--sk-ink);
+  text-shadow: 7px 7px 0 var(--sk-lav); white-space: nowrap; }
+.cover .logo b { font-weight: 400; color: var(--sk-pink); }
+.cover .kick { position: absolute; left: 38px; top: 44px; font: 16px/1 var(--en); letter-spacing: .1em; color: var(--sk-violet); }
+.cover .kick span { font: 15px/1 var(--zh); }
+.cover .ep { position: absolute; right: 30px; top: 58px; width: 64px; height: 248px; background: var(--sk-surface); border: var(--k) solid var(--sk-ink);
+  box-shadow: 5px 5px 0 var(--sk-pink); writing-mode: vertical-rl; display: grid; place-items: center; font: 30px/1 var(--zh); letter-spacing: .14em; }
+.cover .say { position: absolute; left: 36px; top: 262px; padding: 12px 20px 12px; background: var(--sk-surface); border: var(--k) solid var(--sk-ink); box-shadow: 5px 5px 0 var(--sk-ink); }
+.cover .say b { display: block; font: 32px/1.1 var(--zh); letter-spacing: .05em; }
+.cover .say span { display: block; margin-top: 6px; font: 18px/1 var(--en); letter-spacing: .06em; color: var(--sk-violet); }
+.cover .burst { position: absolute; overflow: visible; }
+.cover .chips { position: absolute; left: 36px; top: 440px; display: flex; gap: 10px; }
+.chip { padding: 6px 12px 5px; background: var(--sk-surface); border: 2px solid var(--sk-ink); transform: skewX(-10deg); font: 15px/1 var(--tx); white-space: nowrap; }
+.chip i { display: inline-block; transform: skewX(10deg); font-style: normal; }
+.chip b { font: 21px/1 var(--en); color: var(--sk-pink); letter-spacing: .03em; margin-right: 4px; font-weight: 400; }
+.cover .rays { position: absolute; inset: 34px 0 0 0; background: repeating-conic-gradient(from 0deg at 76% 52%, transparent 0 3deg, color-mix(in srgb, var(--sk-lav) 55%, transparent) 3deg 3.7deg, transparent 3.7deg 7deg); }
+
+/* sheet: the animator's timing chart */
+.sheet text { font: 12px var(--mono); fill: var(--sk-ink); }
+.sheet .grid line { stroke: color-mix(in srgb, var(--sk-violet) 30%, transparent); stroke-width: 1; }
+.sheet .curve { fill: none; stroke: var(--sk-pink); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.sheet .axis { stroke: var(--sk-ink); stroke-width: 2; }
+.sheet .head { stroke: var(--sk-ink); stroke-width: 2; stroke-dasharray: 4 3; }
+
+/* console line */
+.console { position: absolute; background: #17142e; color: #fff; font: 700 17px/1 var(--mono); padding: 13px 18px; border: var(--k) solid var(--sk-ink);
+  box-shadow: 5px 5px 0 var(--sk-pink); display: flex; gap: 10px; align-items: center; white-space: pre; }
+.console .p { color: var(--sk-pink); }
+.console .s { color: #ffe08a; }
+:root[data-sk-palette="mono"] .console { background: #111; }
+:root[data-sk-palette="mono"] .console .s { color: #fff; }
+.console .caret { width: 9px; height: 19px; background: #fff; }
+.sw { position: absolute; display: flex; flex-direction: column; gap: 9px; }
+.sw div { display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 8px; border: 2px solid var(--sk-ink); background: var(--sk-surface); font: 19px/1 var(--en); letter-spacing: .05em; transition: none; }
+.sw div i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--sk-ink); }
+.sw div[data-on] { background: var(--sk-ink); color: var(--sk-surface); transform: translateX(-10px); box-shadow: 4px 4px 0 var(--sk-pink); }
+
+/* montage */
+.strip { position: absolute; left: 0; right: 0; top: 0; height: 64px; background: var(--sk-ink); color: var(--sk-surface); display: flex; align-items: center; gap: 18px; padding: 0 30px; z-index: 5; }
+.strip .en { font: 34px/1 var(--en); letter-spacing: .04em; }
+.strip .en em { color: var(--sk-pink); font-style: normal; }
+.strip .zh { font: 23px/1 var(--zh); letter-spacing: .06em; color: var(--sk-lav); }
+.strip .n { margin-left: auto; font: 30px/1 var(--en); color: var(--sk-pink); }
+.big { position: absolute; font: 56px/1 var(--en); color: var(--sk-ink); letter-spacing: .03em; }
+
+/* back cover */
+.end .url { position: absolute; font: 40px/1 var(--en); letter-spacing: .05em; color: var(--sk-ink); }
+.end .url b { color: var(--sk-pink); font-weight: 400; }
+/* the focus lines tremble on twos, like a held cel with a boiling background */
+@keyframes boil { 0% { transform: rotate(0deg) scale(1.02); } 50% { transform: rotate(.5deg) scale(1.025); } 100% { transform: rotate(-.4deg) scale(1.02); } }
+.cover .rays { animation: boil .5s steps(3, end) infinite; }

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+dist/** linguist-generated=true -diff
+*.mp4 binary
+*.gif binary
+*.png binary
+*.jpg binary

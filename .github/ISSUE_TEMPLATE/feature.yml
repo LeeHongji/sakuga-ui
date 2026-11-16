@@ -1,0 +1,11 @@
+name: Idea / 想法
+description: A component, an effect, a palette or a sound you would like. / 想要的组件、特效、配色或音效。
+labels: [idea]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea / 想法
+      description: If it comes from an anime cut, a link or timestamp helps. / 如果来自某个动画镜头，附上链接或时间点。
+    validations:
+      required: true

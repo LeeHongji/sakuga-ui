@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><title>dev</title>
+<body style="margin:60px;background:var(--sk-paper);font-family:sans-serif">
+<div id="mount" style="display:flex;flex-wrap:wrap;gap:40px;align-items:center"></div>
+<script type="module">
+import * as S from '../src/index.js';
+window.S = S;
+document.getElementById('mount').innerHTML = decodeURIComponent(location.hash.slice(1)) || '<sk-button>Hello</sk-button>';
+window.__ready = true;
+</script>

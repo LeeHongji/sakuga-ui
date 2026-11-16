@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sakuga UI</title>
+<meta name="description" content="Web components with anime key-animation energy: cel-style effects, katakana lettering and synthesised sound.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,700;1,700&family=Dela+Gothic+One&family=Reggae+One&family=Shippori+Antique+B1&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site/site.css">
+</head>
+<body>
+
+<aside class="side" id="side">
+  <a class="logo" href="#cover"><span class="wk">COMICS</span>SAKUGA <em>UI</em><small>vol.0.1</small></a>
+  <nav id="nav"></nav>
+  <div class="dock" id="dock" role="group" aria-label="Settings">
+    <b class="dock-h" data-t="dock.h" aria-hidden="true"></b>
+    <div class="ctl first">
+      <sk-segmented id="c-lang" value="zh" aria-label="Language"><button value="zh">中</button><button value="en">EN</button><button value="ja">日</button></sk-segmented>
+      <sk-theme-switch aria-label="Theme"></sk-theme-switch>
+    </div>
+    <div class="ctl"><span data-t="dock.pal"></span><span class="pals" id="c-pal" role="radiogroup" aria-label="Palette"></span></div>
+    <label class="ctl"><span data-t="dock.fx"></span>
+      <sk-segmented id="c-fx" value="full"><button value="full" data-t="dock.full"></button><button value="lite" data-t="dock.lite"></button><button value="off" data-t="dock.off"></button></sk-segmented>
+    </label>
+    <label class="ctl"><span data-t="dock.fps"></span>
+      <sk-segmented id="c-fps" value="60"><button value="60">60</button><button value="30">30</button><button value="12">12</button></sk-segmented>
+    </label>
+    <label class="ctl"><span data-t="dock.sound"></span><sk-switch id="c-sound" size="sm" checked></sk-switch></label>
+    <output class="hud" id="hud"></output>
+  </div>
+</aside>
+<button class="menu-btn" id="menu-btn" aria-controls="side" aria-expanded="false"><span data-t="nav.toc"></span></button>
+
+<main id="main">
+
+  <!-- ===== the cover ===== -->
+  <section class="page cover" id="cover">
+    <div class="focus" aria-hidden="true"></div>
+    <div class="tone-fade" aria-hidden="true"></div>
+    <div class="mast" aria-hidden="true"><b>COMICS</b><span data-t="hero.issue"></span><span>No.01</span><span>2026.11</span><i>¥0 · MIT</i></div>
+    <div class="cover-grid">
+      <div class="cover-title"><p class="kicker" data-t="hero.kicker"></p><h1><span class="t1">SAKUGA</span> <em>UI</em></h1></div>
+      <div class="vcopy" data-t="hero.vcopy" aria-hidden="true"></div>
+      <div class="cover-copy">
+        <div class="narr"><b data-t="hero.lede"></b><span data-t="hero.sub"></span></div>
+        <div class="cta">
+          <sk-bubble variant="shout" class="pressme" tail="none" data-t="hero.pressme"></sk-bubble>
+          <sk-button fx="boom" size="lg" variant="primary" id="go"><span data-t="hero.cta"></span></sk-button>
+          <code class="install">npm i sakuga-ui</code><sk-copy value="npm i sakuga-ui" id="hero-copy"></sk-copy>
+        </div>
+        <p class="soon" data-t="hero.soon"></p>
+      </div>
+      <div class="cover-art" aria-hidden="true">
+        <div class="flash"></div>
+        <sk-word class="cover-word" text="ドン!" size="92"></sk-word>
+        <div class="sticker"><span data-t="hero.new"></span></div>
+        <div class="barcode"></div>
+      </div>
+    </div>
+    <ul class="facts" id="facts"></ul>
+
+    <div class="strip">
+      <span class="strip-tag" data-t="hero.try"></span>
+      <div class="cut c1"><div><sk-switch size="lg"></sk-switch></div></div>
+      <div class="cut c2"><div><sk-checkbox>Remember me</sk-checkbox><sk-rating value="2"></sk-rating></div></div>
+      <div class="cut c3"><div><sk-slider value="30"></sk-slider><sk-like count="128"></sk-like></div></div>
+    </div>
+  </section>
+
+  <!-- ===== prologue ===== -->
+  <section class="page" id="start">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="start.ep"></span><h2 data-t="start.h"></h2></header>
+    <div class="komas three">
+      <article class="koma note tone-0">
+        <header><span class="no">0-1</span><h3 data-t="start.1h"></h3><p class="cap" data-t="start.1p"></p></header>
+        <div class="code" data-code="html">&lt;script type="module" src="./dist/sakuga.js"&gt;&lt;/script&gt;
+
+&lt;sk-button fx="boom"&gt;Confirm&lt;/sk-button&gt;
+&lt;sk-switch checked&gt;Wi-Fi&lt;/sk-switch&gt;</div>
+        <div class="code" data-code="js">// once it is on npm
+import 'sakuga-ui';                       // every component
+import 'sakuga-ui/components/forms.js';   // one group only</div>
+      </article>
+      <article class="koma note tone-1">
+        <header><span class="no">0-2</span><h3 data-t="start.2h"></h3><p class="cap" data-t="start.2p"></p></header>
+        <div class="code" data-code="js">import { configure, toast, setTheme } from 'sakuga-ui';
+
+configure({
+  fx: 'lite',        // 'full' | 'lite' | 'off'
+  fps: 60,           // 60 | 30 (on twos) | 12
+  sound: true, volume: 0.5,
+  fonts: 'google',   // 'system': no web fonts
+});
+
+toast('Saved!');
+setTheme('dark');</div>
+      </article>
+      <article class="koma note tone-2">
+        <header><span class="no">0-3</span><h3 data-t="start.3h"></h3><p class="cap" data-t="start.3p"></p></header>
+        <div class="code" data-code="html">&lt;form&gt;
+  &lt;sk-input name="email" label="Email"&gt;&lt;/sk-input&gt;
+  &lt;sk-checkbox name="agree"&gt;I agree&lt;/sk-checkbox&gt;
+  &lt;sk-button type="submit" variant="primary"&gt;Send&lt;/sk-button&gt;
+&lt;/form&gt;</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== vocabulary ===== -->
+  <section class="page" id="vocab">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="vocab.ep"></span><h2 data-t="vocab.h"></h2></header>
+    <p class="narr" data-t="vocab.intro"></p>
+    <h3 class="sub" data-t="vocab.prims"></h3>
+    <div class="tiles" id="prims"></div>
+    <h3 class="sub" data-t="vocab.voices"></h3>
+    <div class="tiles words" id="voices"></div>
+    <h3 class="sub"><span data-t="vocab.sounds"></span> <small id="snd-n"></small></h3>
+    <div class="chips" id="sounds"></div>
+  </section>
+
+  <div id="components"></div>
+
+  <!-- ===== theming ===== -->
+  <section class="page" id="theming">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="theming.ep"></span><h2 data-t="theming.h"></h2></header>
+    <p class="narr" data-t="theming.intro"></p>
+    <div class="pal-cards" id="pal-cards"></div>
+    <div class="theme-lab">
+      <div class="swatches" id="swatches"></div>
+      <div class="knobs">
+        <label><span data-t="theming.r"></span><sk-slider id="t-r" value="14" min="0" max="24" suffix="px"></sk-slider></label>
+        <label><span data-t="theming.bw"></span><sk-slider id="t-bw" value="3" min="2" max="5" step="0.5" suffix="px"></sk-slider></label>
+        <label><span data-t="theming.sh"></span><sk-slider id="t-sh" value="5" min="0" max="10" suffix="px"></sk-slider></label>
+        <sk-button id="t-reset" size="sm" variant="ghost"><span data-t="theming.reset"></span></sk-button>
+      </div>
+      <div class="code" id="t-css"></div>
+    </div>
+  </section>
+
+  <!-- ===== performance ===== -->
+  <section class="page" id="perf">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="perf.ep"></span><h2 data-t="perf.h"></h2></header>
+    <div class="perf-top">
+      <p class="narr" data-t="perf.intro"></p>
+      <sk-bubble variant="shout" tail="none" data-t="perf.balloon"></sk-bubble>
+    </div>
+    <ol class="measures" id="measures"></ol>
+    <div class="bench">
+      <div class="bench-ctl">
+        <sk-button id="p-run" variant="pink"><span data-t="bench.run"></span></sk-button>
+        <sk-button id="p-many" variant="ghost" size="sm"><span data-t="bench.many"></span></sk-button>
+      </div>
+      <div class="bench-out" id="p-out" data-t="bench.hint"></div>
+      <div class="bench-field" id="p-field"></div>
+    </div>
+    <div class="measured" id="measured"></div>
+  </section>
+
+  <!-- ===== core api ===== -->
+  <section class="page" id="api">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="api.ep"></span><h2 data-t="api.h"></h2></header>
+    <p class="narr" data-t="api.intro"></p>
+    <table class="sk-table api-table">
+      <thead><tr><th data-t="api.export"></th><th data-t="api.use"></th></tr></thead>
+      <tbody>
+        <tr><td><code>configure(options)</code></td><td data-t="api.r1"></td></tr>
+        <tr><td><code>sfx(word, { voice, x, y, size })</code></td><td data-t="api.r2"></td></tr>
+        <tr><td><code>moves.*</code></td><td data-t="api.r3"></td></tr>
+        <tr><td><code>FX.*</code></td><td data-t="api.r4"></td></tr>
+        <tr><td><code>SND.play(name)</code> / <code>SND.loop(kind)</code></td><td data-t="api.r5"></td></tr>
+        <tr><td><code>spring(el, [from, to], preset)</code> / <code>anim(el, preset)</code></td><td data-t="api.r6"></td></tr>
+        <tr><td><code>SkElement</code> / <code>define(tag, cls)</code></td><td data-t="api.r7"></td></tr>
+        <tr><td><code>setTheme(theme, origin?)</code> / <code>setPalette(name)</code></td><td data-t="api.r8"></td></tr>
+        <tr><td><code>toast(message, options)</code></td><td data-t="api.r9"></td></tr>
+      </tbody>
+    </table>
+    <div class="code" data-code="js">import { SkElement, define, moves } from 'sakuga-ui';
+
+class MyStamp extends SkElement {
+  static template = `&lt;button class="box press"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/button&gt;`;
+  setup() {
+    this.$('button').addEventListener('click', () =&gt; {
+      const q = moves.tap(this.$('button'), 'stamp');
+      moves.say('ペタッ', { voice: 'pop', x: q.cx + 30, y: q.t - 20, size: 24 });
+    });
+  }
+}
+define('my-stamp', MyStamp);</div>
+  </section>
+
+  <footer>
+    <div class="tbc"><sk-word text="つづく" voice="pop" color="ink" size="54" aria-hidden="true"></sk-word><b data-t="foot.next"></b></div>
+    <p data-t="foot.credit"></p>
+  </footer>
+</main>
+
+<script type="module" src="site/site.js"></script>
+</body>
+</html>
