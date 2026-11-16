@@ -1,9 +1,9 @@
 {
-  "planSha256": "028677896ed9e13d25706bd35947bb99f7e98cb0b4955ae82528935a1c141fc0",
+  "planSha256": "c598c5fdd2a4ec23da121449f0d85a2f7427f773d9fdda3aa00761ca51ee9af2",
   "music": {
     "file": "assets/music.wav",
     "gain": 0.6,
-    "sha256": "f2f6ff2855e42f2fb73fead16984316877eec65a993ee5c3ee538f0ff31335c9"
+    "sha256": "f7f2e98515f63409b2df2232b5d1df5a4fa0fa9f783d67be0c276a7e4d60d7a4"
   },
   "cues": [
     {
@@ -14,7 +14,7 @@
       "role": "sfx",
       "kind": "product-cover",
       "syncOffset": 1.594,
-      "sha256": "a177b3e043143de3b87f74669deb1ee7313667d03a2f9c07b64b89b044b81b8e"
+      "sha256": "bf8ff688491a2e93b40080d1e5a21479600a79b1871bad37673ec675331bc428"
     },
     {
       "at": 4.744,
@@ -24,7 +24,7 @@
       "role": "sfx",
       "kind": "product-press",
       "syncOffset": 0.05,
-      "sha256": "c2c0545feb9ced4f5aad4b5b3f4663ec0b021ec3ffb35d7ee8c584473303dbeb"
+      "sha256": "2b570b404edc431bdad732ee7dfd6c87f8f90b906aad2e336ccca67fa193375d"
     },
     {
       "at": 5.945,
@@ -34,27 +34,27 @@
       "role": "sfx",
       "kind": "product-press",
       "syncOffset": 0.05,
-      "sha256": "805d9ceffd265a85a3c423289d09e63bf35ed46c6f963623008af71fd350cb82"
+      "sha256": "fc08c0f376414c0d5e4570d9460c6aa24e2e2515ba847d4a2d70a8f401d36a4c"
     },
     {
       "at": 7.183,
       "actionId": "press-hold",
       "file": "assets/sfx/03-press-hold.wav",
-      "gain": 1.32,
+      "gain": 1.34,
       "role": "sfx",
       "kind": "product-press",
       "syncOffset": 0.05,
-      "sha256": "a7d61ce8683c8c47d7d2fbd5da2c4b051cf888d216a03be8c4aec5e3f4c57edb"
+      "sha256": "7dc90c55eea78c065104bdbecb87049fe9be87b02647c789aa68ae86bebcc0c9"
     },
     {
-      "at": 8.29,
+      "at": 8.25,
       "actionId": "press-slash",
       "file": "assets/sfx/04-press-slash.wav",
       "gain": 1.05,
       "role": "sfx",
       "kind": "product-press",
       "syncOffset": 0.05,
-      "sha256": "f806f51ee9167d09b155acdaf55157c19b890b876e45da778ffa37f32356809f"
+      "sha256": "99cba9cf6b0e377454e2701b210dc741b6c347bd2dc8ff745ed61c1b64b5d44b"
     },
     {
       "at": 10.397,
@@ -64,7 +64,7 @@
       "role": "sfx",
       "kind": "product-forms",
       "syncOffset": 0.05,
-      "sha256": "d9abc0ce801dd7400d196a7fb390808ee4cf30b9c28ba956cc74a92654cf93c9"
+      "sha256": "56fa0e3fafa0584bd68858b6b9cb10233cd333227d35a32fbdf89323ef030714"
     },
     {
       "at": 11.125,
@@ -74,7 +74,7 @@
       "role": "sfx",
       "kind": "product-forms",
       "syncOffset": 0.05,
-      "sha256": "b51e1cdcab69cd22494d64e2b8ce50d0931e9277c65a2a0424866dbdf62f0991"
+      "sha256": "e44a232aff402d9a346837bb4481a58968a1d08ef9999d79369a7c35aabf119f"
     },
     {
       "at": 11.95,
@@ -84,7 +84,7 @@
       "role": "sfx",
       "kind": "product-forms",
       "syncOffset": 0.05,
-      "sha256": "7aefe1f72eb6e48ab2df6f22d5212c0e5d25061da58138ec687f96fb55fdcb93"
+      "sha256": "8f6fa41d684f3ca340523f14c1bd1cbd814a5d7b74901a41bce889eef4b6121e"
     },
     {
       "at": 13.145,
@@ -94,7 +94,7 @@
       "role": "sfx",
       "kind": "product-forms",
       "syncOffset": 0.05,
-      "sha256": "1eaa64d2134832a7f8b38c281c379827fb364c3278cdaa159e41ef165309fc8c"
+      "sha256": "22726e144f82118d47dcd655bc99b8a743d7f3e47b9ce21cc827ee42d97f5fbc"
     },
     {
       "at": 14.761,
@@ -104,7 +104,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "e27b127ed52d532a0719cb848068d72999876fa7f1ccf3ca4ecc4792b653b716"
+      "sha256": "8777627a84aea69b338214710ab2a34b55cd17a1e8c399fa6673df0ab9f101e2"
     },
     {
       "at": 15.164,
@@ -114,7 +114,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "b824943d0f05432c6be149e4f3dbab738f1e94a33408ebe7e5cecd23200a220f"
+      "sha256": "5e612bab307859337cefff6be383a3c3c7a916f40700cc3869124ff80a8a5337"
     },
     {
       "at": 15.561,
@@ -124,7 +124,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "463bfc88a229a1ad47dcea9cb180c6775aa09c469e9f9e2a3ac25c72210cf68c"
+      "sha256": "9553292140c9ca0bcd3a076828cfcb8b070f36d1ba17073eef5a0d06e8dc5af4"
     },
     {
       "at": 15.962,
@@ -134,7 +134,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "b4aef857e14780737c0bc46560a61051aa894349c0e2741cebeb1047ea73ce12"
+      "sha256": "8b259b0ec4380eadbf80a52ca0f2d40c1f12edacff6f15d5cd44e4db10718edf"
     },
     {
       "at": 16.362,
@@ -144,7 +144,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "a5e3048bdfdb30ee076b67b04916a55b59c096fcc92fe3e6fb50d59c3d3461de"
+      "sha256": "0386f0ae2ebe68a7913c08029ca68a1c1ea99e8c5675aa7559ccccd9be68d1b1"
     },
     {
       "at": 16.761,
@@ -154,7 +154,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "8fee736ffed9d9a7e4efa07452d2182909a158bc43a7f8f54c74e69d69dec27d"
+      "sha256": "9e8d9b3e642dd3adeef70acc0e6198e5a9c565c6f53ed0fb1297350cdc8e7e62"
     },
     {
       "at": 17.166,
@@ -164,7 +164,7 @@
       "role": "sfx",
       "kind": "product-let",
       "syncOffset": 0.05,
-      "sha256": "b9fe5b9ba1cd51feb4ad48150220cb532607d62d94aea44d534001995a316bef"
+      "sha256": "5ac0d25c17b4e3d17b1a26cf6d7814fff52841ac032c2d8e49f99b0b4df6abee"
     },
     {
       "at": 25.945,
@@ -174,7 +174,7 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "0de00f8592f93845dd1396e997f391911005f5db4af24395bf8f75cbf8dd70b7"
+      "sha256": "1d1599247ef3523e09f151c904f8be76cd7343fb97215fcfe233b05f589dae4b"
     },
     {
       "at": 26.345,
@@ -184,7 +184,7 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "0de00f8592f93845dd1396e997f391911005f5db4af24395bf8f75cbf8dd70b7"
+      "sha256": "1d1599247ef3523e09f151c904f8be76cd7343fb97215fcfe233b05f589dae4b"
     },
     {
       "at": 26.745,
@@ -194,7 +194,7 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "0de00f8592f93845dd1396e997f391911005f5db4af24395bf8f75cbf8dd70b7"
+      "sha256": "e77750c4dc1e36ab05cde371edf7b55e7cee9c96c240a3c7fe2da9b2f1daaa9d"
     },
     {
       "at": 27.145,
@@ -204,7 +204,7 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "a7d7189b828879b863159b52818abc5e9eefe22afaad4ca55cf8d273f8e70beb"
+      "sha256": "bb95e536a8e270511a3dac1b5fe58a51d7011fb6e0c4f5941740fc3c2b504fed"
     },
     {
       "at": 28.347,
@@ -214,7 +214,7 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "a0b8b7fd2828b649af30e8d2f25fa3b7d32105e071e1255234936f734078518c"
+      "sha256": "f3b9ea3d33d76131a2abe324173df184b80a367ba7d00ce232353ced9461d6c9"
     },
     {
       "at": 29.145,
@@ -224,77 +224,77 @@
       "role": "sfx",
       "kind": "product-load",
       "syncOffset": 0.05,
-      "sha256": "2e7bcb4adc8a36a17e48c41ced42082d9fb118384cb6d48b9e51615f29c66932"
+      "sha256": "9d880b8893c16be1c3f84fd7fa99e520424f36c7a72bacc5db6d017b995a757a"
     },
     {
-      "at": 31.015,
+      "at": 31.161,
       "actionId": "pal-shonen",
       "file": "assets/sfx/22-pal-shonen.wav",
-      "gain": 2.4,
+      "gain": 1.1,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "3fed4702c3fb40ecb8c02d73a1db49a19eb7a4622b3b570c13f2caca3ab33c4c"
+      "sha256": "4b89a364e21ae07d0750e7f602f07b389c17a49f885b6b3ae53faf1f0abe28c3"
     },
     {
-      "at": 31.816,
+      "at": 31.961,
       "actionId": "pal-soda",
       "file": "assets/sfx/23-pal-soda.wav",
-      "gain": 1.59,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "9e19feb4d973c656f70ce955fafbcc7fc042af984fddd4132f9a5d8044aada57"
+      "sha256": "4b89a364e21ae07d0750e7f602f07b389c17a49f885b6b3ae53faf1f0abe28c3"
     },
     {
-      "at": 32.616,
+      "at": 32.761,
       "actionId": "pal-sunset",
       "file": "assets/sfx/24-pal-sunset.wav",
-      "gain": 1.99,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "f6f0f6832c78b959addbc2dd75fe9502f729d16a98a5e2f47b9594557a81147a"
+      "sha256": "4b89a364e21ae07d0750e7f602f07b389c17a49f885b6b3ae53faf1f0abe28c3"
     },
     {
-      "at": 33.416,
+      "at": 33.561,
       "actionId": "pal-mono",
       "file": "assets/sfx/25-pal-mono.wav",
-      "gain": 2.2,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "d54f89f1fde101cd12937f7a90279c437aab9b0101ae42a010f1b2421264de5d"
+      "sha256": "b894d78a3df1ed4b09ecc17a77c69e9e2788383c912933dc3426905d0723f343"
     },
     {
-      "at": 34.361,
+      "at": 34.358,
       "actionId": "pal-dark",
       "file": "assets/sfx/26-pal-dark.wav",
-      "gain": 2.04,
+      "gain": 1.84,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "08eaee283e394bd6f0a840b23cc896e4258ce7a3d1e558c84279a22ec90d2190"
+      "sha256": "bdde041d57dd2a1dac9c9b975c203a3154693a3b555959bfefa9d707dd958749"
     },
     {
-      "at": 35.015,
+      "at": 35.161,
       "actionId": "pal-sakuga-dark",
       "file": "assets/sfx/27-pal-sakuga-dark.wav",
-      "gain": 2.32,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "8c3dc9dc169031335ca82c8c91ecad05af1dccdfbf9f7089ce550fd3cafabd59"
+      "sha256": "549e4aac07bc7e871a54846b6f746676301818ee6b2a3256e27d553515351d85"
     },
     {
-      "at": 35.815,
+      "at": 35.961,
       "actionId": "pal-soda-dark",
       "file": "assets/sfx/28-pal-soda-dark.wav",
-      "gain": 2.1,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-pal",
       "syncOffset": 0.05,
-      "sha256": "005a9ab8623dc1a63ac84ad77fc3fc96644a42b81f0c2adadf59c4b613ba3053"
+      "sha256": "7b3c5edc724eb0ceeef2e68ad33a63dbf2d8820b001ea306988a9fe2be28c68b"
     },
     {
       "at": 37.544,
@@ -304,97 +304,97 @@
       "role": "sfx",
       "kind": "product-ov",
       "syncOffset": 0.05,
-      "sha256": "72f3f5e422d47da3ac774c4abcac164b91bb4654ec3d4d1e65e6f37db4ccb9e2"
+      "sha256": "c72eed7969dfcc109fbbd18a869cb391ae55e022755cc93690e899eae5cc654e"
     },
     {
       "at": 39.145,
       "actionId": "ov-confirm",
       "file": "assets/sfx/30-ov-confirm.wav",
-      "gain": 1.54,
+      "gain": 1.59,
       "role": "sfx",
       "kind": "product-ov",
       "syncOffset": 0.05,
-      "sha256": "50eb252c3a2463b522f68e8bf788225b55951d28379452da22f16b881e7c53aa"
+      "sha256": "f8227841b355f0bd23ce01fd001f842b4ebcd11bf81bd5fb6a3dfe29d2e1fe31"
     },
     {
       "at": 39.975,
       "actionId": "ov-toast",
       "file": "assets/sfx/31-ov-toast.wav",
-      "gain": 1.86,
+      "gain": 2.05,
       "role": "sfx",
       "kind": "product-ov",
       "syncOffset": 0.05,
-      "sha256": "57bdc33bb2cf9b064ae215b02b7f0f45d710bfb8b6c02de851aaa61675f04d7c"
+      "sha256": "c6ec4335cff03ae21263c85ad2a7c9782829afc8f18f35912e5522eaf2911360"
     },
     {
-      "at": 41.948,
+      "at": 41.849,
       "actionId": "mt-tabs",
       "file": "assets/sfx/32-mt-tabs.wav",
-      "gain": 3.94,
+      "gain": 2.94,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "ecba192b9ecc841e3fdac6bc89cf00f8f662a0ad9a3a9fa5435516df0f75dc02"
+      "sha256": "b9f1246fb5382c89bb913c416c1d3c06f8a9a068f62699dc38449d723b89f048"
     },
     {
-      "at": 42.75,
+      "at": 42.65,
       "actionId": "mt-seg",
       "file": "assets/sfx/33-mt-seg.wav",
-      "gain": 2.51,
+      "gain": 2.6,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "4e1b88a72a45517f181ba71aa85cd709c58a190cd9041f95c00dde4fbc713d58"
+      "sha256": "14f1d238209527cab36e517d292700e198fdebce189dd4101a3682d9f1d30dc3"
     },
     {
-      "at": 43.545,
+      "at": 43.445,
       "actionId": "mt-cal",
       "file": "assets/sfx/34-mt-cal.wav",
-      "gain": 1.58,
+      "gain": 1.69,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "a4e3ce17de0b9c1d74ef80d03ac11d78e98f02ace22409da0fd1d8534a20ff78"
+      "sha256": "337fae2232079b0d49271467f2bcf7340ef36f246d4ca2f2084277633c176554"
     },
     {
-      "at": 44.345,
+      "at": 44.245,
       "actionId": "mt-steps",
       "file": "assets/sfx/35-mt-steps.wav",
-      "gain": 1.01,
+      "gain": 1.0,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "605dbe798bed22c3b423463830427b8f919582d56e8e2906546db7da7e474d5b"
+      "sha256": "c63f7cf9fe15ab98ec45d9565196fead57a6423183565740c0a53a6508026a52"
     },
     {
-      "at": 45.145,
+      "at": 45.045,
       "actionId": "mt-count",
       "file": "assets/sfx/36-mt-count.wav",
-      "gain": 2.28,
+      "gain": 2.2,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "856cd43359ebea67455dacc92bd18a231629dd281adf2e26bd3835e420fab82f"
+      "sha256": "6f8d3aead40431145e80b8c0373786909a6ca848499510ae850a1e11d2f9ffab"
     },
     {
-      "at": 45.95,
+      "at": 45.845,
       "actionId": "mt-acc",
       "file": "assets/sfx/37-mt-acc.wav",
-      "gain": 2.72,
+      "gain": 1.39,
       "role": "sfx",
       "kind": "product-mt",
       "syncOffset": 0.05,
-      "sha256": "2d605033767a0e411731aff41f3bcb6c63ec6d7f61f6dc5a5e0463f0d263f21c"
+      "sha256": "603765bc5291f786b80eb3b74f82da0d8a48627c678630d43a30eec9851651c3"
     },
     {
       "at": 47.145,
       "actionId": "end-copy",
       "file": "assets/sfx/38-end-copy.wav",
-      "gain": 1.2,
+      "gain": 1.19,
       "role": "sfx",
       "kind": "product-end",
       "syncOffset": 0.05,
-      "sha256": "a86932af514b7ef6855902faffe2b69ad389c2eb5c60ada43b1c9f368d91bf08"
+      "sha256": "7b69c506be23dab5c47f7b6210c1b7c72493ef1381bfd8216f284af71fd2e4d0"
     },
     {
       "at": 49.961,
@@ -404,20 +404,20 @@
       "role": "sfx",
       "kind": "product-end",
       "syncOffset": 0.05,
-      "sha256": "60790adafd7d57e6b9cfae8a5842d325fdc2dede3e1a06654d0e396615a71254"
+      "sha256": "61743acfb263118bf1603b270838f9c1e451cb05ceecac2863bccaf5b8259bf6"
     }
   ],
   "master": {
     "file": "assets/master.wav",
-    "sha256": "b6872fce82bb05e6a3fd026bc4ca25d726a33cd6783d39b8cffeb854c9d05223"
+    "sha256": "47192276102078d59fa3d6a954e2ee766360f21325abc7019647149506f9784e"
   },
   "sfxStem": {
     "file": "assets/sfx-stem.wav",
-    "sha256": "b9ce01697705de2d6d615618adabb2429cc62f228c965a0a3f030566facc128a"
+    "sha256": "f20e4a5834656a1dfc3cf068580936770eff7a8a026ac80a27484872913554d7"
   },
   "musicStem": {
     "file": "assets/music-ducked.wav",
-    "sha256": "5165522f46a104e093c44f8f57333ea76f8386fc68a6595aff88051e015fd899"
+    "sha256": "f7cb7d92908521df92b1ea000eee72667ee8d365967c766cea90701b4d167e54"
   },
   "ducking": {
     "method": "cue-envelope",
@@ -461,10 +461,10 @@
       {
         "actionId": "press-slash",
         "kind": "product-press",
-        "start": 8.3,
-        "attackEnd": 8.34,
-        "holdEnd": 8.52,
-        "end": 8.82,
+        "start": 8.260000000000002,
+        "attackEnd": 8.3,
+        "holdEnd": 8.48,
+        "end": 8.780000000000001,
         "db": 4
       },
       {
@@ -623,64 +623,64 @@
       {
         "actionId": "pal-shonen",
         "kind": "product-pal",
-        "start": 31.025000000000002,
-        "attackEnd": 31.065,
-        "holdEnd": 31.245,
-        "end": 31.545,
+        "start": 31.171000000000003,
+        "attackEnd": 31.211000000000002,
+        "holdEnd": 31.391000000000002,
+        "end": 31.691000000000003,
         "db": 4
       },
       {
         "actionId": "pal-soda",
         "kind": "product-pal",
-        "start": 31.826,
-        "attackEnd": 31.866,
-        "holdEnd": 32.046,
-        "end": 32.346,
+        "start": 31.970999999999997,
+        "attackEnd": 32.010999999999996,
+        "holdEnd": 32.190999999999995,
+        "end": 32.49099999999999,
         "db": 4
       },
       {
         "actionId": "pal-sunset",
         "kind": "product-pal",
-        "start": 32.626,
-        "attackEnd": 32.666,
-        "holdEnd": 32.846,
-        "end": 33.145999999999994,
+        "start": 32.771,
+        "attackEnd": 32.811,
+        "holdEnd": 32.991,
+        "end": 33.291,
         "db": 4
       },
       {
         "actionId": "pal-mono",
         "kind": "product-pal",
-        "start": 33.425999999999995,
-        "attackEnd": 33.465999999999994,
-        "holdEnd": 33.645999999999994,
-        "end": 33.94599999999999,
+        "start": 33.571,
+        "attackEnd": 33.611,
+        "holdEnd": 33.791,
+        "end": 34.090999999999994,
         "db": 4
       },
       {
         "actionId": "pal-dark",
         "kind": "product-pal",
-        "start": 34.370999999999995,
-        "attackEnd": 34.410999999999994,
-        "holdEnd": 34.590999999999994,
-        "end": 34.89099999999999,
+        "start": 34.367999999999995,
+        "attackEnd": 34.407999999999994,
+        "holdEnd": 34.587999999999994,
+        "end": 34.88799999999999,
         "db": 4
       },
       {
         "actionId": "pal-sakuga-dark",
         "kind": "product-pal",
-        "start": 35.025,
-        "attackEnd": 35.065,
-        "holdEnd": 35.245,
-        "end": 35.544999999999995,
+        "start": 35.171,
+        "attackEnd": 35.211,
+        "holdEnd": 35.391,
+        "end": 35.690999999999995,
         "db": 4
       },
       {
         "actionId": "pal-soda-dark",
         "kind": "product-pal",
-        "start": 35.824999999999996,
-        "attackEnd": 35.864999999999995,
-        "holdEnd": 36.044999999999995,
-        "end": 36.34499999999999,
+        "start": 35.971,
+        "attackEnd": 36.010999999999996,
+        "holdEnd": 36.190999999999995,
+        "end": 36.49099999999999,
         "db": 4
       },
       {
@@ -713,55 +713,55 @@
       {
         "actionId": "mt-tabs",
         "kind": "product-mt",
-        "start": 41.958,
-        "attackEnd": 41.998,
-        "holdEnd": 42.178,
-        "end": 42.477999999999994,
+        "start": 41.858999999999995,
+        "attackEnd": 41.898999999999994,
+        "holdEnd": 42.07899999999999,
+        "end": 42.37899999999999,
         "db": 4
       },
       {
         "actionId": "mt-seg",
         "kind": "product-mt",
-        "start": 42.76,
-        "attackEnd": 42.8,
-        "holdEnd": 42.98,
-        "end": 43.279999999999994,
+        "start": 42.66,
+        "attackEnd": 42.699999999999996,
+        "holdEnd": 42.879999999999995,
+        "end": 43.17999999999999,
         "db": 4
       },
       {
         "actionId": "mt-cal",
         "kind": "product-mt",
-        "start": 43.555,
-        "attackEnd": 43.595,
-        "holdEnd": 43.775,
-        "end": 44.074999999999996,
+        "start": 43.455,
+        "attackEnd": 43.495,
+        "holdEnd": 43.675,
+        "end": 43.974999999999994,
         "db": 4
       },
       {
         "actionId": "mt-steps",
         "kind": "product-mt",
-        "start": 44.355,
-        "attackEnd": 44.394999999999996,
-        "holdEnd": 44.574999999999996,
-        "end": 44.87499999999999,
+        "start": 44.254999999999995,
+        "attackEnd": 44.294999999999995,
+        "holdEnd": 44.474999999999994,
+        "end": 44.77499999999999,
         "db": 4
       },
       {
         "actionId": "mt-count",
         "kind": "product-mt",
-        "start": 45.155,
-        "attackEnd": 45.195,
-        "holdEnd": 45.375,
-        "end": 45.675,
+        "start": 45.055,
+        "attackEnd": 45.095,
+        "holdEnd": 45.275,
+        "end": 45.574999999999996,
         "db": 4
       },
       {
         "actionId": "mt-acc",
         "kind": "product-mt",
-        "start": 45.96,
-        "attackEnd": 46.0,
-        "holdEnd": 46.18,
-        "end": 46.48,
+        "start": 45.855,
+        "attackEnd": 45.894999999999996,
+        "holdEnd": 46.074999999999996,
+        "end": 46.37499999999999,
         "db": 4
       },
       {
@@ -816,9 +816,9 @@
     },
     {
       "actionId": "press-slash",
-      "fileStart": 8.29,
-      "audibleLandmark": 8.34,
-      "actionTime": 8.34,
+      "fileStart": 8.25,
+      "audibleLandmark": 8.3,
+      "actionTime": 8.3,
       "errorFrames": 0.0
     },
     {
@@ -942,51 +942,51 @@
     },
     {
       "actionId": "pal-shonen",
-      "fileStart": 31.015,
-      "audibleLandmark": 31.065,
-      "actionTime": 31.064999999999998,
+      "fileStart": 31.161,
+      "audibleLandmark": 31.211000000000002,
+      "actionTime": 31.211,
       "errorFrames": 0.0
     },
     {
       "actionId": "pal-soda",
-      "fileStart": 31.816,
-      "audibleLandmark": 31.866,
-      "actionTime": 31.866,
+      "fileStart": 31.961,
+      "audibleLandmark": 32.010999999999996,
+      "actionTime": 32.010999999999996,
       "errorFrames": 0.0
     },
     {
       "actionId": "pal-sunset",
-      "fileStart": 32.616,
-      "audibleLandmark": 32.666,
-      "actionTime": 32.666,
+      "fileStart": 32.761,
+      "audibleLandmark": 32.811,
+      "actionTime": 32.811,
       "errorFrames": 0.0
     },
     {
       "actionId": "pal-mono",
-      "fileStart": 33.416,
-      "audibleLandmark": 33.465999999999994,
-      "actionTime": 33.466,
-      "errorFrames": -0.0
+      "fileStart": 33.561,
+      "audibleLandmark": 33.611,
+      "actionTime": 33.611,
+      "errorFrames": 0.0
     },
     {
       "actionId": "pal-dark",
-      "fileStart": 34.361,
-      "audibleLandmark": 34.410999999999994,
-      "actionTime": 34.411,
+      "fileStart": 34.358,
+      "audibleLandmark": 34.407999999999994,
+      "actionTime": 34.408,
       "errorFrames": -0.0
     },
     {
       "actionId": "pal-sakuga-dark",
-      "fileStart": 35.015,
-      "audibleLandmark": 35.065,
-      "actionTime": 35.065,
+      "fileStart": 35.161,
+      "audibleLandmark": 35.211,
+      "actionTime": 35.211,
       "errorFrames": 0.0
     },
     {
       "actionId": "pal-soda-dark",
-      "fileStart": 35.815,
-      "audibleLandmark": 35.864999999999995,
-      "actionTime": 35.864999999999995,
+      "fileStart": 35.961,
+      "audibleLandmark": 36.010999999999996,
+      "actionTime": 36.010999999999996,
       "errorFrames": 0.0
     },
     {
@@ -1012,45 +1012,45 @@
     },
     {
       "actionId": "mt-tabs",
-      "fileStart": 41.948,
-      "audibleLandmark": 41.998,
-      "actionTime": 41.998000000000005,
+      "fileStart": 41.849,
+      "audibleLandmark": 41.898999999999994,
+      "actionTime": 41.899,
       "errorFrames": -0.0
     },
     {
       "actionId": "mt-seg",
-      "fileStart": 42.75,
-      "audibleLandmark": 42.8,
-      "actionTime": 42.800000000000004,
+      "fileStart": 42.65,
+      "audibleLandmark": 42.699999999999996,
+      "actionTime": 42.7,
       "errorFrames": -0.0
     },
     {
       "actionId": "mt-cal",
-      "fileStart": 43.545,
-      "audibleLandmark": 43.595,
-      "actionTime": 43.595,
-      "errorFrames": 0.0
+      "fileStart": 43.445,
+      "audibleLandmark": 43.495,
+      "actionTime": 43.495000000000005,
+      "errorFrames": -0.0
     },
     {
       "actionId": "mt-steps",
-      "fileStart": 44.345,
-      "audibleLandmark": 44.394999999999996,
-      "actionTime": 44.395,
+      "fileStart": 44.245,
+      "audibleLandmark": 44.294999999999995,
+      "actionTime": 44.295,
       "errorFrames": -0.0
     },
     {
       "actionId": "mt-count",
-      "fileStart": 45.145,
-      "audibleLandmark": 45.195,
-      "actionTime": 45.195,
+      "fileStart": 45.045,
+      "audibleLandmark": 45.095,
+      "actionTime": 45.095,
       "errorFrames": 0.0
     },
     {
       "actionId": "mt-acc",
-      "fileStart": 45.95,
-      "audibleLandmark": 46.0,
-      "actionTime": 46.0,
-      "errorFrames": 0.0
+      "fileStart": 45.845,
+      "audibleLandmark": 45.894999999999996,
+      "actionTime": 45.895,
+      "errorFrames": -0.0
     },
     {
       "actionId": "end-copy",
@@ -1072,26 +1072,26 @@
     "requested": "linear",
     "normalization_type": "dynamic",
     "measurement": {
-      "input_i": "-17.70",
-      "input_tp": "-0.16",
-      "input_lra": "3.70",
-      "input_thresh": "-27.87",
-      "output_i": "-15.89",
+      "input_i": "-17.69",
+      "input_tp": "-2.20",
+      "input_lra": "3.90",
+      "input_thresh": "-27.88",
+      "output_i": "-15.88",
       "output_tp": "-1.50",
-      "output_lra": "3.50",
-      "output_thresh": "-26.00",
+      "output_lra": "3.60",
+      "output_thresh": "-26.01",
       "normalization_type": "dynamic",
-      "target_offset": "-0.11"
+      "target_offset": "-0.12"
     },
     "output": {
-      "input_i": "-17.70",
-      "input_tp": "-0.16",
-      "input_lra": "3.70",
-      "input_thresh": "-27.87",
+      "input_i": "-17.69",
+      "input_tp": "-2.20",
+      "input_lra": "3.90",
+      "input_thresh": "-27.88",
       "output_i": "-15.99",
       "output_tp": "-1.50",
-      "output_lra": "3.50",
-      "output_thresh": "-26.11",
+      "output_lra": "3.60",
+      "output_thresh": "-26.13",
       "normalization_type": "dynamic",
       "target_offset": "-0.01"
     }

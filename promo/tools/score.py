@@ -154,6 +154,9 @@ rev = np.stack([fftconvolve(bus['send'][:, c], ir[:, c])[:N] for c in range(2)],
 mix = bus['drums'] * 0.9 + bus['bass'] * 0.85 + bus['keys'] * 0.8 + bus['lead'] * 0.75 + bus['fx'] * 0.7 + rev * 0.9
 mix = np.stack([hp(mix[:, c], 30) for c in range(2)], 1)
 mix = mix[: int(DUR * SR)]
+# シーン…: the music stops dead for the silence beat (18.2-19.2 s) and comes back on the crash at 19.2 s
+gate = np.ones(len(mix)); i0, i1, i2 = int(18.08 * SR), int(18.2 * SR), int(19.19 * SR)
+gate[i0:i1] = np.linspace(1, 0, i1 - i0); gate[i1:i2] = 0; mix *= gate[:, None]
 fade = int(0.6 * SR); mix[-fade:] *= np.linspace(1, 0, fade)[:, None] ** 1.5
 mix = np.tanh(mix / (np.abs(mix).max() + 1e-9) * 1.4) * 0.89
 sf.write(sys.argv[1], mix.astype(np.float32), SR, subtype='FLOAT')

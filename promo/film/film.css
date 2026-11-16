@@ -12,7 +12,7 @@ html, body { margin: 0; background: #000; overflow: hidden; }
 }
 #stage { position: fixed; left: 0; top: 0; width: 960px; height: 540px; overflow: hidden; background: var(--sk-paper); }
 #tone { position: fixed; inset: 0; pointer-events: none; z-index: 50; --r: 0px;
-  background: radial-gradient(circle, var(--sk-ink) var(--r), transparent calc(var(--r) + .6px)) 0 0 / 22px 22px; }
+  background: radial-gradient(circle, var(--sk-ink) var(--r), transparent var(--r)) 0 0 / 22px 22px; }
 
 /* a page of the manga: screentone paper */
 .pg { position: absolute; inset: 0; overflow: hidden; color: var(--sk-ink); font-family: var(--tx);
@@ -104,3 +104,40 @@ html, body { margin: 0; background: #000; overflow: hidden; }
 /* the focus lines tremble on twos, like a held cel with a boiling background */
 @keyframes boil { 0% { transform: rotate(0deg) scale(1.02); } 50% { transform: rotate(.5deg) scale(1.025); } 100% { transform: rotate(-.4deg) scale(1.02); } }
 .cover .rays { animation: boil .5s steps(3, end) infinite; }
+
+/* ===== clean pass (2026-11-16): like the reference, the page is plain and the effects are the only decoration.
+   No screentone, no focus lines, no panel frames; each component floats on white with a small grey label. ===== */
+.pg { background: var(--sk-surface); background-image: none; }
+.pg .no { color: var(--mute); opacity: 1; font-size: 12px; }
+:root { --mute: color-mix(in srgb, var(--sk-ink) 55%, var(--sk-surface)); }
+.koma, .koma.tone, .koma.lines { background: none; border: 0; box-shadow: none; }
+.koma.card { background: var(--sk-surface); border: 2.5px solid var(--sk-ink); border-radius: 16px; box-shadow: 5px 5px 0 var(--sk-lav); }
+.lbl { left: 2px; top: auto; bottom: 0; padding: 0; background: none; color: var(--mute); font: 700 11.5px/1 var(--mono); letter-spacing: .01em; }
+.ttl { padding: 0; background: none; border: 0; box-shadow: none; gap: 5px; }
+.ttl .en { font-size: 30px; }
+.ttl .zh { font-size: 19px; color: var(--mute); }
+.cap { padding: 0; background: none; border: 0; font-size: 14px; color: var(--mute); }
+.cap code { background: none; padding: 0; color: var(--sk-ink); }
+.cover .rays, .cover .bar, .cover .ep, .cover .burst { display: none; }
+.cover .kick { top: 40px; color: var(--mute); font-size: 14px; }
+.cover .logo { text-shadow: 6px 6px 0 var(--sk-lav); }
+.cover .say { padding: 0; background: none; border: 0; box-shadow: none; }
+.cover .say b { font-size: 28px; }
+.cover .say span { color: var(--mute); font-size: 15px; }
+.chip { border: 0; background: none; transform: none; padding: 0 6px; color: var(--mute); }
+.chip i { transform: none; }
+.console { box-shadow: none; border: 0; border-radius: 10px; font-size: 15px; padding: 11px 16px; }
+.sw div { border: 0; background: none; padding: 4px 0; font-size: 17px; color: var(--mute); }
+.sw div i { width: 16px; height: 16px; border-width: 1.5px; }
+.sw div[data-on] { background: none; color: var(--sk-ink); transform: none; box-shadow: none; }
+.sw div[data-on]::after { content: ''; width: 18px; height: 3px; background: var(--sk-pink); border-radius: 2px; }
+.strip { background: none; color: var(--sk-ink); height: 60px; padding: 0 36px; }
+.strip .en { font-size: 26px; }
+.strip .zh { font-size: 18px; color: var(--mute); }
+.strip .n { font-size: 20px; color: var(--mute); }
+
+/* cover, centred: logo, line, button; the press is the only thing that moves */
+.cover .kick { left: 0; right: 0; text-align: center; top: 56px; }
+.cover .logo { left: 0; right: 0; top: 92px; text-align: center; }
+.cover .say { left: 0; right: 0; top: 244px; text-align: center; }
+.cover .chips { left: 0; right: 0; top: 476px; justify-content: center; }

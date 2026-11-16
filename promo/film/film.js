@@ -87,7 +87,12 @@ function screentone(t, swap) {
   at(t + 0.15, () => swap(), true);
   at(t + 0.15, () => { tone.animate([{ '--r': '17px' }, { '--r': '0px' }], { duration: 170, easing: 'steps(4, end)', fill: 'forwards' }); });
 }
-function mount(p, t, z = 1) { p.style.visibility = 'hidden'; p.style.zIndex = z; stage.appendChild(p); pages.push(p); at(t, () => { p.style.visibility = ''; }, true); return p; }
+function mount(p, t, z = 1) { p.style.visibility = 'hidden'; p.style.zIndex = z; stage.appendChild(p); pages.push(p); at(t, () => { p.style.visibility = ''; }, true); if (t > 0) clearWords(t); return p; }
+// lettering lives in the top layer, not on the page, so a page change has to retire it explicitly
+function clearWords(t) { at(t, () => document.querySelectorAll('.sk-w').forEach(w => { w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 70, fill: 'forwards' }).onfinish = () => w.remove(); })); }
+// one hero at a time, like a single panel: the others step back to a faint grey
+function spot(items, plan) { for (const [t, i] of plan) at(t, () => items.forEach((k, j) => k.animate([{ opacity: getComputedStyle(k).opacity }, { opacity: i < 0 || i === j ? 1 : 0.22 }], { duration: 180, easing: 'ease-out', fill: 'forwards' }))); }
+function swap(t, fn, item) { at(t, () => { fn(); S.SND.play('pop'); const d = item(); if (d) d.animate([{ scale: '1.25' }, { scale: '1' }], { duration: SP.bounce.duration, easing: SP.bounce.easing }); }, true); }
 function drop(p, t) { at(t, () => { p.remove(); pages = pages.filter(x => x !== p); }, true); }
 function title(p, x, y, en, zh, t, w) {
   const b = el(`<div class="ttl" style="left:${x}px;top:${y}px;${w ? `width:${w}px` : ''}"><b class="en">${en}</b><span class="zh">${zh}</span></div>`);
@@ -117,14 +122,13 @@ function cover() {
   <div class="logo">SAKUGA <b>UI</b></div>
   <div class="ep">一按，即原画。</div>
   <div class="say"><b>每按一下，都是一格原画。</b><span>EVERY PRESS IS A KEY FRAME</span></div>
-  <svg class="burst" style="left:700px;top:342px" width="1" height="1"><path d="${starburst(18, 124, 74)}" fill="var(--sk-surface)" stroke="var(--sk-ink)" stroke-width="4" stroke-linejoin="miter"/></svg>
-  <div class="chips"><span class="chip"><i><b>44</b>个组件</i></span><span class="chip"><i><b>5</b>套配色</i></span><span class="chip"><i><b>45</b>种合成音效</i></span><span class="chip"><i><b>0</b>依赖</i></span></div>`;
-  const btn = el(`<sk-button variant="pink" size="lg" style="position:absolute;left:700px;top:342px;translate:-50% -50%">按我! PRESS</sk-button>`);
+  <svg class="burst" style="left:700px;top:342px" width="1" height="1"><path d="${starburst(18, 124, 74)}" fill="var(--sk-surface)" stroke="var(--sk-ink)" stroke-width="4" stroke-linejoin="miter"/></svg>`;
+  const btn = el(`<sk-button variant="pink" size="lg" style="position:absolute;left:480px;top:408px;translate:-50% -50%">按我! PRESS</sk-button>`);
   p.appendChild(btn);
   btn.addEventListener('click', () => {
     const r = btn.getBoundingClientRect();
-    S.moves.boom(r.left + r.width / 2, r.top + r.height / 2, 1.3, btn);
-    S.sfx(jp('ドン!'), { voice: 'impact', x: r.left + r.width / 2 - 20, y: r.top - 64, size: 96, hold: 900 });
+    S.moves.boom(r.left + r.width / 2, r.top + r.height / 2, 0.8, btn);
+    S.sfx(jp('ドン!'), { voice: 'impact', x: r.left + r.width / 2 + 230, y: r.top + 20, size: 96, hold: 900 });
     S.shake(p.querySelector('.logo'), 9, 300);
   });
   cursor.park(W + 30, 470, s.start);
@@ -153,6 +157,7 @@ function press(prev) {
   cursor.to(h, 6.5, 0.55);
   cursor.down(7.183); cursor.up(8.45);
   at(8.5, () => S.shake(p, 7, 260));
+  spot([k1, k2, k3], [[4.25, 0], [5.3, 1], [6.5, 2], [8.9, -1]]);
   return p;
 }
 
@@ -160,7 +165,7 @@ function press(prev) {
 function forms(prev) {
   const s = SHOT.forms, p = mount(page('', 'P.03'), s.start, 2);
   drop(prev, s.start + 0.02);
-  const t = title(p, 36, 40, 'FORMS<br>WITH <em>WEIGHT</em>', '表单也有手感', null, 290);
+  const t = title(p, 36, 40, 'FORMS WITH <em>WEIGHT</em>', '表单也有手感', null);
   const c = caption(p, 36, 250, '开关会弹，勾选会「カチッ」，<br>滑块拖动时有摩擦声，<br>评分的星星依次点亮，音阶上升。', null, 290);
   const k1 = koma(p, 354, 32, 278, 200, '<sk-switch>', 'tone');
   const k2 = koma(p, 648, 32, 278, 200, '<sk-checkbox>', 'lines');
@@ -182,6 +187,7 @@ function forms(prev) {
   cursor.up(12.85);
   cursor.to(() => { const st = rt.shadowRoot.querySelectorAll('button, .s, [part~=star]'); return st.length ? st[st.length - 1] : rt; }, 12.9, 0.3);
   cursor.click(13.2);
+  spot([k1, k2, k3, k4], [[10.0, 0], [10.75, 1], [11.5, 2], [12.9, 3], [13.9, -1]]);
   return p;
 }
 
@@ -191,7 +197,7 @@ function lettering(prev) {
   drop(prev, s.start + 0.02);
   impact(s.start);
   const k = koma(p, 20, 20, 920, 500, '', 'lines'); k.style.setProperty('--fx', '50%'); k.style.setProperty('--fy', '52%');
-  const tg = el(`<div class="tag" style="left:44px;top:40px"><i>LETTERING BUILT IN · <span style="font-family:var(--zh)">拟声词就是字幕</span></i></div>`); p.appendChild(tg);
+  const tg = title(p, 36, 28, 'LETTERING <em>BUILT IN</em>', '拟声词就是字幕', null);
   const cp = caption(p, 516, 426, '<code>sfx(\'ドン!\', { voice: \'impact\' })</code><br>10 种声线，每个词有自己的字体、描边、入场和声音。', s.start + 0.25, 400);
   reveal(tg, s.start + 0.05, 160, 3);
   cursor.hide(s.start);
@@ -205,7 +211,7 @@ function lettering(prev) {
     [17.2, 'シュッ', 'swish', 400, 450, 52],
   ];
   for (const [t, w, voice, x, y, size] of words) at(t, () => S.sfx(w, { voice, x, y, size, hold: 19.2 - t > 1.2 ? (18.0 - t) * 1000 : 500 }));
-  at(18.4, () => S.sfx('シーン…', { voice: 'hush', x: 480, y: 270, size: 64, hold: 700 }));
+  at(18.4, () => S.sfx('シーン…', { voice: 'hush', x: 480, y: 270, size: 64, hold: 420 }));
   return p;
 }
 
@@ -234,7 +240,7 @@ function icons(prev) {
     <line class="axis" x1="${ox}" y1="${Y(0)}" x2="${ox + cw}" y2="${Y(0)}"/>
     <line class="head" x1="${ox}" y1="${oy - 6}" x2="${ox}" y2="${oy + ch + 4}"/>
     <text x="${X(DIP) - 4}" y="${oy - 12}" text-anchor="middle">70ms 预备</text>
-    <text x="${X(DIP + 360)}" y="${oy + ch + 24}" text-anchor="middle">733ms 弹簧回位</text>
+    <text x="${X(DIP + 360)}" y="${oy + ch + 46}" text-anchor="middle">733ms 弹簧回位</text>
   </svg>`);
   k2.appendChild(svg);
   const curve = el(`<svg class="sheet" width="468" height="300" style="position:absolute;left:0;top:0"><path class="curve" d="${d}"/></svg>`);
@@ -262,16 +268,16 @@ function icons(prev) {
 function loaders(prev) {
   const s = SHOT.loaders, p = mount(page('', 'P.06'), s.start, 2);
   drop(prev, s.start + 0.02);
-  const k1 = koma(p, 36, 30, 470, 420, '<sk-loader>', 'lines');
+  const k1 = koma(p, 36, 110, 470, 340, '<sk-loader>', 'lines');
   k1.style.setProperty('--fx', '50%'); k1.style.setProperty('--fy', '62%');
-  const ball = el(`<sk-loader style="font-size:46px;margin-top:70px"></sk-loader>`); k1.appendChild(ball);
+  const ball = el(`<sk-loader style="font-size:46px;margin-top:120px"></sk-loader>`); k1.appendChild(ball);
   const k2 = koma(p, 526, 30, 398, 128, 'variant="flip"', 'tone');
   const k3 = koma(p, 526, 176, 398, 128, 'variant="wave"', '');
   const k4 = koma(p, 526, 322, 398, 128, 'variant="pencil"', 'tone');
   const flip = el(`<sk-loader variant="flip" style="font-size:24px">Inking…</sk-loader>`); k2.appendChild(flip);
   const wave = el(`<sk-loader variant="wave" text="LOADING" style="font-size:24px"></sk-loader>`); k3.appendChild(wave);
   const pen = el(`<sk-loader variant="pencil" tips="Roughing in|Cleaning up|Colouring" style="font-size:22px"></sk-loader>`); k4.appendChild(pen);
-  const t = title(p, 52, 46, 'WAITING CAN<br>BE <em>FUN</em>', '等待也可以好玩', null);
+  const t = title(p, 36, 28, 'WAITING CAN BE <em>FUN</em>', '等待也可以好玩', null);
   const c = caption(p, 36, 466 - 8, '四种加载动画，戳一下会回应，连戳还会计连击。', s.start + 0.6);
   slamIn([k1, k2, k3, k4, t], s.start, 0.04);
   cursor.park(700, 600, s.start); cursor.show(s.start + 0.6);
@@ -281,6 +287,7 @@ function loaders(prev) {
   cursor.click(28.4);
   cursor.to(wave, 28.8, 0.4);
   cursor.click(29.2);
+  spot([k1, k2, k3, k4], [[24.9, 0], [27.75, 1], [28.75, 2], [29.75, -1]]);
   return p;
 }
 
@@ -288,7 +295,6 @@ function loaders(prev) {
 function palettes(prev) {
   const s = SHOT.palettes, p = mount(page('', 'P.07'), s.start, 2);
   drop(prev, s.start + 0.02);
-  screentone(s.start - 0.15, () => {});
   title(p, 36, 24, 'FIVE PALETTES, <em>LIGHT AND DARK</em>', '五套配色，一行切换', s.start + 0.1);
   const k = koma(p, 36, 140, 640, 280, '', 'tone');
   k.style.placeItems = 'stretch';
@@ -310,14 +316,15 @@ function palettes(prev) {
   const show = (name, theme) => { code.innerHTML = theme ? `Sakuga.setTheme(<span class="s">'${theme}'</span>)` : `Sakuga.setPalette(<span class="s">'${name}'</span>)`; };
   at(s.start, () => { reset(); show('sakuga'); paint(); });
   const seq = [[31.2, 'shonen'], [32.0, 'soda'], [32.8, 'sunset'], [33.6, 'mono']];
-  for (const [t, n] of seq) screentone(t - 0.15, () => { S.setPalette(n); show(n); paint(); });
+  const item = n => () => sw.querySelector(`[data-p=${n}]`);
+  for (const [t, n] of seq) swap(t, () => { S.setPalette(n); show(n); paint(); }, item(n));
   cursor.park(800, 600, s.start); cursor.show(33.7);
   cursor.to(ts, 33.75, 0.5);
   cursor.click(34.4);
   at(34.42, () => { show(null, 'dark'); paint(); });
   at(35.0, () => paint());
-  screentone(35.2 - 0.15, () => { S.setPalette('sakuga'); show('sakuga'); paint(); });
-  screentone(36.0 - 0.15, () => { S.setPalette('soda'); show('soda'); paint(); });
+  swap(35.2, () => { S.setPalette('sakuga'); show('sakuga'); paint(); }, item('sakuga'));
+  swap(36.0, () => { S.setPalette('soda'); show('soda'); paint(); }, item('soda'));
   return p;
 }
 
@@ -327,7 +334,8 @@ function overlays(prev) {
   drop(prev, s.start + 0.02);
   at(s.start, reset, true);
   title(p, 36, 26, 'POP-UPS THAT <em>LAND</em>', '弹层会「落地」', s.start + 0.05);
-  const k = koma(p, 36, 146, 520, 280, '<sk-dialog> · toast()', 'tone');
+  const k = koma(p, 36, 146, 520, 280, '', 'card');
+  p.appendChild(el(`<span class="lbl" style="position:absolute;left:38px;top:448px;bottom:auto">&lt;sk-dialog&gt; · toast()</span>`));
   k.innerHTML += `<div style="display:grid;gap:16px;justify-items:start;width:380px">
       <div style="font:700 22px/1.2 var(--tx)">Project: “Episode 01”</div>
       <div style="font:400 15px/1.4 var(--tx);color:var(--sk-muted)">48 cuts · last inked 2 min ago</div>
@@ -353,12 +361,12 @@ function overlays(prev) {
 function montage(prev) {
   const s = SHOT.montage;
   const items = [
-    ['<sk-tabs>', `<sk-tabs value="a" style="width:360px"><sk-tab value="a" label="Overview">Every interaction is a key frame.</sk-tab><sk-tab value="b" label="Specs">No dependencies. Plain custom elements.</sk-tab><sk-tab value="c" label="Reviews">“Feels alive.”</sk-tab></sk-tabs>`, (n) => inner(n.querySelector('sk-tabs'), 'button[data-i="1"]')],
+    ['<sk-tabs>', `<sk-tabs value="a" style="width:360px"><sk-tab value="a" label="Overview">Key frames.</sk-tab><sk-tab value="b" label="Specs">Zero deps.</sk-tab><sk-tab value="c" label="Reviews">“Feels alive.”</sk-tab></sk-tabs>`, (n) => inner(n.querySelector('sk-tabs'), 'button[data-i="1"]')],
     ['<sk-segmented>', `<sk-segmented value="day"><button value="day">Day</button><button value="week">Week</button><button value="month">Month</button></sk-segmented>`, (n) => n.querySelector('button[value=month]')],
     ['<sk-calendar>', `<sk-calendar value="2026-11-03" month="2026-11"></sk-calendar>`, (n) => inner(n.querySelector('sk-calendar'), '[data-d="2026-11-20"]')],
-    ['<sk-steps>', `<div style="display:grid;gap:18px;justify-items:center;width:420px"><sk-steps current="1" style="width:100%"><sk-step label="Cart"></sk-step><sk-step label="Pay"></sk-step><sk-step label="Done"></sk-step></sk-steps><sk-button size="sm" class="nx">Next</sk-button></div>`, (n) => n.querySelector('.nx')],
-    ['<sk-counter>', `<div style="display:grid;gap:14px;justify-items:center"><sk-counter value="0" duration="380" style="font-size:66px"></sk-counter><sk-button size="sm" class="nx">+ 9,999</sk-button></div>`, (n) => n.querySelector('.nx')],
-    ['<sk-accordion>', `<sk-accordion single style="width:370px"><sk-accordion-item label="What is sakuga?" open>Shots a key animator draws by hand, with extra force.</sk-accordion-item><sk-accordion-item label="Is it too loud?">Every effect, word and sound can be turned off.</sk-accordion-item></sk-accordion>`, (n) => inner(n.querySelector('sk-accordion-item:nth-child(2)'), '.head')],
+    ['<sk-steps>', `<div style="display:grid;gap:18px;justify-items:center;width:380px"><sk-steps current="1" style="width:100%"><sk-step label="Cart"></sk-step><sk-step label="Pay"></sk-step><sk-step label="Done"></sk-step></sk-steps><sk-button size="sm" class="nx">Next</sk-button></div>`, (n) => n.querySelector('.nx')],
+    ['<sk-counter>', `<div style="display:grid;gap:14px;justify-items:center"><sk-counter value="0" duration="260" style="font-size:66px"></sk-counter><sk-button size="sm" class="nx">+ 9,999</sk-button></div>`, (n) => n.querySelector('.nx')],
+    ['<sk-accordion>', `<sk-accordion single style="width:370px"><sk-accordion-item label="What is sakuga?" open>Hand-drawn force.</sk-accordion-item><sk-accordion-item label="Is it too loud?">Every effect can be off.</sk-accordion-item></sk-accordion>`, (n) => inner(n.querySelector('sk-accordion-item:nth-child(2)'), '.head')],
   ];
   const strip = el(`<div class="strip"><span class="en"><em>49</em> TAGS · ZERO DEPENDENCIES</span><span class="zh">49 个标签，零依赖</span><span class="n">01/06</span></div>`);
   let last = prev;
@@ -367,13 +375,12 @@ function montage(prev) {
     drop(last, t + 0.02); last = p;
     if (i === 0) { impact(t); p.appendChild(strip); }
     else at(t, () => { p.appendChild(strip); strip.querySelector('.n').textContent = `0${i + 1}/06`; });
-    const k = koma(p, 200, 108, 560, 330, label, i % 2 ? 'tone' : 'lines');
-    const holder = el(`<div style="zoom:${i === 2 ? 0.92 : 1.35};display:grid;place-items:center">${html}</div>`); k.appendChild(holder);
+    const k = koma(p, 120, 76, 720, 400, label, '');
+    const holder = el(`<div style="zoom:${i === 2 ? 1.0 : i === 4 ? 1.5 : 1.7};display:grid;place-items:center">${html}</div>`); k.appendChild(holder);
     if (i === 4) holder.querySelector('.nx').addEventListener('click', () => { holder.querySelector('sk-counter').value = 9999; });
     if (i === 3) holder.querySelector('.nx').addEventListener('click', () => holder.querySelector('sk-steps').next());
-    slamIn([k], t, 0);
-    cursor.to(() => target(holder), t + 0.05, 0.3);
-    cursor.click(t + 0.4);
+    cursor.to(() => target(holder), t + 0.02, 0.24);
+    cursor.click(t + 0.3);
   });
   at(s.start, () => { cur.style.opacity = 1; });
   return last;
@@ -394,7 +401,7 @@ function end(prev) {
   const cp = el(`<sk-copy value="npm i github:LeeHongji/sakuga-ui" style="zoom:1.45"></sk-copy>`); p.querySelector('.cmd').appendChild(cp);
   const chips = el(`<div class="chips" style="position:absolute;left:0;right:0;top:452px;display:flex;justify-content:center;gap:10px"><span class="chip"><i><b>44</b>个组件</i></span><span class="chip"><i><b>49</b>个标签</i></span><span class="chip"><i><b>0</b>依赖</i></span><span class="chip"><i><b>57</b>kB gzip</i></span><span class="chip"><i><b>3</b>种语言</i></span><span class="chip"><i><b>5</b>套配色</i></span></div>`);
   p.appendChild(chips);
-  [...chips.children].forEach((c, i) => { c.style.visibility = 'hidden'; at(48.4 + i * 0.1, () => { c.style.visibility = ''; c.animate([{ transform: 'skewX(-10deg) translateY(10px)' }, { transform: 'skewX(-10deg)' }], { duration: SP.bounce.duration, easing: SP.bounce.easing }); }); });
+  [...chips.children].forEach((c, i) => { c.style.visibility = 'hidden'; at(48.4 + i * 0.1, () => { c.style.visibility = ''; c.animate([{ transform: 'translateY(10px)' }, { transform: 'none' }], { duration: SP.bounce.duration, easing: SP.bounce.easing }); }); });
   reveal(p.querySelector('.url'), 49.2, 220, 5);
   reveal(more, 51.2, 200, 4);
   cursor.park(720, 600, s.start - 0.42); cursor.show(s.start);
@@ -403,7 +410,7 @@ function end(prev) {
   cursor.to([880, 610], 47.8, 0.7);
   at(50.0, () => {
     logo.animate([{ transform: 'scale(1.35)' }, { transform: 'none' }], { duration: SP.bounce.duration, easing: SP.bounce.easing });
-    S.moves.boom(480, 176, 1.6);
+    S.moves.shower(480, 150, 'star', 12, { stroke: S.FX.C.ink, g: 520 });
     S.sfx('ドン!', { voice: 'impact', x: 846, y: 168, size: 80, hold: 2400 });
   });
   impact(50.0);

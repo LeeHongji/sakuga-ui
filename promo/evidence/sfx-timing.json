@@ -29,8 +29,8 @@
   },
   {
     "action": "press-slash",
-    "actionTime": 8.34,
-    "firstSound": 8.29,
+    "actionTime": 8.3,
+    "firstSound": 8.25,
     "offsetMs": -50,
     "peak": 0.37
   },
@@ -155,128 +155,128 @@
   },
   {
     "action": "pal-shonen",
-    "actionTime": 31.065,
-    "firstSound": 31.065,
+    "actionTime": 31.211,
+    "firstSound": 31.211,
     "offsetMs": 0,
-    "peak": 0.144
+    "peak": 0.289
   },
   {
     "action": "pal-soda",
-    "actionTime": 31.866,
-    "firstSound": 31.866,
+    "actionTime": 32.011,
+    "firstSound": 32.011,
     "offsetMs": 0,
-    "peak": 0.146
+    "peak": 0.289
   },
   {
     "action": "pal-sunset",
-    "actionTime": 32.666,
-    "firstSound": 32.666,
+    "actionTime": 32.811,
+    "firstSound": 32.811,
     "offsetMs": 0,
-    "peak": 0.136
+    "peak": 0.289
   },
   {
     "action": "pal-mono",
-    "actionTime": 33.466,
-    "firstSound": 33.466,
+    "actionTime": 33.611,
+    "firstSound": 33.611,
     "offsetMs": 0,
-    "peak": 0.14
+    "peak": 0.289
   },
   {
     "action": "pal-dark",
-    "actionTime": 34.411,
-    "firstSound": 34.411,
+    "actionTime": 34.408,
+    "firstSound": 34.408,
     "offsetMs": 0,
-    "peak": 0.311
+    "peak": 0.34
   },
   {
     "action": "pal-sakuga-dark",
-    "actionTime": 35.065,
-    "firstSound": 35.065,
+    "actionTime": 35.211,
+    "firstSound": 35.211,
     "offsetMs": 0,
-    "peak": 0.105
+    "peak": 0.29
   },
   {
     "action": "pal-soda-dark",
-    "actionTime": 35.865,
-    "firstSound": 35.865,
+    "actionTime": 36.011,
+    "firstSound": 36.011,
     "offsetMs": 0,
-    "peak": 0.133
+    "peak": 0.289
   },
   {
     "action": "ov-open",
     "actionTime": 37.594,
     "firstSound": 37.594,
     "offsetMs": 0,
-    "peak": 0.654
+    "peak": 0.675
   },
   {
     "action": "ov-confirm",
     "actionTime": 39.195,
     "firstSound": 39.195,
     "offsetMs": 0,
-    "peak": 0.187
+    "peak": 0.185
   },
   {
     "action": "ov-toast",
     "actionTime": 40.025,
     "firstSound": 40.025,
     "offsetMs": 0,
-    "peak": 0.187
+    "peak": 0.196
   },
   {
     "action": "mt-tabs",
-    "actionTime": 41.998,
-    "firstSound": 41.998,
-    "offsetMs": 0,
-    "peak": 0.225
-  },
-  {
-    "action": "mt-seg",
-    "actionTime": 42.8,
-    "firstSound": 42.8,
+    "actionTime": 41.899,
+    "firstSound": 41.899,
     "offsetMs": 0,
     "peak": 0.186
   },
   {
-    "action": "mt-cal",
-    "actionTime": 43.595,
-    "firstSound": 43.595,
+    "action": "mt-seg",
+    "actionTime": 42.7,
+    "firstSound": 42.7,
     "offsetMs": 0,
-    "peak": 0.257
+    "peak": 0.224
+  },
+  {
+    "action": "mt-cal",
+    "actionTime": 43.495,
+    "firstSound": 43.495,
+    "offsetMs": 0,
+    "peak": 0.241
   },
   {
     "action": "mt-steps",
-    "actionTime": 44.395,
-    "firstSound": 44.395,
+    "actionTime": 44.295,
+    "firstSound": 44.295,
     "offsetMs": 0,
-    "peak": 0.334
+    "peak": 0.378
   },
   {
     "action": "mt-count",
-    "actionTime": 45.195,
-    "firstSound": 45.195,
+    "actionTime": 45.095,
+    "firstSound": 45.095,
     "offsetMs": 0,
-    "peak": 0.275
+    "peak": 0.29
   },
   {
     "action": "mt-acc",
-    "actionTime": 46.0,
-    "firstSound": 46.0,
+    "actionTime": 45.895,
+    "firstSound": 45.895,
     "offsetMs": 0,
-    "peak": 0.148
+    "peak": 0.29
   },
   {
     "action": "end-copy",
     "actionTime": 47.195,
     "firstSound": 47.195,
     "offsetMs": 0,
-    "peak": 0.306
+    "peak": 0.309
   },
   {
     "action": "end-logo",
     "actionTime": 50.011,
     "firstSound": 50.011,
     "offsetMs": 0,
-    "peak": 0.64
+    "peak": 0.627
   }
 ]

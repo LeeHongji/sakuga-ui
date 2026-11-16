@@ -36,8 +36,7 @@
 html { scroll-behavior: smooth; scroll-padding-top: 18px; }
 body {
   margin: 0; color: var(--sk-ink); font: 400 15px/1.6 var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; counter-reset: pg;
-  background-color: color-mix(in srgb, var(--sk-lav) 36%, var(--sk-paper));
-  background-image: radial-gradient(color-mix(in srgb, var(--sk-violet) 34%, transparent) 1.1px, transparent 1.5px); background-size: 9px 9px;
+  background-color: color-mix(in srgb, var(--sk-lav) 30%, var(--sk-paper));   /* plain: the effects are the decoration */
 }
 code { font-family: var(--mono); font-size: 0.9em; }
 a { color: inherit; }
@@ -142,8 +141,6 @@ h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-ord
 .strip-tag { position: absolute !important; left: 22px; top: -17px; z-index: 3; padding: 3px 16px 3px 12px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 18px / 1.2 var(--tag); letter-spacing: 0.1em; rotate: -4deg; clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 100%, 0 100%); }
 .cut { margin: 0 9px; border: var(--ln) solid var(--sk-ink); transform: skewX(-9deg); background: var(--sk-paper); display: grid; place-items: center; min-height: 132px; }
 .cut > div { transform: skewX(9deg); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 24px; padding: 34px 20px 16px; }
-.cut.c1 { background-image: radial-gradient(color-mix(in srgb, var(--sk-lav) 80%, transparent) 1.6px, transparent 2px); background-size: 9px 9px; }
-.cut.c3 { background-image: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--sk-lav) 60%, transparent) 0 1.5px, transparent 1.5px 7px); }
 
 /* ---------- panels (koma) ---------- */
 .komas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--g); align-items: start; }
@@ -166,12 +163,8 @@ h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-ord
 .koma h3 small { margin-left: 8px; font: var(--tw) calc(13px * var(--xk)) / 1 var(--text); color: var(--mute); }
 .koma header code { font-size: 12px; font-weight: 700; color: var(--sk-violet); }
 .koma .cap { grid-column: 1 / -1; margin: 10px 0 0; padding: 6px 9px; border: 2px solid var(--sk-ink); background: var(--sk-paper); font: var(--tw) calc(15px * var(--xk)) / 1.65 var(--text); }
-.stage { position: relative; isolation: isolate; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 22px; min-height: 152px; padding: 40px 22px 34px; border-top: var(--ln) solid var(--sk-ink); border-bottom: var(--ln) solid var(--sk-ink); background: var(--sk-paper); }
+.stage { position: relative; isolation: isolate; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 22px; min-height: 152px; padding: 40px 22px 34px; border-top: var(--ln) solid var(--sk-ink); border-bottom: var(--ln) solid var(--sk-ink); background: var(--sk-surface); }
 .stage::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.tone-0 .stage::before { background: radial-gradient(color-mix(in srgb, var(--sk-lav) 85%, transparent) 1.5px, transparent 2px) 0 0 / 9px 9px; -webkit-mask: linear-gradient(135deg, transparent 58%, #000); mask: linear-gradient(135deg, transparent 58%, #000); }
-.tone-1 .stage::before { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--sk-lav) 70%, transparent) 0 1.5px, transparent 1.5px 7px); -webkit-mask: linear-gradient(225deg, transparent 55%, #000); mask: linear-gradient(225deg, transparent 55%, #000); }
-.tone-2 .stage::before { background: radial-gradient(color-mix(in srgb, var(--sk-peri) 60%, transparent) 2px, transparent 2.6px) 0 0 / 11px 11px; -webkit-mask: linear-gradient(90deg, #000, transparent 34%); mask: linear-gradient(90deg, #000, transparent 34%); }
-.tone-3 .stage::before { background: repeating-linear-gradient(0deg, transparent 0 9px, color-mix(in srgb, var(--sk-lav) 75%, transparent) 9px 10.5px, transparent 10.5px 15px, color-mix(in srgb, var(--sk-lav) 75%, transparent) 15px 18px); -webkit-mask: linear-gradient(90deg, #000, transparent 30%, transparent 70%, #000); mask: linear-gradient(90deg, #000, transparent 30%, transparent 70%, #000); }
 .stage.stack { flex-direction: column; align-items: stretch; }
 .stage.stack > sk-button { align-self: center; }
 .code { position: relative; background: color-mix(in srgb, var(--sk-ink) 92%, var(--sk-violet)); color: #f1eefc; --c1: color-mix(in srgb, var(--sk-pink) 55%, #fff); --c2: color-mix(in srgb, var(--sk-peri) 45%, #fff); --c3: color-mix(in srgb, #f1eefc 55%, transparent); }
@@ -289,3 +282,6 @@ footer p { margin: 8px 0 0; text-align: right; opacity: 0.75; }
   .api-table td:first-child { white-space: normal; overflow-wrap: anywhere; }
 }
 @media (prefers-reduced-motion: reduce) { .koma { transition: none; } .js .koma:not(.in) { opacity: 1; transform: none; } }
+
+/* the cover keeps its starburst but drops the background screentone and focus lines */
+.cover > .focus, .cover > .tone-fade { display: none; }

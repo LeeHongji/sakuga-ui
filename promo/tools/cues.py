@@ -13,7 +13,7 @@ amp = np.abs(x).max(1)
 if '--snap' in sys.argv:
     for s in plan['shots']:
         for a in s['actions']:
-            if not a.get('soundRequired'): continue
+            if not a.get('soundRequired') or a.get('snap') is False: continue
             t = s['start'] + a['at']; lo, hi = round((t - 0.06) * sr), round((t + 0.12) * sr)
             hit = np.nonzero(amp[lo:hi] > 0.02)[0]
             if len(hit): a['at'] = round((lo + hit[0]) / sr - s['start'], 3)

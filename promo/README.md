@@ -22,10 +22,7 @@
 python3 tools/serve.py 8830 &                                   # 根目录是仓库，影片页面在 /promo/film/
 python3 tools/render.py --stills 1.8,22.6                       # 先出几张静帧看看
 python3 tools/render.py --out renders/picture.mp4 --sfx assets/sfx-product.wav   # 全片，约 6 分钟
-python3 tools/score.py assets/music.wav
-python3 tools/cues.py assets/sfx-product.wav --snap
-python3 <skill>/scripts/mix_audio.py plan.json && python3 tools/gains.py && python3 <skill>/scripts/mix_audio.py plan.json
-ffmpeg -i renders/picture.mp4 -i assets/master.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k -shortest renders/final.mp4
+sh tools/finish.sh                                              # 配乐、按实测起音切音效、混音（两遍）、合成、交付检查
 sh tools/media.sh renders/final.mp4 ../docs/media
 ```
 
