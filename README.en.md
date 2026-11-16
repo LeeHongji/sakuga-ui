@@ -7,7 +7,7 @@ Web components with anime key-animation energy: cel-style effects, katakana lett
 
 <p>
 <a href="https://github.com/LeeHongji/sakuga-ui/blob/main/LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-1b1642?style=flat-square"></a>
-<img alt="version 0.1.0" src="https://img.shields.io/badge/version-0.1.0-ec4899?style=flat-square">
+<a href="https://www.npmjs.com/package/sakuga-ui"><img alt="npm" src="https://img.shields.io/npm/v/sakuga-ui?style=flat-square&color=ec4899"></a>
 <img alt="49 tags" src="https://img.shields.io/badge/tags-49-7c6cf0?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1b1642?style=flat-square">
 <img alt="57 kB gzip" src="https://img.shields.io/badge/gzip-57%20kB-ec4899?style=flat-square">
@@ -54,12 +54,12 @@ The clips come from the promo film. Every component in it is this library, every
 - **Restraint**: effects have full / lite / off, sound can be turned off, and reduced-motion turns effects off
 - **Size**: everything is 57 kB gzip; the core alone is 20 kB gzip
 
-> **Status**: 0.1.0. Not on the npm registry yet; install it straight from GitHub. Fully verified in Chromium only.
+> **Status**: 0.1.0, published on [npm](https://www.npmjs.com/package/sakuga-ui). Fully verified in Chromium only.
 
 ## Quick start
 
 ```bash
-npm i github:LeeHongji/sakuga-ui
+npm i sakuga-ui
 ```
 
 ```js
@@ -71,7 +71,7 @@ import { configure, toast, setTheme, setPalette } from 'sakuga-ui';
 Without a build step:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/LeeHongji/sakuga-ui@main/dist/sakuga.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.1/dist/sakuga.js"></script>
 
 <sk-button fx="boom">Confirm</sk-button>
 <sk-switch checked>Wi-Fi</sk-switch>

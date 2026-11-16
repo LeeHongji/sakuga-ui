@@ -7,7 +7,7 @@
 
 <p>
 <a href="https://github.com/LeeHongji/sakuga-ui/blob/main/LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-1b1642?style=flat-square"></a>
-<img alt="version 0.1.0" src="https://img.shields.io/badge/version-0.1.0-ec4899?style=flat-square">
+<a href="https://www.npmjs.com/package/sakuga-ui"><img alt="npm" src="https://img.shields.io/npm/v/sakuga-ui?style=flat-square&color=ec4899"></a>
 <img alt="49 tags" src="https://img.shields.io/badge/tags-49-7c6cf0?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1b1642?style=flat-square">
 <img alt="57 kB gzip" src="https://img.shields.io/badge/gzip-57%20kB-ec4899?style=flat-square">
@@ -54,14 +54,14 @@
 - **克制**：特效分全 / 轻 / 关三档，音效可关，系统开启「减少动态效果」时自动关闭特效
 - **体积**：全部组件 57 kB gzip，只用内核 20 kB gzip
 
-> **状态**：0.1.0，尚未发布到 npm 注册表，可以直接从 GitHub 安装。目前只在 Chromium 上做过完整验证。
+> **状态**：0.1.0，已发布到 [npm](https://www.npmjs.com/package/sakuga-ui)。目前只在 Chromium 上做过完整验证。
 
 ## 快速上手
 
-**从 GitHub 安装**
+**安装**
 
 ```bash
-npm i github:LeeHongji/sakuga-ui
+npm i sakuga-ui
 ```
 
 ```js
@@ -73,7 +73,7 @@ import { configure, toast, setTheme, setPalette } from 'sakuga-ui';
 **不用构建工具**
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/LeeHongji/sakuga-ui@main/dist/sakuga.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.1/dist/sakuga.js"></script>
 
 <sk-button fx="boom">Confirm</sk-button>
 <sk-switch checked>Wi-Fi</sk-switch>
