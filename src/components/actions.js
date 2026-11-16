@@ -216,7 +216,13 @@ export class SkSegmented extends SkElement {
   disconnected() { this.ro.disconnect(); }
   valueOf(b, i) { return b.value || b.getAttribute('value') || String(i); }
   // slotted children report offsets against the page, so measure against the track instead
-  geo(b) { const t = this.track.getBoundingClientRect(), r = b.getBoundingClientRect(); return [r.left - t.left - this.track.clientLeft, r.width]; }
+  // Screen rects include any CSS zoom or scale on the ancestors, and a pressed button is scaled down, so the width comes
+  // from layout (offsetWidth) and only the centre from the screen. Returns [left, width] in the track's own pixels,
+  // plus k (screen px per track px) and the track's screen left edge, for placing effects.
+  geo(b) {
+    const t = this.track.getBoundingClientRect(), r = b.getBoundingClientRect(), k = t.width / this.track.offsetWidth || 1, w = b.offsetWidth;
+    return [(r.left + r.width / 2 - t.left) / k - this.track.clientLeft - w / 2, w, k, t.left + this.track.clientLeft * k];
+  }
   place() {
     const b = this.items[this.cur]; if (!b) return;
     const [l, w] = this.geo(b);
@@ -231,10 +237,10 @@ export class SkSegmented extends SkElement {
   pick(i, user) {
     const its = this.items; if (i === this.cur || !its[i]) return;
     const from = its[this.cur], to = its[i], dir = i > this.cur ? 1 : -1;
-    const [a, wa] = this.geo(from), [b, wb] = this.geo(to);
+    const [a, wa, k, x0] = this.geo(from), [b, wb] = this.geo(to);
     this.cur = i; this.value = this.valueOf(to, i);
     slide(play, this.ind, a, wa, b, wb);   // stretches toward the destination and never leaves the track
-    const q = this.rect, fx = q.l + a + wa / 2, far = q.l + (dir > 0 ? b + wb : b);
+    const q = this.rect, fx = x0 + (a + wa / 2) * k, far = x0 + (dir > 0 ? b + wb : b) * k;
     moves.streak(fx, q.cy, dir > 0 ? Math.PI : 0, 44, 4, { delay: 0.04 });
     moves.say('シュッ', { voice: 'swish', x: (fx + far) / 2 + 12, y: q.t - 22, size: 22, hold: 220 });
     this.at(200, () => { FX.puff({ x: far + dir * 6, y: q.b + 2, r: 8, vx: dir * 40, vy: -10, life: 0.55 }); FX.ticks({ x: far + dir * 4, y: q.t - 4, angle: dir > 0 ? -0.8 : -2.35, len: 9, life: 0.35 }); shake(this, 1, 120); SND.play('land'); });
