@@ -1,48 +1,48 @@
 {
-  "env": "Playwright headless Chromium, GPU on · Apple M5 · 1440×900 · 2026-11-16",
+  "env": "Playwright headless Chromium, GPU on · Apple M5 · 1440×900 · 2026-11-18",
   "idle": {
-    "els": 233,
+    "els": 288,
     "raf": 0,
     "canvases": 0
   },
   "boom": {
     "fps": 120,
-    "p95": 9.1,
-    "worst": 9.4
+    "p95": 9.9,
+    "worst": 10.3
   },
   "switch": {
-    "fps": 120,
-    "p95": 9.2,
-    "worst": 9.3
+    "fps": 119,
+    "p95": 9.9,
+    "worst": 17.7
   },
   "checkbox": {
-    "fps": 120,
-    "p95": 9.3,
-    "worst": 9.3
+    "fps": 119,
+    "p95": 10,
+    "worst": 16.6
   },
   "slider": {
     "fps": 120,
-    "p95": 9.3,
-    "worst": 9.4
+    "p95": 10.2,
+    "worst": 10.4
   },
   "stress": {
     "booms": 180,
-    "fps": 90,
-    "p95": 24.9,
-    "worst": 33.3,
+    "fps": 101,
+    "p95": 17.7,
+    "worst": 26.3,
     "peak": 240
   },
   "throttled": {
-    "fps": 37,
-    "p95": 42.4,
+    "fps": 32,
+    "p95": 51.4,
     "q": 0.35
   },
   "many": {
-    "ms": 19,
+    "ms": 23,
     "raf": 0
   },
   "size": {
-    "all": 56.7,
+    "all": 70.6,
     "core": 19.7
   }
 }

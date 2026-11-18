@@ -8,9 +8,9 @@ Web components with anime key-animation energy: cel-style effects, katakana lett
 <p>
 <a href="https://github.com/LeeHongji/sakuga-ui/blob/main/LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-1b1642?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/sakuga-ui"><img alt="npm" src="https://img.shields.io/npm/v/sakuga-ui?style=flat-square&color=ec4899"></a>
-<img alt="49 tags" src="https://img.shields.io/badge/tags-49-7c6cf0?style=flat-square">
+<img alt="63 tags" src="https://img.shields.io/badge/tags-63-7c6cf0?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1b1642?style=flat-square">
-<img alt="57 kB gzip" src="https://img.shields.io/badge/gzip-57%20kB-ec4899?style=flat-square">
+<img alt="71 kB gzip" src="https://img.shields.io/badge/gzip-71%20kB-ec4899?style=flat-square">
 <img alt="Web Components" src="https://img.shields.io/badge/web%20components-native-7c6cf0?style=flat-square">
 </p>
 
@@ -46,13 +46,13 @@ The clips come from the promo film. Every component in it is this library, every
 
 ## Highlights
 
-- **49 `sk-*` tags** in six groups (actions, forms, feedback, overlays, navigation, display), plus 24 animated icons and 4 playful loaders
+- **63 `sk-*` tags** in seven groups (actions, forms, feedback, overlays, navigation, display, manga), plus 24 animated icons and 4 playful loaders
 - **Zero dependencies**: plain custom elements, so React, Vue, Svelte or plain HTML just write the tag
 - **One core**: shared effect primitives, one lettering system, one set of 45 WebAudio sound recipes (no audio files)
 - **Real springs**: solved once and baked into CSS `linear()` easings that run on the compositor
 - **Top layer**: dialogs, effects and lettering go through the Popover API
 - **Restraint**: effects have full / lite / off, sound can be turned off, and reduced-motion turns effects off
-- **Size**: everything is 57 kB gzip; the core alone is 20 kB gzip
+- **Size**: everything is 71 kB gzip; the core alone is 20 kB gzip
 
 > **Status**: 0.1.0, published on [npm](https://www.npmjs.com/package/sakuga-ui). Fully verified in Chromium only.
 
@@ -96,6 +96,7 @@ setPalette('shonen');
 | Overlays | `sk-dialog` `sk-drawer` `sk-tooltip` `sk-popover` `sk-menu` `sk-menu-item` |
 | Navigation | `sk-tabs` `sk-tab` `sk-accordion` `sk-accordion-item` `sk-breadcrumb` `sk-pagination` `sk-steps` `sk-step` |
 | Display | `sk-card` `sk-avatar` `sk-divider` `sk-kbd` `sk-bubble` `sk-counter` `sk-calendar` `sk-word` `sk-icon` |
+| Manga | `sk-koma` `sk-koma-panel` `sk-pages` `sk-page` `sk-balloon-input` `sk-speedbar` `sk-flash` `sk-tone` `sk-hatch` `sk-yonkoma` `sk-koma-step` `sk-breakout` `sk-reactions` `sk-reaction` |
 
 Form controls take part in native `<form>` submission through `ElementInternals`. Attributes, events and methods for each component are on the [docs site](https://leehongji.github.io/sakuga-ui/).
 

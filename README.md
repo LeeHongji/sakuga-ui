@@ -8,9 +8,9 @@
 <p>
 <a href="https://github.com/LeeHongji/sakuga-ui/blob/main/LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-1b1642?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/sakuga-ui"><img alt="npm" src="https://img.shields.io/npm/v/sakuga-ui?style=flat-square&color=ec4899"></a>
-<img alt="49 tags" src="https://img.shields.io/badge/tags-49-7c6cf0?style=flat-square">
+<img alt="63 tags" src="https://img.shields.io/badge/tags-63-7c6cf0?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1b1642?style=flat-square">
-<img alt="57 kB gzip" src="https://img.shields.io/badge/gzip-57%20kB-ec4899?style=flat-square">
+<img alt="71 kB gzip" src="https://img.shields.io/badge/gzip-71%20kB-ec4899?style=flat-square">
 <img alt="Web Components" src="https://img.shields.io/badge/web%20components-native-7c6cf0?style=flat-square">
 </p>
 
@@ -46,13 +46,13 @@
 
 ## 特点
 
-- **49 个 `sk-*` 标签**：操作、表单、反馈、浮层、导航、展示六类，外加 24 个动效图标和 4 种趣味加载
+- **63 个 `sk-*` 标签**：操作、表单、反馈、浮层、导航、展示、漫画技法七类，外加 24 个动效图标和 4 种趣味加载
 - **零依赖**：原生自定义元素，React / Vue / Svelte / 纯 HTML 都直接写标签
 - **一个内核**：所有组件共用一套特效图元、一套拟声词排版规则、一套音效配方（45 种，WebAudio 合成，没有音频文件）
 - **真实的弹簧**：解一次，烘焙成 CSS `linear()` 缓动，交给合成层执行
 - **顶层渲染**：弹窗、特效、拟声词通过 Popover API 放进浏览器顶层
 - **克制**：特效分全 / 轻 / 关三档，音效可关，系统开启「减少动态效果」时自动关闭特效
-- **体积**：全部组件 57 kB gzip，只用内核 20 kB gzip
+- **体积**：全部组件 71 kB gzip，只用内核 20 kB gzip
 
 > **状态**：0.1.0，已发布到 [npm](https://www.npmjs.com/package/sakuga-ui)。目前只在 Chromium 上做过完整验证。
 
@@ -101,6 +101,7 @@ setPalette('shonen');
 | 浮层 | `sk-dialog` `sk-drawer` `sk-tooltip` `sk-popover` `sk-menu` `sk-menu-item` |
 | 导航 | `sk-tabs` `sk-tab` `sk-accordion` `sk-accordion-item` `sk-breadcrumb` `sk-pagination` `sk-steps` `sk-step` |
 | 展示 | `sk-card` `sk-avatar` `sk-divider` `sk-kbd` `sk-bubble` `sk-counter` `sk-calendar` `sk-word` `sk-icon` |
+| 漫画技法 | `sk-koma` `sk-koma-panel` `sk-pages` `sk-page` `sk-balloon-input` `sk-speedbar` `sk-flash` `sk-tone` `sk-hatch` `sk-yonkoma` `sk-koma-step` `sk-breakout` `sk-reactions` `sk-reaction` |
 
 表单类组件（开关、复选框、单选、滑块、输入框、下拉、步进器、评分、验证码、日历）通过 `ElementInternals` 参与原生 `<form>` 提交。每个组件的属性、事件和方法见[文档站](https://leehongji.github.io/sakuga-ui/)对应的分格。
 
@@ -200,13 +201,13 @@ spring(el, [{ scale: 0.4 }, { scale: 1 }], 'bounce');
 
 空闲时没有动画循环；画布、音频上下文、字体都在第一次用到时才创建。活动粒子最多 240 个，同屏拟声词最多 12 个；帧时间变长时自动减少粒子。每种组件一份可构造样式表，实例之间共享。
 
-实测（Playwright 无头 Chromium，Apple M5，1440×900，2026-11-16；各次运行之间有波动）：
+实测（Playwright 无头 Chromium，Apple M5，1440×900，2026-11-18；各次运行之间有波动）：
 
 | 场景 | 结果 |
 |---|---|
-| 空闲 3 秒，页面上 233 个组件实例 | `requestAnimationFrame` 0 次，画布 0 个，未创建音频上下文 |
-| 一次「ドン!」按钮 / 大号开关 / 复选框 / 拖动滑块 | 120 fps，最慢一帧约 10 ms |
-| 压力测试：3 秒内 180 次爆炸 | 平均 75–97 fps |
+| 空闲 3 秒，页面上 288 个组件实例 | `requestAnimationFrame` 0 次，画布 0 个，未创建音频上下文 |
+| 一次「ドン!」按钮 / 大号开关 / 复选框 / 拖动滑块 | 约 120 fps，最慢一帧 10–18 ms |
+| 压力测试：3 秒内 180 次爆炸 | 平均 75–101 fps |
 | 同样的压力测试，CPU 限速到 1/4 | 平均 27–40 fps，粒子自动降到 35% |
 | 一次性创建 400 个组件 | 16–26 ms |
 
@@ -223,7 +224,7 @@ src/core/         内核，所有组件共用
   moves.js        组合动作（tap / impact / boom / poof / cut …）
   element.js      SkElement 基类：共享样式表、声明式属性、表单参与
   tokens.js       设计变量；palettes.js 五套配色
-src/components/   六组组件，外加 icons.js 和 loaders.js
+src/components/   七组组件，外加 icons.js 和 loaders.js
 types/            TypeScript 声明
 site/ index.html  文档站（漫画杂志）
 ```

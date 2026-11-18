@@ -9,6 +9,17 @@ POKE = """async () => {
       const tag = el.tagName.toLowerCase();
       if (['sk-dialog','sk-drawer','sk-tab','sk-step','sk-menu-item','sk-accordion','sk-skeleton','sk-spinner','sk-avatar','sk-divider','sk-word','sk-tooltip','sk-breadcrumb','sk-card','sk-badge','sk-bubble','sk-counter','sk-alert','sk-ring','sk-progress','sk-steps'].includes(tag)) continue;
       if (tag === 'sk-radio') { el.click(); n++; continue; }
+      if (['sk-koma-panel','sk-page','sk-koma-step','sk-reactions'].includes(tag)) continue;
+      if (el.id === 'd-sp-go' || el.id === 'd-fl-del') continue;   // these start a long scripted demo; the components are poked directly below
+      if (tag === 'sk-koma') { el.pick(1, true); n++; continue; }
+      if (tag === 'sk-pages') { el.next(); n++; continue; }
+      if (tag === 'sk-balloon-input') { el.value = 'I object!'; await w(60); el.send(); n++; continue; }
+      if (tag === 'sk-speedbar') { el.value = 40; await w(40); el.value = 100; n++; continue; }
+      if (tag === 'sk-flash') { el.ask(); await w(80); el.answer(true); n++; continue; }
+      if (tag === 'sk-tone') { const t = el.shadowRoot.querySelector('.track'); t.focus(); t.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true })); n++; continue; }
+      if (tag === 'sk-hatch') { el.value = 4; n++; continue; }
+      if (tag === 'sk-yonkoma') { el.next(); el.next(); n++; continue; }
+      if (tag === 'sk-breakout') { el.shadowRoot.querySelector('.c').click(); n++; continue; }
       if (tag === 'sk-segmented') { const b = el.querySelectorAll('button'); b[b.length - 1].click(); n++; continue; }
       if (tag === 'sk-hold-button') continue;
       const r = el.shadowRoot; if (!r) continue;

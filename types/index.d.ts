@@ -187,6 +187,23 @@ export class SkBubble extends SkElement {}
 export class SkCounter extends SkElement { value: number }
 export class SkCalendar extends SkElement { value: string; month: string }
 export class SkWord extends SkElement { shout(): void }
+export type BalloonTone = 'say' | 'shout' | 'ask' | 'hush' | 'think' | 'sing' | 'tremble';
+/** Which tone a line of text is written in: the rule sk-balloon-input uses. */
+export function toneOf(text: string): BalloonTone;
+export class SkKomaPanel extends SkElement { value: string; label: string; count: string }
+export class SkKoma extends SkElement { value: string; pick(index: number, user?: boolean): void }
+export class SkPage extends SkElement {}
+export class SkPages extends SkElement { page: number; next(): void; prev(): void; go(page: number): void }
+export class SkBalloonInput extends SkElement { value: string; readonly tone: BalloonTone; tail: 'left' | 'right' | 'none'; send(): boolean; clear(): void }
+export class SkSpeedbar extends SkElement { value: number; speed: number; fast: number; stall: number; seal: string }
+export class SkFlash extends SkElement { open: boolean; heading: string; note: string; ask(from?: Element): Promise<boolean>; answer(yes: boolean): void }
+export class SkTone extends SkElement { value: number; min: number; max: number; step: number; preview: boolean }
+export class SkHatch extends SkElement { value: number; max: number; labels: string; seal: string }
+export class SkKomaStep extends SkElement { mark: string; label: string; summary: string; readonly state: 'rough' | 'now' | 'done' }
+export class SkYonkoma extends SkElement { current: number; next(): void; back(): void; go(step: number): void }
+export class SkBreakout extends SkElement { label: string; word: string; href: string }
+export class SkReaction extends SkElement { word: string; voice: string; label: string; count: number; pressed: boolean; toggle(): void }
+export class SkReactions extends SkElement { for: string; readonly target: Element }
 export class SkIcon extends SkElement { name: IconName; play(): void }
 
 declare global {
@@ -200,5 +217,8 @@ declare global {
     'sk-tab': SkTab; 'sk-tabs': SkTabs; 'sk-accordion-item': SkAccordionItem; 'sk-accordion': SkAccordion; 'sk-breadcrumb': SkBreadcrumb;
     'sk-pagination': SkPagination; 'sk-step': SkStep; 'sk-steps': SkSteps; 'sk-card': SkCard; 'sk-avatar': SkAvatar; 'sk-divider': SkDivider;
     'sk-kbd': SkKbd; 'sk-bubble': SkBubble; 'sk-counter': SkCounter; 'sk-calendar': SkCalendar; 'sk-word': SkWord; 'sk-icon': SkIcon;
+    'sk-koma': SkKoma; 'sk-koma-panel': SkKomaPanel; 'sk-pages': SkPages; 'sk-page': SkPage; 'sk-balloon-input': SkBalloonInput; 'sk-speedbar': SkSpeedbar;
+    'sk-flash': SkFlash; 'sk-tone': SkTone; 'sk-hatch': SkHatch; 'sk-yonkoma': SkYonkoma; 'sk-koma-step': SkKomaStep; 'sk-breakout': SkBreakout;
+    'sk-reactions': SkReactions; 'sk-reaction': SkReaction;
   }
 }

@@ -7,5 +7,6 @@ export * from './components/feedback.js';
 export * from './components/overlay.js';
 export * from './components/navigation.js';
 export * from './components/display.js';
+export * from './components/manga.js';
 export * from './components/icons.js';
 export * from './components/loaders.js';
