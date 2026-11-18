@@ -54,7 +54,7 @@
 - **克制**：特效分全 / 轻 / 关三档，音效可关，系统开启「减少动态效果」时自动关闭特效
 - **体积**：全部组件 71 kB gzip，只用内核 20 kB gzip
 
-> **状态**：0.1.0，已发布到 [npm](https://www.npmjs.com/package/sakuga-ui)。目前只在 Chromium 上做过完整验证。
+> **状态**：0.2.0，已发布到 [npm](https://www.npmjs.com/package/sakuga-ui)。目前只在 Chromium 上做过完整验证。
 
 ## 快速上手
 
@@ -73,7 +73,7 @@ import { configure, toast, setTheme, setPalette } from 'sakuga-ui';
 **不用构建工具**
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.1/dist/sakuga.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.2/dist/sakuga.js"></script>
 
 <sk-button fx="boom">Confirm</sk-button>
 <sk-switch checked>Wi-Fi</sk-switch>

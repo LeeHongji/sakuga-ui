@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 · 2026-11-18
 
 - New group, Manga: ten components that each put one manga technique to work. `sk-koma` (panel-layout tabs), `sk-pages` (a pager turned by its corner), `sk-balloon-input` (a field whose balloon takes the tone of the text), `sk-speedbar` (progress with speed lines that follow the real speed, and a visible stall), `sk-flash` (a black-flash confirmation), `sk-tone` (a screentone slider), `sk-hatch` (a cross-hatching meter), `sk-yonkoma` (steps that go from blue-pencil rough to toned), `sk-breakout` (a card whose picture breaks its frame) and `sk-reactions` (reactions as sound words). 14 new tags, 63 in all.
 - `toneOf(text)` is exported: the rule `sk-balloon-input` uses to read a tone from text.

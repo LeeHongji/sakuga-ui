@@ -14,7 +14,7 @@ export const T = {
   'hero.lede': ['每按一下，都是一格原画。', 'Every press is a key frame.', '押すたび、原画。'],
   'hero.sub': ['带赛璐璐特效、片假名拟声词和合成音效的组件库。', 'A component library with cel-style effects, katakana sound words and synthesised audio.', 'セル画風エフェクト、カタカナ擬音、合成サウンド付きのコンポーネント集。'],
   'hero.pressme': ['按我！', 'PRESS ME!', '押して！'], 'hero.cta': ['开始阅读', 'Start reading', '読みはじめる'], 'hero.copy': ['复制', 'Copy', 'コピー'],
-  'hero.soon': ['已发布到 npm · v0.1.0，零依赖。', 'On npm · v0.1.0, zero dependencies.', 'npm 公開中 · v0.1.0、依存ゼロ。'],
+  'hero.soon': ['已发布到 npm · v0.2.0，零依赖。', 'On npm · v0.2.0, zero dependencies.', 'npm 公開中 · v0.2.0、依存ゼロ。'],
   'hero.try': ['先玩一下', 'TRY IT', 'まず触って'],
   'fact.components': ['个组件', 'components', 'コンポーネント'], 'fact.tags': ['个标签', 'tags', 'タグ'], 'fact.sounds': ['种合成音效', 'synth sounds', '合成サウンド'], 'fact.voices': ['种拟声词声音', 'lettering voices', '擬音の声'], 'fact.deps': ['个依赖', 'dependencies', '依存'],
   'start.h': ['上手', 'Get started', 'はじめに'], 'start.ep': ['序章', 'PROLOGUE', '序章'],

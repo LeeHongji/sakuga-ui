@@ -54,7 +54,7 @@ The clips come from the promo film. Every component in it is this library, every
 - **Restraint**: effects have full / lite / off, sound can be turned off, and reduced-motion turns effects off
 - **Size**: everything is 71 kB gzip; the core alone is 20 kB gzip
 
-> **Status**: 0.1.0, published on [npm](https://www.npmjs.com/package/sakuga-ui). Fully verified in Chromium only.
+> **Status**: 0.2.0, published on [npm](https://www.npmjs.com/package/sakuga-ui). Fully verified in Chromium only.
 
 ## Quick start
 
@@ -71,7 +71,7 @@ import { configure, toast, setTheme, setPalette } from 'sakuga-ui';
 Without a build step:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.1/dist/sakuga.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/sakuga-ui@0.2/dist/sakuga.js"></script>
 
 <sk-button fx="boom">Confirm</sk-button>
 <sk-switch checked>Wi-Fi</sk-switch>

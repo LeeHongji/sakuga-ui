@@ -1,6 +1,6 @@
 {
   "name": "sakuga-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Web components with anime key-animation energy: cel-style effects, katakana lettering and synthesised sound, sharing one small core.",
   "type": "module",
   "license": "MIT",
