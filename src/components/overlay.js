@@ -10,7 +10,7 @@ class Layer extends SkElement {
   static props = { open: Boolean, title: String, nodismiss: Boolean };
   setup() {
     this.panel = this.$('.panel'); this.back = this.$('.back');
-    this.back.addEventListener('click', () => { if (!this.nodismiss) this.hide(); else { anim(this.panel, 'nope'); SND.play('buzz'); } });
+    this.back.addEventListener('click', () => { if (!this.nodismiss) this.hide(); else { anim(this.panel, 'nope'); FX.arcs({ el: this.panel }); SND.play('buzz'); } });
     this.$('.x').addEventListener('click', () => this.hide());
     this.addEventListener('keydown', e => {
       if (e.key === 'Escape' && !this.nodismiss) { e.stopPropagation(); this.hide(); }
@@ -55,9 +55,9 @@ const LAYER_CSS = `
 .back{position:absolute;inset:0;background-color:color-mix(in srgb,var(--sk-ink) 46%,transparent);background-image:radial-gradient(color-mix(in srgb,var(--sk-paper) 26%,transparent) 1.2px,transparent 1.6px);background-size:8px 8px}
 .panel{position:relative;outline:none;display:flex;flex-direction:column;max-height:calc(100vh - 48px)}
 .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 12px 6px 18px}
-.ttl{font:italic 800 20px/1.2 var(--sk-font)}
+.ttl{font:400 23px/1.2 var(--sk-font-head)}
 .x{border:0;background:none;padding:6px;cursor:pointer;line-height:0;font-size:13px;border-radius:8px;color:inherit}
-.body{padding:8px 18px 16px;overflow:auto;font:500 15px/1.5 var(--sk-font)}
+.body{padding:8px 18px 16px;overflow:auto;font:700 15px/1.5 var(--sk-font)}
 .foot{display:flex;justify-content:flex-end;gap:10px;padding:0 18px 18px}
 .foot:not(:has(::slotted(*))){display:none}`;
 const LAYER_HTML = `<div class="back" part="backdrop"></div><div class="panel box" role="dialog" aria-modal="true" tabindex="-1" part="panel"><div class="head"><span class="ttl"></span><button class="x" aria-label="close">${X_ICON}</button></div><div class="body"><slot></slot></div><div class="foot"><slot name="footer"></slot></div></div>`;
@@ -109,28 +109,42 @@ export class SkDrawer extends Layer {
 define('sk-drawer', SkDrawer);
 
 /* ---------------- sk-tooltip ---------------- */
+/* A speech balloon that pops out of what it points at: white, inked, its tail on the thing. It grows out of the tail's
+   tip at full ink, overshoots with a little tilt and settles, and goes by shrinking back into the tail. Silent, and no
+   sound word: a hover happens too often to shout about. */
 export class SkTooltip extends SkElement {
   static props = { content: String, placement: [String, 'top'] };
   static styles = css`
 :host{display:inline-block}
-.tip{width:max-content;max-width:min(240px,calc(100vw - 16px));padding:5px 10px;border:2.5px solid var(--sk-ink);border-radius:10px;background:var(--sk-ink);color:var(--sk-surface);font:700 13px/1.35 var(--sk-font);pointer-events:none;transform-origin:var(--ax,50%) -20%}
-.tip[data-side=top]{transform-origin:var(--ax,50%) 120%}
-.tip::after{content:"";position:absolute;left:var(--ax,50%);bottom:100%;translate:-50% 0;border:6px solid transparent;border-bottom-color:var(--sk-ink)}
-.tip[data-side=top]::after{bottom:auto;top:100%;border-bottom-color:transparent;border-top-color:var(--sk-ink)}`;
+.tip{width:max-content;max-width:min(240px,calc(100vw - 16px));padding:6px 12px 7px;border:2.5px solid var(--sk-ink);border-radius:14px;background:var(--sk-surface);color:var(--sk-ink);box-shadow:3px 3px 0 var(--sk-lav);font:700 13.5px/1.35 var(--sk-font);pointer-events:none;transform-origin:var(--ax,50%) -14px}
+.tip[data-side=top]{transform-origin:var(--ax,50%) calc(100% + 14px)}
+.tip::before,.tip::after{content:"";position:absolute;left:var(--ax,50%);translate:-50% 0;border:0 solid transparent}
+.tip::before{bottom:100%;border-width:0 8px 11px;border-bottom-color:var(--sk-ink)}
+.tip::after{bottom:calc(100% - 4.25px);border-width:0 8px 11px;border-bottom-color:var(--sk-surface)}
+.tip[data-side=top]::before{bottom:auto;top:100%;border-width:11px 8px 0;border-color:var(--sk-ink) transparent transparent}
+.tip[data-side=top]::after{bottom:auto;top:calc(100% - 4.25px);border-width:11px 8px 0;border-color:var(--sk-surface) transparent transparent}`;
   static template = `<slot></slot><span class="tip float" role="tooltip" hidden part="base"></span>`;
   setup() {
     this.tip = this.$('.tip');
     const show = () => { clearTimeout(this.t); this.t = setTimeout(() => {
-      if (!this.content || !this.tip.hidden) return;
+      if (!this.content) return;
+      if (this.out) { this.out.cancel(); this.out = null; }               // coming back while it shrinks away: just stay
+      if (!this.tip.hidden) return;
       this.tip.hidden = false; lift(this.tip);
-      this.off = anchor(this.tip, this, { side: this.placement === 'bottom' ? 'bottom' : 'top', align: 'center', gap: 10 });
-      spring(this.tip, [{ scale: 0.94, opacity: 0 }, { scale: 1, opacity: 1 }], 'snap', { duration: 180 });
+      this.off = anchor(this.tip, this, { side: this.placement === 'bottom' ? 'bottom' : 'top', align: 'center', gap: 14 });
+      const s = this.tip.dataset.side === 'top' ? -1 : 1;
+      play(this.tip, [{ transform: `scale(.18) rotate(${-9 * s}deg)` }, { transform: `scale(1.13) rotate(${3 * s}deg)`, offset: 0.5 }, { transform: `scale(.96) rotate(${-1 * s}deg)`, offset: 0.78 }, { transform: 'none' }], { duration: 240 });
     }, 110); };
-    const hide = () => { clearTimeout(this.t); this.stop(); };
+    const hide = () => {
+      clearTimeout(this.t);
+      if (this.tip.hidden || this.out) return;
+      this.out = play(this.tip, [{ transform: 'none' }, { transform: 'scale(1.05)', offset: 0.3 }, { transform: 'scale(.1)' }], { duration: 110, easing: 'ease-in', fill: 'forwards' });
+      if (this.out) this.out.onfinish = () => this.stop(); else this.stop();   // stop() cancels the held last frame too
+    };
     this.addEventListener('pointerenter', show); this.addEventListener('pointerleave', hide);
     this.addEventListener('focusin', show); this.addEventListener('focusout', hide);
   }
-  stop() { if (this.off) { this.off(); this.off = null; } lower(this.tip); this.tip.hidden = true; }
+  stop() { if (this.out) { this.out.cancel(); this.out = null; } if (this.off) { this.off(); this.off = null; } lower(this.tip); this.tip.hidden = true; }
   sync() { this.tip.textContent = this.content || ''; }
   disconnected() { clearTimeout(this.t); this.stop(); }
 }
@@ -141,7 +155,7 @@ export class SkPopover extends SkElement {
   static props = { open: Boolean, placement: [String, 'bottom-start'] };
   static styles = css`
 :host{display:inline-block}
-.pop{min-width:180px;width:max-content;max-width:min(340px,calc(100vw - 16px));padding:10px 15px;--sk-sh:4px;font:500 14px/1.45 var(--sk-font)}`;
+.pop{min-width:180px;width:max-content;max-width:min(340px,calc(100vw - 16px));padding:10px 15px;--sk-sh:4px;font:700 14px/1.45 var(--sk-font)}`;
   static template = `<slot name="trigger"></slot><div class="pop float box" hidden part="popup"><slot></slot></div>`;
   setup() {
     this.pop = this.$('.pop');
@@ -174,7 +188,7 @@ define('sk-popover', SkPopover);
 export class SkMenuItem extends SkElement {
   static props = { value: String, disabled: Boolean, danger: Boolean };
   static styles = css`
-:host{display:flex;align-items:center;gap:8px;padding:7px 10px 9px;border-radius:8px;font:600 15px/1.2 var(--sk-font);cursor:pointer;outline:none;user-select:none;transition:padding var(--sk-snap-t) var(--sk-snap)}
+:host{display:flex;align-items:center;gap:8px;padding:7px 10px 9px;border-radius:8px;font:700 15px/1.2 var(--sk-font);cursor:pointer;outline:none;user-select:none;transition:padding var(--sk-snap-t) var(--sk-snap)}
 :host(:hover),:host(:focus){background:color-mix(in srgb,var(--sk-lav) 55%,transparent);padding-left:14px;padding-right:6px}
 :host([danger]){color:var(--sk-pink)}
 :host([data-hit]){background:var(--sk-ink);color:var(--sk-surface)}`;
@@ -205,7 +219,6 @@ export class SkMenu extends SkPopover {
     const q = rectOf(it);
     it.toggleAttribute('data-hit', true);
     moves.say('ピッ', { voice: 'click', x: rectOf(this.pop).r + 18, y: q.cy - 8, size: 18, enter: 'whole', hold: 180, exitMs: 50 });
-    FX.ticks({ x: q.r + 2, y: q.cy, angle: 0, len: 9, life: 0.3 });
     this.at(90, () => { it.removeAttribute('data-hit'); this.open = false; const t = this.querySelector('[slot=trigger]'); t && t.focus(); });
     this.emit('sk-select', { value: it.value, item: it });
   }

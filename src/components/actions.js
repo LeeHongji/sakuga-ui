@@ -1,6 +1,6 @@
 /* Actions: button, hold-button, like, segmented, copy. */
 import { SkElement, define, css, FX, SND, moves, anim, play, spring, shake, rectOf, rnd, clamp, now, level } from '../core/index.js';
-import { CHECK, CHECK_CSS, SPIN, SPIN_CSS, HEART, roll, ROLL_CSS, slide } from './_parts.js';
+import { CHECK, CHECK_CSS, SPIN, SPIN_CSS, HEART, roll, ROLL_CSS, slide, DT, jelly, jellyStep } from './_parts.js';
 
 /* ---------------- sk-button ---------------- */
 export class SkButton extends SkElement {
@@ -8,7 +8,7 @@ export class SkButton extends SkElement {
   static delegatesFocus = true;
   static styles = css`
 :host{display:inline-block;vertical-align:middle}
-button{display:inline-flex;align-items:center;justify-content:center;gap:var(--gp,8px);width:100%;padding:10px 22px;font:italic 700 17px/1.15 var(--sk-font);cursor:pointer;user-select:none;touch-action:manipulation;white-space:nowrap}
+button{display:inline-flex;align-items:center;justify-content:center;gap:var(--gp,8px);width:100%;padding:10px 22px;font:400 19.5px/1 var(--sk-font-head);cursor:pointer;user-select:none;touch-action:manipulation;white-space:nowrap}
 :host([size=sm]) button{padding:6px 14px;font-size:14px;border-radius:11px;--sk-sh:4px}
 :host([size=lg]) button{padding:14.5px 30px 13.5px;font-size:21px;border-radius:17px;--sk-sh:6px}
 :host([variant=primary]) button{background:var(--sk-peri)}
@@ -21,21 +21,63 @@ button[data-inv]{background:var(--sk-ink);color:var(--sk-surface);box-shadow:non
 :host([data-done]) .chk path{stroke-dashoffset:0}
 :host([loading]) button{cursor:progress}
 ${CHECK_CSS}${SPIN_CSS}
-:host(:not([loading])) .spin{display:none}`;
+:host(:not([loading])) .spin{display:none}
+:host([data-held]){width:var(--sk-held-w)!important;height:var(--sk-held-h)!important}
+:host([data-held]) button.lift{scale:none;translate:none;position:relative}
+:host([data-held]) button::after{content:"";position:absolute;left:calc(var(--hx) - var(--sk-bw,3px));top:calc(var(--hy) - var(--sk-bw,3px));width:var(--hw);height:var(--hh)}`;
   static template = `<button class="box lift" part="base">${SPIN}<slot name="prefix"></slot><slot></slot><slot name="suffix"></slot>${CHECK}</button>`;
 
   setup() {
     this.btn = this.$('button');
-    this.btn.addEventListener('pointerdown', () => { this._down = performance.now(); });
+    const up = () => { removeEventListener('pointerup', up); removeEventListener('pointercancel', up); this.letGo(); };
+    this.btn.addEventListener('pointerdown', () => { this._down = performance.now(); this.press(); addEventListener('pointerup', up); addEventListener('pointercancel', up); });
+    this.btn.addEventListener('keydown', e => { if (e.key === ' ' && !e.repeat) { this._down = performance.now(); this.press(); } });
+    this.btn.addEventListener('keyup', e => { if (e.key === ' ') this.letGo(); });
+    this.btn.addEventListener('blur', () => this.letGo());
     this.btn.addEventListener('click', e => {
       if (this.disabled || this.loading) { e.stopImmediatePropagation(); e.preventDefault(); return; }
       const held = this._down && performance.now() - this._down > 110; this._down = 0;
+      if (this.fx === 'boom') this.sqEnd();   // the impact frame takes the squash over from here
       if (this.fx === 'boom') moves.impact(this.btn, { word: this.word, stage: this, skip: held ? 135 : 0 });   // a held press has done its wind-up: go straight to the hit
       else if (this.fx !== 'none') moves.tap(this.btn);
       if (this.type === 'submit' || this.type === 'reset') { const f = this.closest('form'); if (f) this.type === 'submit' ? f.requestSubmit() : f.reset(); }
     });
   }
   sync() { this.btn.disabled = this.disabled; this.btn.setAttribute('aria-busy', this.loading); }
+  /* The held press, the anticipation before the hit. While a finger or Space holds it the box squashes flat and wide
+     (about 0.62 of its height, its width growing so it keeps its volume), sitting on its bottom edge; the body alone
+     carries it, no marks around it. Let go and it springs past its height, tall and narrow, and wobbles out. The squash
+     changes the size of the box, not its scale, so the outline keeps one width; the host keeps its own size meanwhile,
+     so nothing around it moves. */
+  press() {
+    if (this.disabled || this.loading || !level() || this.fx === 'none') return;
+    const b = this.btn;
+    if (!this.sq) {
+      this.sq = Object.assign(jelly(), { W: b.offsetWidth, H: b.offsetHeight });
+      this.style.setProperty('--sk-held-w', this.sq.W + 'px'); this.style.setProperty('--sk-held-h', this.sq.H + 'px'); this.toggleAttribute('data-held', true);
+    }
+    this.sq.held = true;
+    if (!this.sqRaf) { this.sqLast = 0; this.sqRaf = requestAnimationFrame(t => this.sqLoop(t)); }
+  }
+  letGo() { if (this.sq) this.sq.held = false; }
+  sqLoop(tms) {
+    const s = this.sq; if (!s) return;
+    const dt = clamp(this.sqLast ? (tms - this.sqLast) / 1000 : 1 / 60, 0.001, 0.05); this.sqLast = tms;
+    for (let n = Math.ceil(dt / DT), i = 0; i < n; i++) {
+      // held: a quick, nearly dead spring down into the squash. Let go: the jelly, which overshoots into a stretch
+      if (s.held) { s.v += (2500 * (-0.38 - s.e) - 2 * 0.72 * 50 * s.v) * DT; s.e += s.v * DT; } else jellyStep(s, 0);
+    }
+    if (!s.held && Math.abs(s.e) < 0.004 && Math.abs(s.v) < 0.05) { this.sqEnd(); return; }
+    // the box drawn smaller still answers to the whole of its old place, so a press near its top edge still clicks
+    const h = s.H * (1 + s.e), w = s.W / Math.sqrt(1 + s.e), f = v => v.toFixed(2) + 'px';
+    this.btn.style.cssText = `height:${f(h)};width:${f(w)};margin:${f(s.H - h)} 0 0 ${f((s.W - w) / 2)};--hx:${f((w - s.W) / 2)};--hy:${f(h - s.H)};--hw:${f(s.W)};--hh:${f(s.H)}`;
+    this.sqRaf = requestAnimationFrame(t => this.sqLoop(t));
+  }
+  sqEnd() {
+    cancelAnimationFrame(this.sqRaf); this.sqRaf = 0; this.sq = null;
+    this.btn.style.cssText = ''; this.style.removeProperty('--sk-held-w'); this.style.removeProperty('--sk-held-h'); this.toggleAttribute('data-held', false);
+  }
+  disconnected() { if (this.sq) this.sqEnd(); }
   /* end a loading state with a hit and a check mark */
   success(word = 'ジャーン!') {
     this.loading = false;
@@ -49,7 +91,7 @@ ${CHECK_CSS}${SPIN_CSS}
     clearTimeout(this._doneT); if (ms > 0) this._doneT = setTimeout(() => this.toggleAttribute('data-done', false), ms);
   }
   /* reject: shake and buzz */
-  fail() { this.loading = false; anim(this.btn, 'nope'); SND.play('buzz'); }
+  fail() { this.loading = false; anim(this.btn, 'nope'); FX.arcs({ el: this.btn }); SND.play('buzz'); }
 }
 define('sk-button', SkButton);
 
@@ -59,7 +101,7 @@ export class SkHoldButton extends SkElement {
   static delegatesFocus = true;
   static styles = css`
 :host{display:inline-block;vertical-align:middle;position:relative}
-button{position:relative;overflow:hidden;padding:10px 22px;font:italic 700 17px/1.15 var(--sk-font);cursor:pointer;user-select:none;touch-action:none;white-space:nowrap;--c:0}
+button{position:relative;overflow:hidden;padding:10px 22px;font:400 19.5px/1 var(--sk-font-head);cursor:pointer;user-select:none;touch-action:none;white-space:nowrap;--c:0}
 button{transition:scale var(--sk-bounce-t) var(--sk-bounce)}
 button[data-hold]{transition:none}
 button::before{content:"";position:absolute;inset:0;background:var(--sk-pink);transform-origin:0 50%;transform:scaleX(var(--c));opacity:.9}
@@ -127,7 +169,7 @@ span{position:relative}
         this.halves = clips.map((cp, i) => {
           const c = document.createElement('button');
           c.className = 'box half'; c.tabIndex = -1; c.setAttribute('aria-hidden', 'true');
-          c.style.cssText = `width:${q.w}px;height:${q.h}px;--c:1;clip-path:${cp};padding:10px 22px;font:italic 700 17px/1.15 var(--sk-font)`;
+          c.style.cssText = `width:${q.w}px;height:${q.h}px;--c:1;clip-path:${cp};padding:10px 22px;font:400 19.5px/1 var(--sk-font-head)`;
           c.innerHTML = `<span>${text.replace(/</g, '&lt;')}</span>`;
           this.shadowRoot.appendChild(c);
           const s = i ? -1 : 1;
@@ -158,7 +200,7 @@ export class SkLike extends SkElement {
   static delegatesFocus = true;
   static styles = css`
 :host{display:inline-block;vertical-align:middle}
-button{display:inline-flex;align-items:center;gap:8px;padding:8px 16px 8px 12px;font:700 17px/1 var(--sk-font);cursor:pointer;touch-action:manipulation}
+button{display:inline-flex;align-items:center;gap:8px;padding:8px 16px 8px 12px;font:400 19.5px/1 var(--sk-font-head);cursor:pointer;touch-action:manipulation}
 svg{width:24px;height:24px;overflow:visible}
 path{fill:var(--sk-surface);stroke:var(--sk-ink);stroke-width:2.6;stroke-linejoin:round}
 :host([pressed]) path{fill:var(--sk-pink)}
@@ -197,7 +239,7 @@ export class SkSegmented extends SkElement {
 :host{display:inline-block;vertical-align:middle}
 .track{position:relative;display:inline-flex;padding:4px;contain:layout style}
 .ind{position:absolute;left:0;top:4px;bottom:4px;width:10px;border-radius:8px;background:var(--sk-peri);border:var(--sk-bw) solid var(--sk-ink)}
-::slotted(button){transition:scale var(--sk-bounce-t) var(--sk-bounce);position:relative;border:0;background:none;margin:0;padding:9px 15px;font:italic 700 15px/1 var(--sk-font);color:var(--sk-ink);cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
+::slotted(button){transition:scale var(--sk-bounce-t) var(--sk-bounce);position:relative;border:0;background:none;margin:0;padding:9px 15px;font:400 17px/1 var(--sk-font-head);color:var(--sk-ink);cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
 ::slotted(button:active){scale:.9;transition:scale 70ms}`;
   static template = `<div class="track box" part="base" role="tablist"><span class="ind"></span><slot></slot></div>`;
   get items() { return [...this.querySelectorAll(':scope > button')]; }
@@ -239,11 +281,11 @@ export class SkSegmented extends SkElement {
     const from = its[this.cur], to = its[i], dir = i > this.cur ? 1 : -1;
     const [a, wa, k, x0] = this.geo(from), [b, wb] = this.geo(to);
     this.cur = i; this.value = this.valueOf(to, i);
-    slide(play, this.ind, a, wa, b, wb);   // stretches toward the destination and never leaves the track
+    const hit = slide(play, this.ind, a, wa, b, wb);   // stretches on the way, squashes on arrival
     const q = this.rect, fx = x0 + (a + wa / 2) * k, far = x0 + (dir > 0 ? b + wb : b) * k;
     moves.streak(fx, q.cy, dir > 0 ? Math.PI : 0, 44, 4, { delay: 0.04 });
     moves.say('シュッ', { voice: 'swish', x: (fx + far) / 2 + 12, y: q.t - 22, size: 22, hold: 220 });
-    this.at(200, () => { FX.puff({ x: far + dir * 6, y: q.b + 2, r: 8, vx: dir * 40, vy: -10, life: 0.55 }); FX.ticks({ x: far + dir * 4, y: q.t - 4, angle: dir > 0 ? -0.8 : -2.35, len: 9, life: 0.35 }); shake(this, 1, 120); SND.play('land'); });
+    this.at(hit, () => { FX.puff({ x: far + dir * 6, y: q.b + 2, r: 8, vx: dir * 40, vy: -10, life: 0.55 }); shake(this, 1, 120); SND.play('land'); });
     if (user) this.emit('change', { value: this.value });
   }
 }
@@ -255,7 +297,7 @@ export class SkCopy extends SkElement {
   static delegatesFocus = true;
   static styles = css`
 :host{display:inline-block;vertical-align:middle}
-button{--gp:6px;display:inline-flex;align-items:center;gap:var(--gp);padding:5px 11px;font:italic 700 13px/1.1 var(--sk-font);cursor:pointer;border-radius:11px;--sk-sh:3px}
+button{--gp:6px;display:inline-flex;align-items:center;gap:var(--gp);padding:5px 11px;font:400 15px/1.1 var(--sk-font-head);cursor:pointer;border-radius:11px;--sk-sh:3px}
 :host([data-done]) .chk{width:1em;margin-left:0}
 :host([data-done]) .chk path{stroke-dashoffset:0}${CHECK_CSS}`;
   static template = `<button class="box press" part="base"><slot><span class="lbl"></span></slot>${CHECK}</button>`;

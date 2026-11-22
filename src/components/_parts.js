@@ -1,14 +1,60 @@
 // Small pieces of markup and CSS reused by several components.
-/* Move a selection indicator from [a, wa] to [b, wb] (px): the leading edge goes first and stops at the destination,
-   the tail catches up, with a small squash against the far side. It never leaves the span between the two ends. */
+/* ---------- elastic bodies ----------
+   One model for everything that travels and deforms (the slider knob, the segmented and tabs markers, the theme orb).
+   Where the body is and what shape it has are two springs. The position spring carries it; a softer, springier "jelly"
+   spring holds its shape. Speed pulls the shape long (volume kept, so it also gets thinner); when the speed goes the
+   jelly overshoots into a squash and wobbles out; only a real hit on a wall adds a kick. The shape is drawn by changing
+   the size, never with scale(), so the ink outline keeps one width (rule 1). Everything is stepped at 240 Hz. */
+export const DT = 1 / 240;
+const JW = 38, JZ = 0.3;                                       // jelly: about six wobbles a second, two of them visible
+export const jelly = () => ({ e: 0, v: 0 });
+export function jellyStep(j, target, dt = DT) { j.v += (JW * JW * (target - j.e) - 2 * JZ * JW * j.v) * dt; j.e += j.v * dt; }
+// stretch from speed: nothing while slow, then up to +0.6 once the body covers `ref` of its own widths a second
+export const stretchOf = (speed, ref) => 0.6 * Math.tanh((speed / ref) ** 2);
+// the drawn shape: long side and short side as factors of the rest size. Soft limits, so big numbers never look broken
+export function shapeOf(e) { const s = 1 + (e > 0 ? 0.75 * Math.tanh(e / 0.75) : -0.3 * Math.tanh(-e / 0.3)); return [s, 1 / Math.sqrt(s)]; }
+
+/* A body of size D thrown `dist` px into a wall: it accelerates on a spring aimed past the wall, stretches with its
+   speed, stops dead on the wall (the speed goes into the jelly as a squash) and wobbles out. Returns 60 fps samples
+   { x, sx, sy }, x counted back from the wall (it starts at -dist), and the moment of the hit in ms. */
+export function slam(dist, D, ref = 12) {
+  const W = 22, Z = 0.9, j = jelly(), out = [];
+  let x = -dist, v = 0, t = 0, n = 0, hit = 0, stuck = false;
+  for (;;) {
+    if (!stuck) {
+      v += (W * W * (dist * 0.4 - x) - 2 * Z * W * v) * DT; x += v * DT;
+      if (x >= 0) { x = 0; stuck = true; hit = t; j.v -= Math.min(22, (v / D) * 0.45); v = 0; }
+    }
+    jellyStep(j, stretchOf(Math.abs(v) / D, ref)); t += DT;
+    if (t < n / 60) continue;
+    const [sx, sy] = shapeOf(j.e); out.push({ x, sx, sy }); n++;
+    if ((stuck && Math.abs(j.e) < 0.004 && Math.abs(j.v) < 0.05) || t > 1) break;
+  }
+  out.push({ x: 0, sx: 1, sy: 1 });
+  return { frames: out, hit: Math.round(hit * 1000) };
+}
+
+/* Move a selection marker from [a, wa] to [b, wb] (px). Its front edge rides a quick spring to the new place; its
+   length is the jelly: pulled long and thin by the speed, then, as the front stops, the back runs on into a short fat
+   squash, one small rebound, rest. Baked to keyframes at 60 fps. Returns the moment of the squash in ms. */
 export function slide(play, ind, a, wa, b, wb) {
-  const right = b > a, w = Math.min(right ? b + wb - a : a + wa - b, wb * 1.35);
-  return play(ind, [
-    { left: a + 'px', width: wa + 'px' },
-    { left: (right ? b + wb - w : b) + 'px', width: w + 'px', offset: 0.45 },
-    { left: (right ? b + wb * 0.08 : b) + 'px', width: wb * 0.92 + 'px', offset: 0.75 },
-    { left: b + 'px', width: wb + 'px' },
-  ], { duration: 260, easing: 'cubic-bezier(.3,.7,.3,1)' });
+  const d = b > a ? 1 : -1, F0 = d > 0 ? a + wa : a, F1 = d > 0 ? b + wb : b, span = Math.abs(F1 - F0) || 1;
+  const top0 = ind.offsetTop, H0 = ind.offsetHeight, bw = 2 * (parseFloat(getComputedStyle(ind).borderTopWidth) || 0), W = 26, Z = 0.85, j = jelly(), frames = [];
+  let F = F0, v = 0, t = 0, n = 0, hit = 0, low = 1;
+  for (;;) {
+    const L0 = wa + (wb - wa) * Math.min(1, Math.max(0, (F - F0) * d / span));     // its own length grows over the trip
+    v += (W * W * (F1 - F) - 2 * Z * W * v) * DT; F += v * DT;
+    jellyStep(j, stretchOf(Math.abs(v) / L0, 13)); t += DT;
+    if (t < n / 60) continue;
+    const [sx, sy] = shapeOf(j.e), L = L0 * sx, h = bw + (H0 - bw) * sy;     // the fill thins and fattens, the outline stays
+    if (sx < low) { low = sx; hit = t; }
+    frames.push({ left: (d > 0 ? F - L : F) + 'px', width: L + 'px', top: top0 + (H0 - h) / 2 + 'px', height: h + 'px' });
+    n++;
+    if ((t > 0.15 && Math.abs(F - F1) < 0.3 && Math.abs(v) < 4 && Math.abs(j.e) < 0.004 && Math.abs(j.v) < 0.05) || t > 1) break;
+  }
+  frames.push({ left: b + 'px', width: wb + 'px', top: top0 + 'px', height: H0 + 'px' });
+  play(ind, frames, { duration: (frames.length - 1) * 1000 / 60, easing: 'linear' });
+  return Math.round(hit * 1000);
 }
 export const CHECK = '<svg class="chk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13l6 6L21 5"/></svg>';
 export const CHECK_CSS = `.chk{width:0;height:1em;flex:none;margin-left:calc(var(--gp,8px)*-1);overflow:visible;transition:width .22s cubic-bezier(.3,1.9,.5,1),margin .22s cubic-bezier(.3,1.9,.5,1)}

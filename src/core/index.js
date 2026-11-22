@@ -10,5 +10,6 @@ export { SkElement, define, css, html } from './element.js';
 export { setTheme, getTheme, setPalette, getPalette } from './theme.js';
 export { PALETTES } from './palettes.js';
 export { TOKENS } from './tokens.js';
+export { tone, tonePattern, TONES } from './tone.js';
 export { lift, lower, anchor, crownLayer, BARE } from './layer.js';
 export * from './util.js';

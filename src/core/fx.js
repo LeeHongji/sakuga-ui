@@ -41,8 +41,11 @@ function mk(z, rank) {
 const showLayers = on => { for (const c of [back, front]) { c.style.display = on ? 'block' : 'none'; on ? lift(c) : lower(c); } };
 function resize() {
   // large viewports get a lower backing-store ratio: effects are flat shapes, so this is invisible but cuts fill cost
-  dpr = Math.min(window.devicePixelRatio || 1, innerWidth * innerHeight > 2.3e6 ? 1.25 : 2);
-  for (const c of [back, front]) { c.width = Math.round(innerWidth * dpr); c.height = Math.round(innerHeight * dpr); }
+  // The canvases are 100vw by 100vh, the layout viewport. innerWidth is the visual one and shrinks when the page is
+  // pinch-zoomed, so it is scaled back; otherwise every effect would be drawn stretched and out of place.
+  const zoom = window.visualViewport ? visualViewport.scale : 1, W = innerWidth * zoom, H = innerHeight * zoom;
+  dpr = Math.min(window.devicePixelRatio || 1, W * H > 2.3e6 ? 1.25 : 2);
+  for (const c of [back, front]) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
   dirty.back = dirty.front = true; lastQ = -1;
 }
 function ensure() {
@@ -52,6 +55,7 @@ function ensure() {
   bctx = back.getContext('2d'); fctx = front.getContext('2d');
   resize();
   addEventListener('resize', resize, { passive: true });
+  if (window.visualViewport) visualViewport.addEventListener('resize', resize, { passive: true });
   addEventListener('scroll', () => { lastQ = -1; }, { passive: true });
   new MutationObserver(invalidateTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-sk-theme', 'data-sk-palette', 'class', 'style'] });
 }
@@ -69,13 +73,22 @@ function render(t) {
   if (nb || dirty.back) { prep(back, bctx); dirty.back = nb > 0; }
   if (nf || dirty.front) { prep(front, fctx); dirty.front = nf > 0; }
   let punch = null;
+  const frames = new Map();                            // each panel is measured once per rendered frame
   for (const it of items) {
     if (it.dead) continue;
     const age = t - it.t0;
     if (age < 0) continue;
     if (age > it.life) { it.dead = true; continue; }
     const ctx = it.layer === 'back' ? bctx : it.layer === 'front' ? fctx : null;
-    if (ctx) { ctx.save(); it.draw(ctx, age, age / it.life); ctx.restore(); }
+    if (ctx) {
+      ctx.save();
+      if (it.clip) {                                   // drawn inside a panel: nothing crosses its frame line
+        let b = frames.get(it.clip);
+        if (!b) { const r = it.clip.getBoundingClientRect(); frames.set(it.clip, (b = [r.left + it.clip.clientLeft + scrollX, r.top + it.clip.clientTop + scrollY, it.clip.clientWidth, it.clip.clientHeight])); }
+        ctx.beginPath(); ctx.rect(b[0], b[1], b[2], b[3]); ctx.clip();
+      }
+      it.draw(ctx, age, age / it.life); ctx.restore();
+    }
     else it.draw(null, age, age / it.life);
     if (it.behind && it.layer === 'back') (punch || (punch = new Set())).add(it.behind);
   }
@@ -112,11 +125,15 @@ function kick() {
   showLayers(true);
   requestAnimationFrame(frame);
 }
-/* add one effect item. o: { layer:'front'|'back'|'self', life, delay, draw(ctx, age, a), behind: Element, keep } */
+/* Effects in a manga panel stay inside its frame. within(el, fn) runs fn, and every effect spawned by it is
+   clipped to the inside of el. */
+let panel = null;
+export function within(el, fn) { const was = panel; panel = el; try { return fn(); } finally { panel = was; } }
+/* add one effect item. o: { layer:'front'|'back'|'self', life, delay, draw(ctx, age, a), behind: Element, clip: Element, keep } */
 export function add(o) {
   const it = {
     layer: o.layer || 'front', t0: now() + (o.delay || 0), life: o.life == null ? 1 : o.life, draw: o.draw, dead: false,
-    behind: o.behind || null, keep: !!o.keep || o.life === Infinity || o.layer === 'self',
+    behind: o.behind || null, clip: o.clip || panel, keep: !!o.keep || o.life === Infinity || o.layer === 'self',
     end(fade = 0.12) { this.life = Math.min(this.life, now() - this.t0 + fade); },
     kill() { this.dead = true; },
   };
@@ -306,23 +323,33 @@ export function ring(o) {
   });
 }
 
-// fan of small wedges: the "surprise" marks
+/* 驚き線, the marks that burst off a point of notice: a fan of pen strokes with 入り抜き, pointed at both ends and
+   fattest a little past the middle. They snap in at full ink, a touch long, on the first frame; hold for a beat; then
+   shoot outward and are eaten from behind until nothing is left, so they leave by thinning and never fade. Lengths
+   alternate long and short and the angles are a little uneven, so two uses never look stamped from one die.
+   Ink by default; pink is for the one moment that matters most (rule 2). o: { x, y, angle, n, len, spread, dist, w, color } */
 export function ticks(o) {
-  const n = o.n || 3, spread = o.spread || 0.42, len = o.len || 14;
+  const R = newR(), n = o.n || 3, spread = o.spread || 0.5, len = (o.len || 14) * 1.75, mid = (n - 1) / 2, arr = [];
+  for (let i = 0; i < n; i++) arr.push({ da: (R() - 0.5) * 0.14, L: len * (Math.abs(i - mid) < 0.6 ? 1 : 0.7) * (0.88 + R() * 0.24) });
+  const w0 = o.w || clamp(len * 0.2, 2.4, 6), D = o.dist == null ? 8 : o.dist;
   return add({
     behind: o.behind,
-    layer: o.layer, delay: o.delay, life: o.life || 0.45,
+    layer: o.layer, delay: o.delay, life: o.life || 0.42,
     draw(ctx, age, a) {
-      const k = a < 0.25 ? E.outBack(a / 0.25) : 1, sh = a > 0.6 ? 1 - (a - 0.6) / 0.4 : 1;
-      ctx.fillStyle = o.color || C.pink;
-      for (let i = 0; i < n; i++) {
-        const ang = o.angle + (i - (n - 1) / 2) * spread;
-        const c = Math.cos(ang), s = Math.sin(ang);
-        const d0 = (o.dist || 10) * (0.5 + 0.5 * k) + 8 * a;
-        const L = len * k * sh * (i === (n - 1) / 2 ? 1 : 0.82), w = L * 0.24;
-        const x0 = o.x + c * d0, y0 = o.y + s * d0, x1 = o.x + c * (d0 + L), y1 = o.y + s * (d0 + L);
-        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1 - s * w, y1 + c * w); ctx.lineTo(x1 + s * w, y1 - c * w); ctx.closePath(); ctx.fill();
-      }
+      const pop = a < 0.08 ? 0.8 + 0.55 * (a / 0.08) : a < 0.18 ? 1.35 - 0.35 * ((a - 0.08) / 0.1) : 1;
+      const u = a < 0.34 ? 0 : (a - 0.34) / 0.66, run = 1 - Math.pow(1 - u, 2), eat = Math.pow(u, 1.4);
+      ctx.fillStyle = o.color || C.ink;
+      arr.forEach((T, i) => {
+        const ang = o.angle + (i - mid) * spread + T.da, c = Math.cos(ang), sn = Math.sin(ang);
+        const r1 = D + T.L * pop + T.L * 1.3 * run, r0 = D + (T.L + T.L * 1.3) * eat, l = r1 - r0;
+        if (l < 0.8) return;
+        const w = w0 * Math.min(1, l / (T.L * 0.55)) * (Math.abs(i - mid) < 0.6 ? 1 : 0.85), rm = r0 + l * 0.6;
+        const ax = o.x + c * r0, ay = o.y + sn * r0, bx = o.x + c * r1, by = o.y + sn * r1, mx = o.x + c * rm, my = o.y + sn * rm;
+        ctx.beginPath(); ctx.moveTo(ax, ay);
+        ctx.quadraticCurveTo(mx - sn * w * 1.1, my + c * w * 1.1, bx, by);
+        ctx.quadraticCurveTo(mx + sn * w * 1.1, my - c * w * 1.1, ax, ay);
+        ctx.fill();
+      });
     },
   });
 }
@@ -403,21 +430,43 @@ export function slash(o) {
   });
 }
 
-// vibration marks: (( or ))
+/* ブレ, something shaking side to side: a field shaking its head at a wrong value, a stepper knocking on its limit.
+   Two marks, both in the direction of the shake, never around the thing:
+   - ghosts (残像): copies of the element's own outline set to either side of it, where it just was, swapping sides on
+     twos (a new pose every other frame at 12 fps, as a shake is timed on paper) and closing in as the shake dies, so
+     they leave by meeting the element, not by fading. They are a ruled line like the outline they copy, a tone
+     lighter (violet), and drawn behind the element, so only the part that sticks out past it shows.
+   - motion strokes (ブレ線): beside each end, three short level strokes, the middle one longest, pointed at both ends
+     (rule 1), jittering on twos and shrinking where they stand.
+   Concentric outlines are left out on purpose: in manga they mean something giving off waves (a bell, a speaker), not
+   something shaking. o: { el, box, amp, sides (both | left | right), life, color }. With only a box, an element with
+   no border of its own, or a point { x, y, dir, h }, only the strokes are drawn. */
+const edgeBox = el => { const r = el.getBoundingClientRect(); return { l: r.left + scrollX, t: r.top + scrollY, w: r.width, h: r.height, radius: parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0 }; };
 export function arcs(o) {
-  const n = o.n || 2, r = o.r || 16, dir = o.dir || 1;
-  return add({
-    behind: o.behind,
-    layer: o.layer, delay: o.delay, life: o.life || 0.3,
-    draw(ctx, age, a) {
-      const span = 0.5 * (a > 0.5 ? 1 - (a - 0.5) / 0.5 : 1);
-      ctx.lineWidth = o.lw || 1.6; ctx.strokeStyle = o.color || C.violet;
-      for (let i = 0; i < n; i++) {
-        const cx = o.x + dir * (i * 5 + a * 8) - dir * r, mid = dir > 0 ? 0 : Math.PI;
-        ctx.beginPath(); ctx.arc(cx, o.y, r, mid - span, mid + span); ctx.stroke();
-      }
-    },
-  });
+  const el = o.el, b = o.box || (el ? edgeBox(el) : { l: o.x - (o.dir < 0 ? 0 : 1), t: o.y - (o.h || 28) / 2, w: 1, h: o.h || 28 });
+  const sides = o.box || el ? (o.sides === 'left' ? [-1] : o.sides === 'right' ? [1] : [-1, 1]) : [o.dir || 1];
+  const life = o.life || 0.46, amp = o.amp || clamp(b.h * 0.24, 5, 11), L0 = clamp(b.h * 0.42, 10, 18), out = [];
+  const bw = el ? parseFloat(getComputedStyle(el).borderTopWidth) || 0 : 0;
+  if (el && bw > 0) {                    // only something with an outline of its own leaves outline ghosts
+    const g = edgeBox(el), rad = Math.min(g.radius, g.h / 2, g.w / 2), lw = o.lw || clamp(bw * 0.75, 1.6, 2.6);
+    out.push(add({ layer: 'back', behind: el, delay: o.delay, life, draw(ctx, age, a) {
+      const sg = Math.floor(age * 12) % 2 ? 1 : -1, A = amp * Math.pow(1 - a, 1.2);
+      if (A < 0.6) return;
+      ctx.lineWidth = lw; ctx.strokeStyle = o.ghost || C.violet;
+      for (const [k, s] of [[1, sg], [0.55, -sg]]) { ctx.beginPath(); ctx.roundRect(g.l + s * A * k, g.t, g.w, g.h, rad); ctx.stroke(); }
+    } }));
+  }
+  out.push(add({ delay: o.delay, life, draw(ctx, age, a) {
+    const sg = Math.floor(age * 12) % 2 ? 1 : -1, k = 1 - a * a;
+    ctx.fillStyle = o.color || C.ink;
+    for (const dir of sides) for (let i = 0; i < 3; i++) {
+      const L = L0 * (i === 1 ? 1 : 0.66) * k, w = clamp(L0 * 0.16, 1.8, 2.8) * k;
+      if (L < 1.5) continue;
+      const y = b.t + b.h * (0.24 + 0.26 * i), x0 = (dir < 0 ? b.l - 7 : b.l + b.w + 7) + sg * 2 * k, x1 = x0 + dir * L;
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.quadraticCurveTo((x0 + x1) / 2, y - w, x1, y); ctx.quadraticCurveTo((x0 + x1) / 2, y + w, x0, y); ctx.fill();
+    }
+  } }));
+  return out;
 }
 
 // teardrop that points along its velocity
@@ -466,4 +515,5 @@ export function sticker(o) {
   });
 }
 
-
+/* the manga shelf: focus lines, flashes, gloom lines, cracks, afterimages and the rest live in their own file */
+export * from './fx-manga.js';

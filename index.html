@@ -7,13 +7,13 @@
 <meta name="description" content="Web components with anime key-animation energy: cel-style effects, katakana lettering and synthesised sound.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,700;1,700&family=Dela+Gothic+One&family=Reggae+One&family=Shippori+Antique+B1&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Knewave&family=Comic+Neue:ital,wght@0,700;1,700&family=Dela+Gothic+One&family=Reggae+One&family=Shippori+Antique+B1&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site/site.css">
 </head>
 <body>
 
 <aside class="side" id="side">
-  <a class="logo" href="#cover"><span class="wk">COMICS</span>SAKUGA <em>UI</em><small>vol.0.2</small></a>
+  <a class="logo" href="#cover"><span class="wk">Comics</span>SAKUGA <em>UI</em><small>vol.0.2</small></a>
   <nav id="nav"></nav>
   <div class="dock" id="dock" role="group" aria-label="Settings">
     <b class="dock-h" data-t="dock.h" aria-hidden="true"></b>
@@ -40,7 +40,7 @@
   <section class="page cover" id="cover">
     <div class="focus" aria-hidden="true"></div>
     <div class="tone-fade" aria-hidden="true"></div>
-    <div class="mast" aria-hidden="true"><b>COMICS</b><span data-t="hero.issue"></span><span>No.01</span><span>2026.11</span><i>¥0 · MIT</i></div>
+    <div class="mast" aria-hidden="true"><b>Comics</b><span data-t="hero.issue"></span><span>No.01</span><span>2026.11</span><i>¥0 · MIT</i></div>
     <div class="cover-grid">
       <div class="cover-title"><p class="kicker" data-t="hero.kicker"></p><h1><span class="t1">SAKUGA</span> <em>UI</em></h1></div>
       <div class="vcopy" data-t="hero.vcopy" aria-hidden="true"></div>
@@ -115,10 +115,37 @@ setTheme('dark');</div>
     <p class="narr" data-t="vocab.intro"></p>
     <h3 class="sub" data-t="vocab.prims"></h3>
     <div class="tiles" id="prims"></div>
+    <h3 class="sub" data-t="vocab.techs"></h3>
+    <div class="tech" id="tech">
+      <header class="tech-head">
+        <span class="tech-no" id="tech-no"></span><b class="tech-name" id="tech-name" lang="ja"></b><span class="tech-gloss" id="tech-gloss"></span>
+        <span class="tech-group" id="tech-group"></span>
+        <span class="tech-nav"><button id="tech-prev" aria-label="Previous">◀</button><button id="tech-again" aria-label="Replay">↻</button><button id="tech-next" aria-label="Next">▶</button></span>
+      </header>
+      <div class="tech-stage" id="tech-stage"><div class="tech-set" id="tech-set"></div></div>
+      <p class="tech-cap" id="tech-cap"></p>
+      <div class="tech-index" id="techs"></div>
+    </div>
+    <h3 class="sub" data-t="vocab.tones"></h3>
+    <p class="narr" data-t="vocab.tonep"></p>
+    <div class="tones" id="tones"></div>
     <h3 class="sub" data-t="vocab.voices"></h3>
     <div class="tiles words" id="voices"></div>
     <h3 class="sub"><span data-t="vocab.sounds"></span> <small id="snd-n"></small></h3>
     <div class="chips" id="sounds"></div>
+  </section>
+
+  <!-- ===== the ten rules ===== -->
+  <section class="page" id="rules">
+    <header class="opener"><div class="focus" aria-hidden="true"></div><span class="ep" data-t="rules.ep"></span><h2 data-t="rules.h"></h2></header>
+    <p class="narr" data-t="rules.intro"></p>
+    <div class="komas" id="rule-list"></div>
+    <h3 class="sub" data-t="rules.roles"></h3>
+    <table class="sk-table api-table"><thead><tr><th data-t="rules.token"></th><th data-t="rules.role"></th></tr></thead><tbody id="role-rows"></tbody></table>
+    <h3 class="sub" data-t="rules.nots"></h3>
+    <ul class="nots" id="nots"></ul>
+    <h3 class="sub"><span data-t="rules.ship"></span> <small id="ship-n"></small></h3>
+    <div class="ship" id="ship"></div>
   </section>
 
   <div id="components"></div>

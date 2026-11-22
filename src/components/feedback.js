@@ -102,11 +102,11 @@ export class SkAlert extends SkElement {
   static props = { variant: [String, 'info'], closable: Boolean, title: String };
   static styles = css`
 :host{display:block}
-.a{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;font:500 15px/1.45 var(--sk-font);position:relative;overflow:hidden}
+.a{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;font:700 15px/1.45 var(--sk-font);position:relative;overflow:hidden}
 .a::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background:var(--sk-violet)}
 :host([variant=success]) .a::before{background:var(--sk-peri)}:host([variant=warn]) .a::before{background:#ffb938}:host([variant=danger]) .a::before{background:var(--sk-pink)}
 .ic{margin-left:8px;align-self:center}.body{flex:1;min-width:0}
-.ttl{display:block;font:italic 800 16px/1.3 var(--sk-font)}.ttl:empty{display:none}
+.ttl{display:block;font:400 18.5px/1.3 var(--sk-font-head)}.ttl:empty{display:none}
 .x{border:0;background:none;padding:4px;cursor:pointer;line-height:0;font-size:12px;border-radius:6px}
 :host(:not([closable])) .x{display:none}
 ${ICON_CSS}`;
@@ -159,7 +159,7 @@ export class SkProgress extends SkElement {
 :host([data-done]) .fin .sp{scale:.8;transition:scale var(--sk-bounce-t) var(--sk-bounce) .26s}
 .ground *{fill:none;stroke:var(--sk-violet);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 :host([ground]) .badge{margin-top:clamp(10px,10cqw,34px)}
-.badge{width:max-content;margin:10px auto 0;border:var(--sk-bw) solid var(--sk-ink);background:var(--sk-surface);padding:.26em .85em;font:italic 700 clamp(15px,6.3cqw,21px)/1.1 var(--sk-font);transform:skewX(-9deg);box-shadow:4px 4px 0 var(--sk-pink)}
+.badge{width:max-content;margin:10px auto 0;border:var(--sk-bw) solid var(--sk-ink);background:var(--sk-surface);padding:.26em .85em;font:400 clamp(17px,7.24cqw,24px)/1.1 var(--sk-font-head);transform:skewX(-9deg);box-shadow:4px 4px 0 var(--sk-pink)}
 .badge b{display:inline-block;transform:skewX(9deg)}
 :host([plain]) .badge{display:none}
 :host([indeterminate]) .fill{transform:skewX(-24deg) scaleX(1.3);background:repeating-linear-gradient(90deg,var(--sk-pink) 0 14px,color-mix(in srgb,var(--sk-pink) 62%,var(--sk-surface)) 14px 28px);animation:sk-run .5s steps(7) infinite}
@@ -167,19 +167,38 @@ export class SkProgress extends SkElement {
 @keyframes sk-run{to{background-position:28px 0}}
 @media (prefers-reduced-motion:reduce){:host([indeterminate]) .fill{animation:none}}`;
   static template = `<div class="bar box" part="base"><div class="fill"></div><i class="hl"></i></div><svg class="fin" viewBox="0 0 120 60" aria-hidden="true"><path class="ck" d="M40 30L56 46L88 6"/><path class="em" d="M10 14l13 4M6 27l13 1.5M100 20l13-3.5M104 31l13 1.5"/><path class="sp" d="M107 34q1.6 10 8 13q-6.400 3-8 13q-1.600-10-8-13q6.400-3 8-13z"/></svg><div class="gnd" aria-hidden="true"><svg class="ground" viewBox="0 0 240 20" preserveAspectRatio="none"><path d="M4 15H236M22 15l3-4M70 15l3-4M118 15l3-4M154 15l3-4M200 15l3-4"/></svg><svg class="dec pl" viewBox="0 0 30 18"><path d="M5 17a5 5 0 0 1 0-10a6.500 6.500 0 0 1 11.500-3a5.500 5.500 0 0 1 8.500 5a4.200 4.200 0 0 1 0 8z"/></svg><svg class="dec pr" viewBox="0 0 30 18"><path d="M5 17a5 5 0 0 1 0-10a6.500 6.500 0 0 1 11.500-3a5.500 5.500 0 0 1 8.500 5a4.200 4.200 0 0 1 0 8z"/></svg><svg class="dec chip c1" viewBox="0 0 12 12"><path d="M2 6l3.500-4l4.500 1.500l1 5.500l-6 2z"/></svg><svg class="dec chip c2" viewBox="0 0 12 12"><path d="M1.500 7l3-5l5 1l1.500 5l-5 3z"/></svg><svg class="dec chip c3" viewBox="0 0 12 12"><path d="M2 5l4-3l4.500 2.500l-1 5.500l-6 1z"/></svg></div><div class="badge" part="badge"><b></b></div>`;
-  setup() { this.bar = this.$('.bar'); this.badge = this.$('.badge b'); this.setAttribute('role', 'progressbar'); this.lastEmit = 0; this.prev = null; }
-  disconnected() { if (this.cloud) { this.cloud.kill(); this.cloud = null; } }
+  setup() { this.bar = this.$('.bar'); this.badge = this.$('.badge b'); this.setAttribute('role', 'progressbar'); this.lastEmit = 0; this.prev = null; this.shown = 0; }
+  disconnected() { cancelAnimationFrame(this.raf); this.raf = 0; if (this.cloud) { this.cloud.kill(); this.cloud = null; } }
   sync(name) {
     const v = clamp(this.value, 0, 100), was = this.prev; this.prev = v;
-    this.bar.style.setProperty('--p', v / 100); this.setAttribute('aria-valuenow', Math.round(v));
-    if (!this._complete) this.badge.textContent = this.label != null ? this.label : this.indeterminate ? '···' : Math.round(v) + '%';
-    if (v < 100 && this._complete) { this.at.clear(); this.removeAttribute('data-done'); }
-    if (name !== 'value' || was == null) { if (v < 100) this._complete = false; else if (was == null) { this._complete = true; this.badge.textContent = this.done; this.toggleAttribute('data-done', true); } return; }
-    if (v < 100 && this._complete) { this._complete = false; this.badge.textContent = Math.round(v) + '%'; }
-    if (v > was && !this._complete && level()) this.run(v, v - was);
-    if (v >= 100 && was < 100) this.finish();
+    this.setAttribute('aria-valuenow', Math.round(v));                     // the real value is reported at once
+    if (v < 100 && this._complete) { this.at.clear(); this.removeAttribute('data-done'); this._complete = false; }
+    if (this.raf && name !== 'value') { this.draw(this.shown); return; }   // a new label mid-ride: the ride goes on
+    // a higher value is ridden up to at a limited speed, so even a jump gets run by the cloud; the first value, going
+    // back and motion turned off are drawn at once
+    if (name === 'value' && was != null && v > this.shown && level()) { if (!this.raf) { this.last = 0; this.raf = requestAnimationFrame(t => this.ride(t)); } return; }
+    cancelAnimationFrame(this.raf); this.raf = 0;
+    this.draw(v);
+    if (v >= 100 && !this._complete) {
+      if (name === 'value' && was != null && was < 100) this.finish();
+      else if (was == null) { this._complete = true; this.badge.textContent = this.done; this.toggleAttribute('data-done', true); }
+    }
   }
-  run(v, moved) {
+  draw(x) {
+    this.shown = x; this.bar.style.setProperty('--p', x / 100);
+    if (!this._complete) this.badge.textContent = this.label != null ? this.label : this.indeterminate ? '···' : Math.round(x) + '%';
+  }
+  // the drawn head closes on the value at five times the gap a second, never slower than 15% or faster than 100% a
+  // second; the cloud, the chips and the number ride with it, and the finish lands when the bar itself gets there
+  ride(tms) {
+    const dt = clamp(this.last ? (tms - this.last) / 1000 : 1 / 60, 0.001, 0.05); this.last = tms;
+    const goal = clamp(this.value, 0, 100), gap = goal - this.shown;
+    if (gap <= 0.05) { this.raf = 0; this.draw(goal); if (goal >= 100 && !this._complete) this.finish(); return; }
+    const x = this.shown + Math.min(gap, clamp(gap * 5, 15, 100) * dt);
+    this.draw(x); this.run(x);
+    this.raf = requestAnimationFrame(t => this.ride(t));
+  }
+  run(v) {
     const q = rectOf(this.bar), U = q.h * 0.78;
     this.hx = q.l + 4 + ((q.w - 8) * v) / 100; this.hy = q.cy;
     if (!this.cloud || this.cloud.dead) {
@@ -223,7 +242,7 @@ svg{grid-area:1/1;transform:rotate(-90deg);overflow:visible}
 circle{fill:none;stroke-width:9}
 .bg{stroke:var(--sk-ink)}.tr{stroke:var(--sk-surface);stroke-width:4}
 .fg{stroke:var(--sk-pink);stroke-width:4;stroke-linecap:butt;transition:stroke-dashoffset .25s steps(6)}
-.n{grid-area:1/1;font:italic 800 15px/1 var(--sk-font)}${ROLL_CSS}`;
+.n{grid-area:1/1;font:400 17px/1 var(--sk-font-head)}${ROLL_CSS}`;
   static template = `<svg viewBox="0 0 80 80" aria-hidden="true"><circle class="bg" cx="40" cy="40" r="32"/><circle class="tr" cx="40" cy="40" r="32"/><circle class="fg" cx="40" cy="40" r="32" pathLength="100" stroke-dasharray="100"/></svg><span class="n roll"><b></b></span>`;
   setup() { this.setAttribute('role', 'progressbar'); this.fg = this.$('.fg'); this.n = this.$('.n'); this.prev = null; }
   sync(name) {
@@ -269,7 +288,7 @@ export class SkBadge extends SkElement {
   static props = { value: String, variant: [String, 'pink'], dot: Boolean };
   static styles = css`
 :host{display:inline-flex;position:relative;vertical-align:middle}
-.b{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border:2.5px solid var(--sk-ink);border-radius:11px;background:var(--sk-pink);color:var(--sk-on-hot);font:italic 800 12px/1 var(--sk-font)}
+.b{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border:2.5px solid var(--sk-ink);border-radius:11px;background:var(--sk-pink);color:var(--sk-on-hot);font:400 14px/1 var(--sk-font-head)}
 :host([variant=ink]) .b{background:var(--sk-ink);color:var(--sk-surface)}
 :host([variant=peri]) .b{background:var(--sk-peri);color:var(--sk-ink)}
 :host([dot]) .b{min-width:13px;width:13px;height:13px;padding:0}
@@ -297,7 +316,7 @@ export class SkTag extends SkElement {
   static props = { variant: [String, 'default'], removable: Boolean };
   static styles = css`
 :host{display:inline-flex;vertical-align:middle}
-.t{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:2.5px solid var(--sk-ink);border-radius:999px;background:var(--sk-surface);font:italic 700 13px/1.3 var(--sk-font);box-shadow:3px 3px 0 var(--sk-lav)}
+.t{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:2.5px solid var(--sk-ink);border-radius:999px;background:var(--sk-surface);font:400 15px/1.3 var(--sk-font-head);box-shadow:3px 3px 0 var(--sk-lav)}
 :host([variant=pink]) .t{background:var(--sk-pink);color:var(--sk-on-hot)}
 :host([variant=peri]) .t{background:var(--sk-peri)}
 :host([variant=ink]) .t{background:var(--sk-ink);color:var(--sk-surface)}

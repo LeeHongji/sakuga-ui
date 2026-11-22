@@ -1,9 +1,9 @@
 {
   "version": "0.2.0",
-  "rawKB": 227.1,
-  "gzipKB": 70.6,
+  "rawKB": 269,
+  "gzipKB": 86,
   "core": {
-    "rawKB": 51.9,
-    "gzipKB": 19.7
+    "rawKB": 89.1,
+    "gzipKB": 33.5
   }
 }

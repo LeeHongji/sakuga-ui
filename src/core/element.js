@@ -4,16 +4,24 @@
      observed attributes with matching JS properties.
    - Per-instance timeline that is cancelled on disconnect, so nothing fires on a removed element. */
 import { timeline, rectOf } from './util.js';
-import './tokens.js';
+import { enter, leave } from './config.js';
+import { linkFonts } from './tokens.js';
+
+/* Effect regions (data-sk-fx): whatever the user acts on sets the ceiling for the effects that follow.
+   A press that is still held keeps its own region while the pointer passes over others. */
+if (typeof addEventListener === 'function') {
+  const mark = e => { if (e.type !== 'pointerover' || !e.buttons) enter(e.composedPath()[0]); };
+  for (const type of ['pointerdown', 'pointerup', 'pointerover', 'click', 'keydown', 'keyup', 'input', 'change', 'focusin']) addEventListener(type, mark, { capture: true, passive: true });
+}
 
 const BASE = `
-:host{box-sizing:border-box;font-family:var(--sk-font);color:var(--sk-ink);-webkit-tap-highlight-color:transparent}
+:host{box-sizing:border-box;font-family:var(--sk-font);font-weight:700;font-synthesis:none;color:var(--sk-ink);-webkit-tap-highlight-color:transparent}
 :host([hidden]){display:none !important}
 *,*::before,*::after{box-sizing:border-box}
 button{font:inherit;color:inherit;margin:0}
 :focus-visible{outline:3px solid var(--sk-pink);outline-offset:4px}
 :where(.box){border:var(--sk-bw) solid var(--sk-ink);border-radius:var(--sk-r);background:var(--sk-surface);color:var(--sk-ink);box-shadow:var(--sk-sh) var(--sk-sh) 0 var(--sk-lav)}
-.ital{font-style:italic;font-weight:700}
+.ital{font-family:var(--sk-font-head);font-weight:400}
 :host([disabled]){opacity:.5;pointer-events:none}
 .press{transition:scale var(--sk-bounce-t) var(--sk-bounce)}
 .press:active{scale:.93 .87;transition:scale 70ms ease-out}
@@ -49,16 +57,24 @@ export class SkElement extends HTMLElement {
     const root = this.attachShadow({ mode: 'open', delegatesFocus: !!this.constructor.delegatesFocus });
     root.adoptedStyleSheets = sheetFor(this.constructor);
     root.appendChild(templateFor(this.constructor).content.cloneNode(true));
-    this.at = timeline();
+    this.at = timeline(this);
     this._live = false;
   }
   connectedCallback() {
-    if (!this._live) { this._live = true; this.setup && this.setup(); }
-    this.sync && this.sync(null);
-    this.connected && this.connected();
+    linkFonts();
+    const was = enter(this);
+    try {
+      if (!this._live) { this._live = true; this.setup && this.setup(); }
+      this.sync && this.sync(null);
+      this.connected && this.connected();
+    } finally { leave(was); }
   }
   disconnectedCallback() { this.at.clear(); this.disconnected && this.disconnected(); }
-  attributeChangedCallback(name, old, val) { if (this._live && old !== val && this.sync) this.sync(name, old, val); }
+  attributeChangedCallback(name, old, val) {
+    if (!this._live || old === val || !this.sync) return;
+    const was = enter(this);
+    try { this.sync(name, old, val); } finally { leave(was); }
+  }
 
   /* form participation for classes that declare `static formAssociated = true` */
   setForm(v) {

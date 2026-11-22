@@ -32,17 +32,19 @@ export const VOICES = {
   spin: { font: FACE.pop, fill: 'violet', edge: 0.06, edgeColor: 'ink', key: 0.055, skew: 0, rot: -4, grow: 0, rise: 0, sp: 1.04, enter: 'pop', round: 1, arc: 0.24 },
 };
 const ENTER = {
-  // words arrive small, overshoot and settle, almost together: the reference never builds a word glyph by glyph
-  slam: i => [[{ transform: 'scale(.22)', opacity: 0 }, { transform: 'scale(1.2)', opacity: 1, offset: 0.52 }, { transform: 'scale(.95)', opacity: 1, offset: 0.78 }, { transform: 'none', opacity: 1 }], 170, i * 12],
-  whole: () => [[{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1.14)', opacity: 1, offset: 0.6 }, { transform: 'none', opacity: 1 }], 120, 0],
-  pop: i => [[{ transform: 'translateY(8px) scale(.2)', opacity: 0 }, { transform: 'translateY(-6px) scale(1.22)', opacity: 1, offset: 0.55 }, { transform: 'translateY(1px) scale(.95)', opacity: 1, offset: 0.8 }, { transform: 'none', opacity: 1 }], 150, i * 10],
-  zip: i => [[{ transform: 'translateX(-46px) scaleX(2.4)', opacity: 0 }, { transform: 'translateX(5px) scaleX(.9)', opacity: 1, offset: 0.7 }, { transform: 'none', opacity: 1 }], 130, i * 8],
-  fade: i => [[{ transform: 'translateY(-5px)', opacity: 0 }, { transform: 'none', opacity: 1 }], 180, i * 40],
+  /* words arrive small, overshoot and settle, almost together: the reference never builds a word glyph by glyph.
+     A word is at full ink from its first frame: it grows into place and leaves by shrinking or thinning, never by fading */
+  slam: i => [[{ transform: 'scale(.22)' }, { transform: 'scale(1.2)', offset: 0.52 }, { transform: 'scale(.95)', offset: 0.78 }, { transform: 'none' }], 170, i * 12],
+  whole: () => [[{ transform: 'scale(.2)' }, { transform: 'scale(1.14)', offset: 0.6 }, { transform: 'none' }], 120, 0],
+  pop: i => [[{ transform: 'translateY(8px) scale(.2)' }, { transform: 'translateY(-6px) scale(1.22)', offset: 0.55 }, { transform: 'translateY(1px) scale(.95)', offset: 0.8 }, { transform: 'none' }], 150, i * 10],
+  zip: i => [[{ transform: 'translateX(-46px) scaleX(2.4) scaleY(.5)' }, { transform: 'translateX(5px) scaleX(.9)', offset: 0.7 }, { transform: 'none' }], 130, i * 8],
+  // the quiet one: each glyph is set down in turn, whole, and sinks the last few pixels
+  fade: i => [[{ transform: 'scale(0)' }, { transform: 'translateY(-5px)', offset: 0.01 }, { transform: 'none' }], 180, i * 40],
 };
 const EXIT = {
   shrink: [[{ transform: 'scale(1)' }, { transform: 'scale(1.06)', offset: 0.3 }, { transform: 'scale(.08)' }], 80],
-  fly: [[{ transform: 'none', opacity: 1 }, { transform: 'translateX(46px) scaleX(1.5)', opacity: 0 }], 130],
-  fade: [[{ opacity: 1 }, { opacity: 0 }], 160],
+  fly: [[{ transform: 'none' }, { transform: 'translateX(46px) scale(1.5, .04)' }], 130],
+  fade: [[{ transform: 'none' }, { transform: 'scale(1.04, .04)' }], 160],
 };
 const SMALL = 'ッュャョァィゥェォ';
 let mctx = null, sfxId = 0;
@@ -166,7 +168,7 @@ function place(text, o) {
     if (V.tremble) el.animate([{ translate: '0 0' }, { translate: '-1px .8px' }, { translate: '1px -1px' }, { translate: '-.8px 1px' }, { translate: '0 0' }], { duration: 170, iterations: Infinity, easing: 'steps(4, end)' });
   });
   const mk = svg.querySelector('.mk');
-  if (mk) mk.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1.1)', offset: 0.6 }, { opacity: 1, transform: 'none' }], { duration: 200, delay: V.marks === 'speed' ? 0 : total * 0.5, fill: 'backwards' });
+  if (mk) mk.animate([{ transform: 'scale(0)' }, { transform: 'scale(1.1)', offset: 0.6 }, { transform: 'none' }], { duration: 200, delay: V.marks === 'speed' ? 0 : total * 0.5, fill: 'backwards' });
   const hold = o.hold == null ? 700 : o.hold;
   if (hold !== Infinity) {
     setTimeout(() => {
@@ -180,10 +182,10 @@ function place(text, o) {
 /* say a sound-effect word at page position (x, y): lettering plus its sound.
    o: { voice, x, y, size, color, rot, hold (ms), delay (s), silent, sp (spacing), enter, enterMs, stagger (ms per glyph), exitMs } */
 export function sfx(text, o = {}) {
-  // the returned handle takes the word away early: cancel(ms) fades it in ms (default 60)
+  // the returned handle takes the word away early: cancel(ms) shrinks it away in ms (default 60)
   const h = { el: null, gone: false, cancel(ms = 60) {
     this.gone = true; const el = this.el;
-    if (el && el.isConnected) el.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.6)' }], { duration: ms, fill: 'forwards' }).onfinish = () => { el.remove(); if (layerEl && layerEl.childElementCount === 1) lower(layerEl); };
+    if (el && el.isConnected) el.animate([{ transform: 'scale(1)' }, { transform: 'scale(.06)' }], { duration: ms, easing: 'ease-in', fill: 'forwards' }).onfinish = () => { el.remove(); if (layerEl && layerEl.childElementCount === 1) lower(layerEl); };
   } };
   const go = () => {
     if (h.gone) return;
@@ -222,7 +224,7 @@ export function loadFaces() {
     l.rel = 'stylesheet'; l.href = GOOGLE; l.dataset.skFonts = '';
     document.head.appendChild(l);
   }
-  const all = 'ドンズバッカチシュゴポキラパァジャザガフプスピョタグルーブペ!…';
+  const all = 'ドンズバッカチシュゴポキラパァジャザガフプスピョタグルーブペメホヒオダ!…';
   faces = document.fonts && document.fonts.load
     ? new Promise(res => setTimeout(res, 60)).then(() => Promise.all(Object.values(FACE).flatMap(f => f.split(',').map(one => document.fonts.load(`40px ${one}`, all).catch(() => {})))))
     : Promise.resolve();

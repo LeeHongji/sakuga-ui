@@ -10,7 +10,7 @@ POKE = """async () => {
       if (['sk-dialog','sk-drawer','sk-tab','sk-step','sk-menu-item','sk-accordion','sk-skeleton','sk-spinner','sk-avatar','sk-divider','sk-word','sk-tooltip','sk-breadcrumb','sk-card','sk-badge','sk-bubble','sk-counter','sk-alert','sk-ring','sk-progress','sk-steps'].includes(tag)) continue;
       if (tag === 'sk-radio') { el.click(); n++; continue; }
       if (['sk-koma-panel','sk-page','sk-koma-step','sk-reactions'].includes(tag)) continue;
-      if (el.id === 'd-sp-go' || el.id === 'd-fl-del') continue;   // these start a long scripted demo; the components are poked directly below
+      if (el.id === 'd-sp-go' || el.id === 'd-fl-del' || el.id === 'rl-mono') continue;   // these start a long scripted demo; the components are poked directly below
       if (tag === 'sk-koma') { el.pick(1, true); n++; continue; }
       if (tag === 'sk-pages') { el.next(); n++; continue; }
       if (tag === 'sk-balloon-input') { el.value = 'I object!'; await w(60); el.send(); n++; continue; }
@@ -42,7 +42,8 @@ POKE = """async () => {
   document.querySelectorAll('sk-menu-item').forEach((m, i) => { if (i === 0) m.click(); });
   document.querySelectorAll('sk-bubble').forEach(b => b.pop());
   const tg = document.querySelector('sk-tag[removable]'); if (tg) tg.shadowRoot.querySelector('button').click();
-  for (const t of document.querySelectorAll('#prims .tile, #voices .tile, #sounds button')) { t.click(); await w(8); }
+  for (const t of document.querySelectorAll('#prims .tile, #techs button, #voices .tile, #sounds button')) { t.click(); await w(8); }
+  { const el = document.querySelector('#tech-stage'), q = Sakuga.rectOf(el), M = Sakuga.moves; for (const m of ['notice', 'gloom', 'vanish', 'zap', 'bloom', 'shiver', 'dread', 'focusOn', 'crackAt']) M[m](el); M.afterimage(el, { l: q.l - 100, t: q.t, w: q.w, h: q.h }); M.stomp(q.cx, q.b); }
   await w(2600);
   document.querySelectorAll('sk-dialog,sk-drawer').forEach(d => { d.open = false; });
   document.querySelectorAll('sk-popover,sk-menu').forEach(d => { d.open = false; });

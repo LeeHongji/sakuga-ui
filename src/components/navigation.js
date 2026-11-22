@@ -16,7 +16,7 @@ export class SkTabs extends SkElement {
   static styles = css`
 :host{display:block}
 .nav{position:relative;display:flex;gap:4px;border-bottom:var(--sk-bw) solid var(--sk-ink);contain:layout style}
-.nav button{position:relative;border:0;background:none;padding:9px 14px 10px;font:italic 700 15px/1 var(--sk-font);cursor:pointer;color:var(--sk-muted);border-radius:8px 8px 0 0}
+.nav button{position:relative;border:0;background:none;padding:9px 14px 10px;font:400 17px/1 var(--sk-font-head);cursor:pointer;color:var(--sk-muted);border-radius:8px 8px 0 0}
 .nav button{transition:scale var(--sk-bounce-t) var(--sk-bounce)}
 .nav button:active{scale:.92;transition:scale 70ms}
 .nav button[aria-selected=true]{color:var(--sk-ink)}
@@ -54,12 +54,12 @@ export class SkTabs extends SkElement {
     const a = from.offsetLeft + 6, wa = from.offsetWidth - 12, b = to.offsetLeft + 6, wb = to.offsetWidth - 12;
     this.value = ts[i].value || String(i);
     if (this.cur !== i) { this.cur = i; this.sync(); }
-    slide(play, this.ind, a, wa, b, wb);
+    const hit = slide(play, this.ind, a, wa, b, wb);
     play(ts[i], [{ transform: `translateX(${18 * dir}px) skewX(${-6 * dir}deg)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 170, easing: 'cubic-bezier(.2,.9,.3,1.2)' });
     const q = rectOf(this.nav);
     moves.streak(q.l + a + wa / 2, q.b - 2, dir > 0 ? Math.PI : 0, 36, 3, { spread: 10 });
     SND.play('swish', { small: 1 });
-    this.at(190, () => { FX.ticks({ x: q.l + b + (dir > 0 ? wb : 0), y: q.b + 4, angle: dir > 0 ? 0.5 : 2.64, len: 8, n: 2, life: 0.3 }); SND.play('land'); });
+    this.at(hit, () => { FX.puff({ x: q.l + b + (dir > 0 ? wb + 4 : -4), y: q.b - 2, r: 7, n: 3, vx: dir * 44, vy: -12, life: 0.45, lw: 1.5 }); SND.play('land'); });   // it skids to a stop in a little dust
     if (user) this.emit('change', { value: this.value });
   }
 }
@@ -72,14 +72,14 @@ export class SkAccordionItem extends SkElement {
   static styles = css`
 :host{display:block;border-bottom:2px dashed color-mix(in srgb,var(--sk-muted) 50%,transparent)}
 :host(:last-child){border-bottom:0}
-.head{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;border:0;background:none;padding:13px 14px;font:italic 700 16px/1.3 var(--sk-font);cursor:pointer;text-align:left}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;border:0;background:none;padding:13px 14px;font:400 18.5px/1.3 var(--sk-font-head);cursor:pointer;text-align:left}
 .chev{flex:none;transition:rotate .22s var(--sk-snap)}
 .head:active .chev{scale:.8}
 :host([open]) .chev{rotate:180deg}
 .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .2s cubic-bezier(.3,1,.4,1)}
 :host([open]) .body{grid-template-rows:1fr}
 .in{overflow:hidden;min-height:0}
-.pad{padding:0 14px 14px;font:500 15px/1.5 var(--sk-font)}`;
+.pad{padding:0 14px 14px;font:700 15px/1.5 var(--sk-font)}`;
   static template = `<button class="head" part="header"><span><slot name="label"></slot><span class="lbl"></span></span>${CHEVRON}</button><div class="body"><div class="in"><div class="pad" part="content"><slot></slot></div></div></div>`;
   setup() {
     this.head = this.$('.head');
@@ -91,7 +91,6 @@ export class SkAccordionItem extends SkElement {
     const q = rectOf(this.$('.chev'));
     if (this.open) {
       SND.word('パカッ');   // heard, not lettered: there is no room beside a row of text that is about to open
-      FX.ticks({ x: q.cx, y: q.cy + 12, angle: Math.PI / 2, len: 8, life: 0.3 });
       play(this.$('.pad'), [{ transform: 'translateY(-8px) scaleY(.8)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 200, delay: 60, fill: 'backwards' });
     } else { SND.play('close'); FX.puff({ x: q.cx, y: q.cy + 10, r: 6, n: 3, vy: 10, life: 0.35 }); }
     this.emit('sk-toggle', { open: this.open });
@@ -111,7 +110,7 @@ define('sk-accordion', SkAccordion);
 export class SkBreadcrumb extends SkElement {
   static styles = css`
 :host{display:block}
-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font:italic 700 14px/1.3 var(--sk-font)}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font:400 16px/1.3 var(--sk-font-head)}
 .sep{color:var(--sk-pink);font-weight:900;letter-spacing:-3px;padding:0 6px 0 3px;transform:skewX(-14deg)}
 ::slotted(a){color:var(--sk-muted);text-decoration:none;padding:3px 6px;border-radius:7px}
 ::slotted(a:hover){color:var(--sk-ink);background:color-mix(in srgb,var(--sk-lav) 45%,transparent)}
@@ -134,7 +133,7 @@ export class SkPagination extends SkElement {
   static styles = css`
 :host{display:inline-block;vertical-align:middle}
 nav{display:inline-flex;align-items:center;gap:5px}
-button{min-width:34px;height:34px;padding:0 8px 1px;border:var(--sk-bw) solid transparent;border-radius:11px;background:none;font:italic 700 15px/1 var(--sk-font);cursor:pointer}
+button{min-width:34px;height:34px;padding:0 8px 1px;border:var(--sk-bw) solid transparent;border-radius:11px;background:none;font:400 17px/1 var(--sk-font-head);cursor:pointer}
 button:hover{background:color-mix(in srgb,var(--sk-lav) 45%,transparent)}
 button[aria-current]{border-color:var(--sk-ink);background:var(--sk-peri);box-shadow:3px 3px 0 var(--sk-lav)}
 button:disabled{opacity:.35;cursor:default;background:none}
@@ -159,7 +158,7 @@ button[data-hop]{background:transparent;border-color:transparent;box-shadow:none
     if (a && cur && level()) {
       const b = rectOf(cur);
       cur.toggleAttribute('data-hop', true);   // the number stays readable; only its box waits for the ball to land
-      moves.hop({ x: a.cx, y: a.cy }, { x: b.cx, y: b.cy }, { height: 16, r: 7, side: 'y', dur: 0.22, color: FX.C.peri, hollow: true, done: () => { cur.removeAttribute('data-hop'); play(cur, [{ scale: '1.12 .85' }, { scale: '.97 1.05', offset: 0.5 }, { scale: '1 1' }], { duration: 200 }); moves.dust(b.cx, b.b + 2, 4, 12); SND.play('land'); } });
+      moves.hop({ x: a.cx, y: a.cy }, { x: b.cx, y: b.cy }, { height: 16, r: 7, side: 'y', dur: 0.3, color: FX.C.peri, hollow: true, hit: () => { cur.removeAttribute('data-hop'); play(cur, [{ scale: '1.12 .85' }, { scale: '.97 1.05', offset: 0.5 }, { scale: '1 1' }], { duration: 200 }); moves.dust(b.cx, b.b + 2, 4, 12); SND.play('land'); } });
       SND.play('boing');
     } else if (cur) anim(cur, 'pulse');
     this.emit('change', { page: p });
@@ -179,9 +178,9 @@ export class SkSteps extends SkElement {
   static styles = css`
 :host{display:block}
 ol{display:flex;list-style:none;margin:0;padding:0}
-li{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;font:italic 700 13px/1.25 var(--sk-font);text-align:center;color:var(--sk-muted)}
+li{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;font:400 15px/1.25 var(--sk-font-head);text-align:center;color:var(--sk-muted)}
 li[data-s=done],li[data-s=now]{color:var(--sk-ink)}
-.dot{position:relative;z-index:1;width:34px;height:34px;border-radius:50%;border:var(--sk-bw) solid var(--sk-ink);background:var(--sk-surface);display:grid;place-items:center;padding-bottom:1px;font:italic 900 15px/1 var(--sk-font);color:var(--sk-ink)}
+.dot{position:relative;z-index:1;width:34px;height:34px;border-radius:50%;border:var(--sk-bw) solid var(--sk-ink);background:var(--sk-surface);display:grid;place-items:center;padding-bottom:1px;font:400 17px/1 var(--sk-font-head);color:var(--sk-ink)}
 li[data-s=now] .dot{background:var(--sk-peri);box-shadow:3px 3px 0 var(--sk-lav)}
 li[data-s=done] .dot{background:var(--sk-pink);color:var(--sk-on-hot)}
 .line{position:absolute;top:15px;left:calc(-50% + 17px);right:calc(50% + 17px);height:5px;border:1.5px solid var(--sk-ink);border-radius:3px;background:var(--sk-surface);overflow:hidden}
@@ -202,7 +201,7 @@ li:first-child .line{display:none}`;
     if (name !== 'current' || was == null || cur === was) return;
     if (cur > was) {
       const dot = this.ol.children[cur - 1] && this.ol.children[cur - 1].querySelector('.dot');
-      if (dot) { const q = rectOf(dot); anim(dot, 'land'); moves.say('ペタッ', { voice: 'pop', x: q.cx + 26, y: q.t - 16, size: 18, hold: 220 }); FX.ticks({ x: q.cx, y: q.t - 4, angle: -Math.PI / 2, len: 9 }); moves.dust(q.cx, q.b + 2, 5, 16); }
+      if (dot) { const q = rectOf(dot); anim(dot, 'land'); moves.say('ペタッ', { voice: 'pop', x: q.cx + 26, y: q.t - 16, size: 18, hold: 220 }); moves.dust(q.cx, q.b + 2, 5, 16); }
       if (cur >= steps.length) { const q = this.rect; moves.say('ジャーン!', { voice: 'impact', x: q.cx, y: q.t - 26, size: 36, hold: 600 }); moves.shower(q.cx, q.cy, 'star', 10, { stroke: FX.C.ink, g: 520 }); }
     } else SND.play('swish', { small: 1 });
     const now = this.ol.children[cur] && this.ol.children[cur].querySelector('.dot'); if (now) anim(now, 'pulse');

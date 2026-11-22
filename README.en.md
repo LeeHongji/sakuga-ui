@@ -10,7 +10,7 @@ Web components with anime key-animation energy: cel-style effects, katakana lett
 <a href="https://www.npmjs.com/package/sakuga-ui"><img alt="npm" src="https://img.shields.io/npm/v/sakuga-ui?style=flat-square&color=ec4899"></a>
 <img alt="63 tags" src="https://img.shields.io/badge/tags-63-7c6cf0?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1b1642?style=flat-square">
-<img alt="71 kB gzip" src="https://img.shields.io/badge/gzip-71%20kB-ec4899?style=flat-square">
+<img alt="86 kB gzip" src="https://img.shields.io/badge/gzip-86%20kB-ec4899?style=flat-square">
 <img alt="Web Components" src="https://img.shields.io/badge/web%20components-native-7c6cf0?style=flat-square">
 </p>
 
@@ -46,13 +46,13 @@ The clips come from the promo film. Every component in it is this library, every
 
 ## Highlights
 
-- **63 `sk-*` tags** in seven groups (actions, forms, feedback, overlays, navigation, display, manga), plus 24 animated icons and 4 playful loaders
+- **63 `sk-*` tags** in twelve groups: the general ones (actions, forms, feedback, overlays, navigation, layout, data display) and the ones that put a manga technique to work as interface (manuscript, chat, staging, lettering); plus 24 animated icons and 4 playful loaders
 - **Zero dependencies**: plain custom elements, so React, Vue, Svelte or plain HTML just write the tag
 - **One core**: shared effect primitives, one lettering system, one set of 45 WebAudio sound recipes (no audio files)
 - **Real springs**: solved once and baked into CSS `linear()` easings that run on the compositor
 - **Top layer**: dialogs, effects and lettering go through the Popover API
 - **Restraint**: effects have full / lite / off, sound can be turned off, and reduced-motion turns effects off
-- **Size**: everything is 71 kB gzip; the core alone is 20 kB gzip
+- **Size**: everything is 86 kB gzip; the core alone is 33 kB gzip
 
 > **Status**: 0.2.0, published on [npm](https://www.npmjs.com/package/sakuga-ui). Fully verified in Chromium only.
 
@@ -91,12 +91,17 @@ setPalette('shonen');
 | Group | Tags |
 |---|---|
 | Actions | `sk-button` `sk-hold-button` `sk-like` `sk-segmented` `sk-copy` |
-| Forms | `sk-switch` `sk-theme-switch` `sk-checkbox` `sk-radio-group` `sk-radio` `sk-slider` `sk-input` `sk-textarea` `sk-select` `sk-stepper` `sk-rating` `sk-otp` |
-| Feedback | `sk-toast` `sk-alert` `sk-progress` `sk-ring` `sk-spinner` `sk-loader` `sk-skeleton` `sk-badge` `sk-tag` |
+| Forms | `sk-switch` `sk-theme-switch` `sk-checkbox` `sk-radio-group` `sk-radio` `sk-slider` `sk-input` `sk-textarea` `sk-select` `sk-stepper` `sk-rating` `sk-otp` `sk-calendar` |
+| Feedback | `sk-toast` `sk-alert` `sk-progress` `sk-ring` `sk-spinner` `sk-loader` `sk-skeleton` |
 | Overlays | `sk-dialog` `sk-drawer` `sk-tooltip` `sk-popover` `sk-menu` `sk-menu-item` |
-| Navigation | `sk-tabs` `sk-tab` `sk-accordion` `sk-accordion-item` `sk-breadcrumb` `sk-pagination` `sk-steps` `sk-step` |
-| Display | `sk-card` `sk-avatar` `sk-divider` `sk-kbd` `sk-bubble` `sk-counter` `sk-calendar` `sk-word` `sk-icon` |
-| Manga | `sk-koma` `sk-koma-panel` `sk-pages` `sk-page` `sk-balloon-input` `sk-speedbar` `sk-flash` `sk-tone` `sk-hatch` `sk-yonkoma` `sk-koma-step` `sk-breakout` `sk-reactions` `sk-reaction` |
+| Navigation | `sk-tabs` `sk-tab` `sk-breadcrumb` `sk-pagination` `sk-steps` `sk-step` |
+| Layout | `sk-accordion` `sk-accordion-item` `sk-card` `sk-divider` |
+| Data display | `sk-avatar` `sk-badge` `sk-tag` `sk-counter` |
+| Manuscript | `sk-koma` `sk-koma-panel` `sk-pages` `sk-page` `sk-yonkoma` `sk-koma-step` `sk-breakout` |
+| Chat | `sk-bubble` `sk-balloon-input` `sk-reactions` `sk-reaction` |
+| Staging | `sk-flash` `sk-speedbar` `sk-tone` `sk-hatch` |
+| Lettering | `sk-word` `sk-kbd` |
+| Icons | `sk-icon` |
 
 Form controls take part in native `<form>` submission through `ElementInternals`. Attributes, events and methods for each component are on the [docs site](https://leehongji.github.io/sakuga-ui/).
 
@@ -109,16 +114,20 @@ configure({
   sound: true,
   volume: 0.5,
   lettering: true,
-  fonts: 'google',    // 'system' never requests web fonts
+  fonts: 'google',    // the comic faces and sound-word faces come from Google Fonts; 'system' never requests web fonts
   maxParticles: 240,
   maxWords: 12,
   adaptive: true,     // fewer particles when frames get slow
 });
 ```
 
+A region can be turned down by itself: put `data-sk-fx="lite"` or `"off"` on a container and every component inside spawns effects under that ceiling (the nearest mark wins, and a region never goes above the global setting). The level is taken from the region of the component being acted on. The rules that decide whether a component belongs in the library are in [DESIGN.md](DESIGN.md) (Chinese).
+
 ## Themes and palettes
 
 Everything reads `--sk-*` custom properties, injected first in `<head>`, so your stylesheet can override any of them. Put `data-sk-theme="dark"` on any ancestor for dark; `setTheme('dark', { x, y })` wipes from a point.
+
+Component text is lettered in two comic voices: `--sk-font-head` for buttons, titles, labels and numbers (Knewave by default) and `--sk-font` for sentences, descriptions and fields (Comic Neue bold). Chinese falls through to ZCOOL KuaiLe; a `lang="ja"` page switches to Reggae One and Shippori Antique B1. Override the two properties to change faces.
 
 | Palette | Look |
 |---|---|
@@ -129,6 +138,64 @@ Everything reads `--sk-*` custom properties, injected first in `<head>`, so your
 | `mono` | A black-and-white manga page with one red |
 
 `setPalette('shonen')` recolours components, effects and lettering together; `<html data-sk-palette="soda">` works too. Run `npm run contrast` after changing colours.
+
+## Manga technique effects
+
+Besides the general primitives (smoke, starburst, speed lines), `FX` has a shelf of manga techniques. Each is a way of drawing that has a name:
+
+| Primitive | Technique | What it says |
+|---|---|---|
+| `FX.focus` | 集中線 focus lines, 明かり線, 白抜き | the eye and the shock pulled to one point; `mode: 'out'` reads as light or joy |
+| `FX.uni` | ウニフラッシュ sea-urchin flash | inner monologue, a hit |
+| `FX.bolt` | イナズマ lightning, ひらめき | shock, revelation; `zig: 0` is an idea arriving |
+| `FX.tare` | タレ線 gloom lines | the mood drops; `kind: 'wavy'` is the comic version, `'drip'` is cold sweat |
+| `FX.odoro` | オドロ線 dread lines | a grudge, an ominous presence |
+| `FX.wobble` | 震え線 / しびれ線 | trembling, numbness |
+| `FX.ghost` / `FX.trail` / `FX.bure` | 残像 / 残像線 / ブレ線 | faster than the eye |
+| `FX.crack` | ヒビ cracks | something gave way |
+| `FX.shock` / `FX.crown` | 衝撃波 / タタキダシ | a blow, a hard landing |
+| `FX.spatter` | ホワイト飛ばし spatter | stars, sparks; `ink: true` is tension |
+| `FX.drift` | トビモノ drifting things | petals for glamour, dust for tension, one looping dead leaf for an awkward silence |
+
+A second shelf covers the everyday moments of an app. Each has a move that brings its word and sound:
+
+| move | primitive | technique | for |
+|---|---|---|---|
+| `moves.reveal` | `FX.rays` | 後光 glory rays | an unlock, an achievement, an upgrade, a result revealed |
+| `moves.celebrate` | `FX.confetti` | 紙吹雪 confetti | an order placed, a task done, a milestone |
+| `moves.blaze` | `FX.flame` | メラメラ flames | a streak, something hot, on a roll |
+| `moves.fresh` | `FX.steam` | 湯気 steam | fresh, just updated, new in |
+| `moves.freeze` | `FX.frost` | 氷結 frost | frozen, locked, paused, snoozed |
+| `moves.dash` | `FX.rush` | 流線 speed rush | sent, submitted, on its way, a transition |
+| `moves.blowAway` | `FX.gust` | 風 gust | cleared, dismissed, archived |
+| `moves.spotlight` | `FX.spotlight` | スポットライト spotlight | an onboarding step, a featured item |
+| `moves.sing` | `FX.notes` | 音符 notes | playing, sound on |
+
+`blaze`, `freeze` and `spotlight` take `hold: true` to stay on (ice that stays while an account is frozen) until `.end()` on what they return.
+
+Components normally call the moves that bring a sound word and a sound with them: `moves.notice`, `gloom`, `vanish`, `zap`, `bloom`, `shiver`, `afterimage`, `crackAt`, `stomp`, `focusOn`, `dread`, and the nine above.
+
+```js
+import { moves } from 'sakuga-ui';
+
+moves.gloom(field);              // gloom lines and ずーん
+moves.crackAt(card, x, y);       // cracks and ピキッ, kept inside the card
+const lines = moves.focusOn(row, { life: Infinity });   // focus lines that hold
+lines.end(0.2);                  // and leave when asked
+```
+
+Effects are drawn over the whole page by default. To keep them inside a panel, as a manga drawing stays inside its frame, call `FX.within(panel, () => moves.focusOn(el))`: everything spawned inside is clipped to `panel`.
+
+Screentone comes from `tone()`: one repeating tile whose `css` paints a layer element and follows the theme colour.
+
+```js
+import { tone } from 'sakuga-ui';
+
+layer.style.cssText += tone('dots', { pct: 30 }).css;      // 30% dot tone
+layer.style.cssText += tone('hatch', { level: 3 }).css;    // three layers of hatching
+```
+
+Kinds: `dots`, `grad`, `lines`, `hatch`, `rope`, `sand`, `stipple`, `sparkle`, `bubble`. All of them are on the docs site under Vocabulary.
 
 ## Springs
 
@@ -152,16 +219,17 @@ npm run docs       # docs site on http://localhost:8823, loads src/ directly
 npm run build      # bundles dist/ and writes dist/meta.json
 npm test           # clicks every demo in 3 languages, 2 themes, 3 settings
 npm run audit      # overlap, overflow and clipped-lettering audit at 5 widths
+npm run laws       # the checkable part of the design rules: filters, shadows, docs and types
 npm run contrast   # contrast of 9 text roles in 10 palette/theme combinations
 npm run perf       # performance measurements
 ```
 
-Everything except `build` needs Python Playwright and the docs server on port 8823. Commit `dist/` after changing `src/`; CI checks that they match.
+Everything except `build` and `laws` needs Python Playwright and the docs server on port 8823. Commit `dist/` after changing `src/`; CI checks that they match.
 
 Browsers: Chrome / Edge 111+, Safari 16.4+, Firefox 113+, with fallbacks when the Popover API or `linear()` easing is missing. Verified in Chromium only.
 
 ## Credits
 
-The visual language recreates and extends FinkTheArtist's "Sakuga UI set" demo video. Fonts from Google Fonts: Bangers, Comic Neue, ZCOOL QingKe HuangYou, ZCOOL KuaiLe, Chokokutai, Reggae One, Dela Gothic One, Mochiy Pop One, Potta One, Stick.
+The visual language recreates and extends FinkTheArtist's "Sakuga UI set" demo video. Fonts from Google Fonts: Knewave, Comic Neue, ZCOOL QingKe HuangYou, ZCOOL KuaiLe, Chokokutai, Reggae One, Dela Gothic One, Mochiy Pop One, Potta One, Stick.
 
 [MIT](LICENSE)

@@ -16,5 +16,17 @@ export const config = {
 const subs = new Set();
 export function configure(patch) { Object.assign(config, patch); subs.forEach(f => f(config)); return config; }
 export function onConfig(f) { subs.add(f); return () => subs.delete(f); }
+/* A region can turn the effects down for everything inside it: <section data-sk-fx="lite"> or "off".
+   The nearest marked ancestor wins ("full" lifts an outer mark again), and no region goes above the global setting.
+   `cap` is the ceiling of the component that is acting now: set from the target of each user event, and around
+   every attribute change and timer of an SkElement. */
+const CAPS = { off: 0, lite: 0.5 };
+let cap = 1;
+export function regionOf(el) {
+  for (let n = el; n; n = n.parentNode || n.host) { const v = n.dataset && n.dataset.skFx; if (v) return v in CAPS ? CAPS[v] : 1; }
+  return 1;
+}
+export function enter(el) { const was = cap; cap = regionOf(el); return was; }
+export function leave(was) { cap = was; }
 // 0..1 multiplier for effect amount
-export const level = () => (reduced || config.fx === 'off' ? 0 : config.fx === 'lite' ? 0.5 : 1);
+export const level = () => Math.min(cap, reduced || config.fx === 'off' ? 0 : config.fx === 'lite' ? 0.5 : 1);

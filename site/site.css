@@ -4,7 +4,8 @@
 :root {
   --side: 244px; --g: 14px; --ln: 3px;
   --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --disp: "Bangers", "Arial Narrow", Impact, sans-serif;          /* numbers and Latin tags, in every language */
+  --logo: "Helvetica Neue", Helvetica, Arial, sans-serif;          /* the wordmark only: components letter with --sk-font-head and --sk-font */
+  --disp: "Knewave", Impact, sans-serif;         /* numbers and Latin tags, in every language */
   /* Three voices per language, as in a manga: title (chapter lettering), head (panel titles, taglines, shouted lines)
      and text (dialogue and narration). --hk / --tk / --xk even out the optical size of the faces. */
   --title: var(--disp); --head: var(--disp); --tag: var(--disp);
@@ -18,20 +19,18 @@
 :root:lang(zh) {
   --title: "ZCOOL QingKe HuangYou", "PingFang SC", "Microsoft YaHei", sans-serif;
   --head: "Comic Neue", "ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --tag: "Bangers", "ZCOOL KuaiLe", "PingFang SC", sans-serif;
+  --tag: "Knewave", "ZCOOL KuaiLe", "PingFang SC", sans-serif;
   /* descriptions are lettered too: the same comic face as the shouted lines, a size down; panel titles take the poster face */
   --text: "Comic Neue", "ZCOOL KuaiLe", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;   /* Latin and digits from the comic Latin face */
   --panel: var(--title);
   --tw: 400; --ts: normal; --hk: 1.04; --tk: 1.1; --xk: 1.05; --pk: 1.16; --hls: 0.03em; --tls: 0.04em;
-  --sk-font: "Helvetica Neue", Helvetica, Arial, "ZCOOL KuaiLe", "PingFang SC", "Hiragino Sans GB", sans-serif;
 }
 :root:lang(ja) {
   --title: "Dela Gothic One", "Hiragino Sans", "Yu Gothic", sans-serif;
   --head: "Reggae One", "Hiragino Sans", "Yu Gothic", sans-serif;
-  --tag: "Bangers", "Reggae One", "Hiragino Sans", sans-serif;
+  --tag: "Knewave", "Reggae One", "Hiragino Sans", sans-serif;
   --text: "Shippori Antique B1", "Hiragino Sans", "Yu Gothic", sans-serif;
   --tw: 400; --ts: normal; --hk: 0.98; --tk: 0.84; --xk: 1; --hls: 0.01em; --tls: 0;
-  --sk-font: "Helvetica Neue", Helvetica, Arial, "Reggae One", "Hiragino Sans", "Yu Gothic", sans-serif;
 }
 html { scroll-behavior: smooth; scroll-padding-top: 18px; }
 body {
@@ -52,10 +51,10 @@ a { color: inherit; }
 /* ---------- sidebar: the spine, the contents and the console ---------- */
 .side { position: fixed; left: 0; top: 0; bottom: 0; width: var(--side); display: flex; flex-direction: column; padding: 18px 0 0; background: var(--sk-ink); color: var(--sk-surface); z-index: 20; border-right: var(--ln) solid var(--sk-ink); }
 :root[data-sk-theme="dark"] .side { background: var(--night); color: var(--sk-ink); border-right-color: var(--sk-ink); }
-.logo { flex: none; display: block; padding: 0 18px 14px; font: italic 900 29px/0.95 var(--sk-font); letter-spacing: -0.03em; text-decoration: none; border-bottom: 2px dashed color-mix(in srgb, currentColor 40%, transparent); }
+.logo { flex: none; display: block; padding: 0 18px 14px; font: italic 900 29px/0.95 var(--logo); letter-spacing: -0.03em; text-decoration: none; border-bottom: 2px dashed color-mix(in srgb, currentColor 40%, transparent); }
 .logo em { color: var(--sk-pink); }
-.logo .wk { display: block; width: max-content; margin: 0 0 8px; padding: 1px 9px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 13px/1.3 var(--disp); letter-spacing: 0.12em; transform: skewX(-12deg); }
-.logo small { display: block; margin-top: 6px; font: 400 13px/1 var(--disp); letter-spacing: 0.12em; opacity: 0.7; }
+.logo .wk { display: block; width: max-content; margin: 0 0 8px; padding: 1px 9px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 13px/1.3 var(--disp); letter-spacing: 0.05em; transform: skewX(-12deg); }
+.logo small { display: block; margin-top: 6px; font: 400 13px/1 var(--disp); letter-spacing: 0.05em; opacity: 0.7; }
 #nav { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 18px; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, currentColor 40%, transparent) transparent; }
 #nav .grp { display: flex; align-items: baseline; gap: 9px; margin: 18px 0 4px; padding: 0 16px; font: 400 calc(15px * var(--hk)) / 1 var(--head); letter-spacing: var(--hls); text-decoration: none; }
 #nav .grp b { font: 400 22px/1 var(--disp); color: color-mix(in srgb, var(--sk-pink) 75%, var(--sk-surface)); letter-spacing: 0.04em; }
@@ -84,7 +83,7 @@ a { color: inherit; }
 main { margin-left: var(--side); padding: 30px 34px 70px; max-width: 1218px; }
 .page { position: relative; margin: 0 0 46px; padding: 24px 24px 50px; background: var(--sk-surface); border: var(--ln) solid var(--sk-ink); box-shadow: 9px 9px 0 var(--sk-ink); counter-increment: pg; }
 .page::after { content: "— " counter(pg, decimal-leading-zero) " —"; position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 17px/1 var(--disp); letter-spacing: 0.2em; }
-.page::before { content: "SAKUGA UI"; position: absolute; right: 16px; bottom: 16px; font: 400 12px/1 var(--disp); letter-spacing: 0.24em; color: var(--mute); }
+.page::before { content: "Sakuga UI"; position: absolute; right: 16px; bottom: 16px; font: 400 12px/1 var(--disp); letter-spacing: 0.06em; color: var(--mute); }
 
 .cover::after, .cover::before { display: none; }
 
@@ -95,7 +94,7 @@ main { margin-left: var(--side); padding: 30px 34px 70px; max-width: 1218px; }
 .opener > :not(.focus) { position: relative; }
 .opener .ep { align-self: flex-start; margin-top: 4px; padding: 5px 20px 5px 13px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 22px / 1.15 var(--tag); letter-spacing: 0.08em; rotate: -4deg; clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%); }
 .opener h2 { margin: 0; letter-spacing: var(--tls); font: var(--ts) 400 calc(clamp(46px, 7vw, 86px) * var(--tk)) / 1.05 var(--title); text-shadow: 0.06em 0.06em 0 var(--sk-pink); }
-.opener .en { margin-left: auto; align-self: stretch; writing-mode: vertical-rl; font: 400 20px/1 var(--disp); letter-spacing: 0.22em; opacity: 0.75; }
+.opener .en { margin-left: auto; align-self: stretch; writing-mode: vertical-rl; font: 400 20px/1 var(--disp); letter-spacing: 0.08em; opacity: 0.75; }
 .opener .cnt { display: grid; place-items: center; width: 54px; height: 54px; border: var(--ln) solid currentColor; border-radius: 50%; font: 400 26px/1 var(--disp); rotate: 8deg; }
 
 /* narration box */
@@ -108,7 +107,7 @@ h3.sub small { color: var(--mute); font: var(--tw) calc(12px * var(--xk)) / 1 va
 /* ---------- the cover ---------- */
 .cover { padding: 0 34px 0; overflow: hidden; container-type: inline-size; --fx: 74%; --fy: 34%; --fo: 0.13; }
 .cover > :not(.focus):not(.tone-fade) { position: relative; }
-.mast { display: flex; align-items: center; gap: 16px; margin: 0 -34px 20px; padding: 7px 34px; background: var(--sk-ink); color: var(--sk-surface); font: 400 16px / 1.2 var(--tag); letter-spacing: 0.1em; white-space: nowrap; }
+.mast { display: flex; align-items: center; gap: 16px; margin: 0 -34px 20px; padding: 7px 34px; background: var(--sk-ink); color: var(--sk-surface); font: 400 16px / 1.2 var(--tag); letter-spacing: 0.04em; white-space: nowrap; }
 .mast b { padding: 1px 12px; background: var(--sk-pink); color: var(--sk-on-hot); font-weight: 400; transform: skewX(-12deg); }
 .mast i { margin-left: auto; font-style: normal; }
 /* title across the top, copy and art side by side under it, the vertical tagline down the right edge */
@@ -121,8 +120,8 @@ h3.sub small { color: var(--mute); font: var(--tw) calc(12px * var(--xk)) / 1 va
 .cover-word { position: absolute; left: 50%; top: 50%; translate: -50% -50%; rotate: 5deg; }
 .sticker { position: absolute; left: -34px; top: 0; z-index: 2; display: grid; place-items: center; width: 104px; height: 104px; background: var(--sk-pink); color: var(--sk-on-hot); rotate: -14deg; font: 400 calc(18px * var(--hk)) / 1 var(--head); letter-spacing: var(--hls); text-align: center; }
 .barcode { position: absolute; right: 0; bottom: -30px; width: 92px; height: 38px; border: 4px solid var(--sk-surface); background: repeating-linear-gradient(90deg, var(--sk-ink) 0 2px, transparent 2px 4px, var(--sk-ink) 4px 5px, transparent 5px 9px, var(--sk-ink) 9px 12px, transparent 12px 14px, var(--sk-ink) 14px 15px, transparent 15px 17px) var(--sk-surface); }
-.kicker { margin: 0 0 8px; font: 400 17px / 1 var(--tag); letter-spacing: 0.12em; color: var(--sk-violet); }
-h1 { margin: 0; font: italic 900 clamp(44px, 17.6cqw - 22px, 156px) / 0.86 var(--sk-font); letter-spacing: -0.055em; white-space: nowrap; }
+.kicker { margin: 0 0 8px; font: 400 17px / 1 var(--tag); letter-spacing: 0.05em; color: var(--sk-violet); }
+h1 { margin: 0; font: italic 900 clamp(44px, 17.6cqw - 22px, 156px) / 0.86 var(--logo); letter-spacing: -0.055em; white-space: nowrap; }
 h1 .t1 { text-shadow: 0.04em 0.04em 0 var(--sk-lav); }
 h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-order: stroke fill; text-shadow: 0.045em 0.045em 0 var(--sk-ink); }
 .cover .narr { max-width: 470px; margin-bottom: 20px; }
@@ -138,7 +137,7 @@ h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-ord
 @container (max-width: 760px) { .cover-grid { grid-template-areas: "title v" "copy v"; grid-template-columns: minmax(0, 1fr) auto; } .cover-art { display: none; } h1 { font-size: clamp(44px, 19cqw - 22px, 156px); } }
 @container (max-width: 520px) { .cover-grid { grid-template-areas: "title" "copy"; grid-template-columns: minmax(0, 1fr); } .vcopy, .pressme { display: none; } h1 { font-size: clamp(40px, 19.5cqw, 120px); } }
 .strip { position: relative; display: grid; grid-template-columns: 1fr 1.3fr 1.3fr; margin: 26px -34px 0; padding: 14px 26px 16px; border-top: var(--ln) solid var(--sk-ink); background: var(--sk-surface); }
-.strip-tag { position: absolute !important; left: 22px; top: -17px; z-index: 3; padding: 3px 16px 3px 12px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 18px / 1.2 var(--tag); letter-spacing: 0.1em; rotate: -4deg; clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 100%, 0 100%); }
+.strip-tag { position: absolute !important; left: 22px; top: -17px; z-index: 3; padding: 3px 16px 3px 12px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 18px / 1.2 var(--tag); letter-spacing: 0.04em; rotate: -4deg; clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 100%, 0 100%); }
 .cut { margin: 0 9px; border: var(--ln) solid var(--sk-ink); transform: skewX(-9deg); background: var(--sk-paper); display: grid; place-items: center; min-height: 132px; }
 .cut > div { transform: skewX(9deg); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 24px; padding: 34px 20px 16px; }
 
@@ -185,6 +184,29 @@ h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-ord
 .koma summary::before { content: "▸ "; color: var(--sk-pink); }
 .koma details[open] summary::before { content: "▾ "; }
 .koma summary::-webkit-details-marker { display: none; }
+.koma .sheet { padding: 0 14px; font: var(--tw) calc(13.5px * var(--xk)) / 1.6 var(--text); }
+.koma .sheet:empty { display: none; }
+.koma .sheet h4 { display: flex; align-items: center; gap: 8px; margin: 14px 0 8px; font: 400 calc(14px * var(--hk)) / 1 var(--head); letter-spacing: var(--hls); }
+.koma .sheet h4::before { content: ""; width: 16px; height: 8px; background: var(--sk-pink); transform: skewX(-24deg); }
+.koma .sheet dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 12px; margin: 0 0 4px; }
+.koma .sheet dt { color: var(--mute); white-space: nowrap; }
+.koma .sheet dd { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 6px; margin: 0; }
+.koma .sheet dd code, .koma .sheet dd button, .koma .sheet dd kbd { padding: 1px 7px; border: 2px solid var(--sk-ink); background: var(--sk-paper); color: inherit; font: 700 12px/1.5 var(--mono); }
+.koma .sheet dd button { cursor: pointer; transform: skewX(-10deg); transition: scale var(--sk-bounce-t) var(--sk-bounce); }
+.koma .sheet dd button:hover { background: var(--sk-peri); }
+.koma .sheet dd button:active { scale: 0.88; transition: scale 70ms; }
+.koma .sheet dd kbd { border-bottom-width: 4px; }
+.koma .sheet dd b { padding: 0 4px; font: 400 15px/1.4 "Dela Gothic One", var(--head); }
+.koma .sheet p { margin: 0 0 4px; }
+.koma .sheet .rel { display: flex; flex-wrap: wrap; gap: 6px 14px; padding-bottom: 14px; }
+.koma .sheet .rel a { color: inherit; font-weight: 700; text-decoration: underline 2px var(--sk-pink); text-underline-offset: 3px; }
+.koma .sheet .rel code { font: 700 12px/1 var(--mono); color: var(--sk-violet); }
+.koma .sheet .api { padding: 0 0 4px; }
+.koma .specs { display: flex; flex-wrap: wrap; gap: 2px; margin: 0 14px; padding: 2px; }
+.koma .specs:empty { display: none; }
+.koma .specs figure { flex: 1 1 150px; display: grid; grid-template-rows: 1fr auto; place-items: center; gap: 10px; min-width: min-content; max-width: 100%; margin: 0; padding: 18px 8px 8px; outline: 2px solid var(--sk-ink); background: var(--sk-surface); overflow: hidden; }
+.koma .specs figure > :first-child { min-width: 0; max-width: 100%; }
+.koma .specs figcaption { font: 700 11px/1.3 var(--mono); color: var(--mute); }
 .koma .api { padding: 0 12px 12px; overflow-x: auto; }
 .koma .api table { width: 100%; font-size: 12.5px; box-shadow: none; border-width: 2px; border-radius: 0; }
 .koma .api th, .koma .api td { padding: 5px 9px; vertical-align: top; }
@@ -210,6 +232,79 @@ h1 em { color: var(--sk-pink); -webkit-text-stroke: 3px var(--sk-ink); paint-ord
 .chips button { padding: 4px 11px; border: 2.5px solid var(--sk-ink); background: var(--sk-paper); color: inherit; font: 700 12px/1.3 var(--mono); cursor: pointer; transform: skewX(-10deg); transition: scale var(--sk-bounce-t) var(--sk-bounce); }
 .chips button:hover { background: var(--sk-peri); }
 .chips button:active { scale: 0.88; transition: scale 70ms; }
+
+/* ---------- the technique stage ---------- */
+.tech { margin: 0 0 30px; border: var(--ln) solid var(--sk-ink); background: var(--sk-surface); box-shadow: 7px 7px 0 var(--sk-ink); }
+.tech-head { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px 0 0; border-bottom: var(--ln) solid var(--sk-ink); }
+.tech-no { align-self: stretch; display: grid; place-items: center; min-width: 54px; background: var(--sk-ink); color: var(--sk-surface); font: 400 24px/1 var(--disp); letter-spacing: 0.06em; }
+.tech-name { font: 400 clamp(20px, 3.2vw, 28px) / 1.1 "Dela Gothic One", var(--head); white-space: nowrap; }
+.tech-gloss { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--tw) calc(15px * var(--xk)) / 1.2 var(--text); color: var(--mute); }
+.tech-group { margin-left: auto; padding: 4px 16px 4px 12px; background: var(--sk-pink); color: var(--sk-on-hot); font: 400 calc(15px * var(--hk)) / 1.2 var(--head); letter-spacing: var(--hls); white-space: nowrap; rotate: -3deg; clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 100%, 0 100%); }
+.tech-nav { display: flex; gap: 5px; }
+.tech-nav button { width: 34px; height: 34px; padding: 0; border: 2.5px solid var(--sk-ink); background: var(--sk-paper); color: inherit; font: 700 14px/1 var(--mono); cursor: pointer; transition: scale var(--sk-bounce-t) var(--sk-bounce); }
+.tech-nav button:hover { background: var(--sk-peri); }
+.tech-nav button:active { scale: 0.86; transition: scale 70ms; }
+.tech-stage { position: relative; display: grid; place-items: center; height: clamp(280px, 42vh, 400px); overflow: hidden; background: var(--sk-paper); }
+.tech-stage[data-dark] { background: var(--sk-ink); }
+.tech-set { display: grid; justify-items: center; align-content: center; gap: 14px; width: 100%; height: 100%; padding: 0 16px; font: 600 15px/1.4 var(--sk-font); color: var(--sk-ink); }
+.tech-stage[data-dark] .tech-set { color: var(--sk-paper); }
+:root[data-sk-theme="dark"] .tech-stage[data-dark] { background: color-mix(in srgb, var(--sk-paper) 45%, #000); }
+:root[data-sk-theme="dark"] .tech-stage[data-dark] .tech-set { color: var(--sk-ink); }
+@media (min-width: 721px) { .tech-set { zoom: 1.25; } }
+.s-count { font: 400 46px/1 var(--disp); }
+.s-label { font: 700 13px/1.3 var(--mono); letter-spacing: 0.08em; opacity: 0.72; }
+.s-big { font-size: 70px; color: inherit; }
+.s-card { width: min(280px, 86%); }
+.s-card b { display: block; font-size: 17px; }
+.s-card small { display: block; margin-top: 2px; color: var(--mute); }
+.s-card.center { text-align: center; }
+.s-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.tech-cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: 0; padding: 11px 14px 12px; border-top: var(--ln) solid var(--sk-ink); border-bottom: var(--ln) solid var(--sk-ink); background: var(--sk-paper); font: var(--tw) calc(15px * var(--xk)) / 1.55 var(--text); }
+.tech-cap b { font: 400 calc(17px * var(--hk)) / 1.4 var(--head); letter-spacing: var(--hls); }
+.tech-cap span { color: var(--mute); }
+.tech-cap i { margin-right: 8px; padding: 1px 8px; border: 2px solid currentColor; font-style: normal; font-size: 0.82em; }
+.tech-index { display: flex; flex-wrap: wrap; gap: 12px 22px; padding: 14px; }
+.tech-index section { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; }
+.tech-index h4 { display: grid; place-items: center; margin: 0; padding: 0 12px 0 9px; background: var(--sk-ink); color: var(--sk-surface); font: 400 calc(13px * var(--hk)) / 1 var(--head); letter-spacing: var(--hls); clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 100%, 0 100%); }
+.tech-index button { display: grid; gap: 2px; justify-items: start; padding: 6px 10px; border: 2.5px solid var(--sk-ink); background: var(--sk-paper); color: inherit; cursor: pointer; transition: translate var(--sk-spring-t) var(--sk-spring), scale var(--sk-bounce-t) var(--sk-bounce); }
+.tech-index button b { font: 400 14px/1.2 "Dela Gothic One", var(--head); white-space: nowrap; }
+.tech-index button small { font: var(--tw) calc(11.5px * var(--xk)) / 1.1 var(--text); color: var(--mute); white-space: nowrap; }
+.tech-index button:hover { translate: -1px -2px; box-shadow: 3px 4px 0 var(--sk-ink); }
+.tech-index button:active { scale: 0.92; transition: scale 70ms; }
+.tech-index button[aria-pressed="true"] { background: var(--sk-ink); color: var(--sk-surface); }
+.tech-index button[aria-pressed="true"] small { color: inherit; opacity: 0.8; }
+@media (max-width: 1100px) { .tech-index button small { display: none; } .tech-index { gap: 10px 16px; } }
+@media (max-width: 720px) {
+  .tech-gloss { display: none; } .tech-no { min-width: 44px; font-size: 20px; } .tech-nav button { width: 30px; height: 30px; }
+  .tech-head { gap: 8px; } .tech-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 16px; } .tech-group, .tech-nav { flex: none; } .tech-group { padding: 3px 12px 3px 8px; font-size: 13px; }
+  .tech-stage { height: clamp(260px, 38vh, 340px); }
+  .tech-index { flex-wrap: nowrap; overflow-x: auto; gap: 14px; padding: 12px; scrollbar-width: thin; }
+  .tech-index section { flex: none; flex-wrap: nowrap; }
+}
+.tones { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--g); }
+.tones figure { margin: 0; border: var(--ln) solid var(--sk-ink); background: var(--sk-surface); }
+.tones i { display: block; height: 78px; }
+.tones .ladder { grid-column: 1 / -1; }
+.tones .ladder div { display: grid; grid-template-columns: repeat(5, 1fr); }
+.tones .ladder i + i { border-left: 2px solid var(--sk-ink); }
+.tones figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 7px 10px 8px; border-top: var(--ln) solid var(--sk-ink); }
+.tones b { font: 400 14px/1.3 "Dela Gothic One", var(--head); }
+.tones span { font: var(--tw) calc(13px * var(--xk)) / 1.3 var(--text); color: var(--mute); }
+.tones em { margin-left: auto; font: 700 12px/1.3 var(--mono); font-style: normal; color: var(--mute); }
+
+/* ---------- the ten rules ---------- */
+.koma .check { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 9px 14px; font: var(--tw) calc(13.5px * var(--xk)) / 1.6 var(--text); }
+.koma .check b { flex: none; padding: 1px 9px 1px 7px; background: var(--sk-ink); color: var(--sk-surface); font: 400 calc(12px * var(--hk)) / 1.5 var(--head); letter-spacing: var(--hls); clip-path: polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
+.koma .code + .check { border-top: var(--ln) solid var(--sk-ink); }
+.stage .live { font: 700 13px/1 var(--mono); color: var(--mute); }
+.stage .zone { display: grid; justify-items: center; gap: 12px; padding: 16px 14px 10px; border: 2px dashed var(--sk-ink); }
+.stage .zone code { font: 700 11px/1.3 var(--mono); color: var(--mute); }
+.chip { display: inline-block; width: 15px; height: 15px; margin-right: 6px; border: 2px solid var(--sk-ink); vertical-align: -3px; }
+#role-rows code { margin-right: 10px; font: 700 12.5px/1 var(--mono); }
+.nots { display: grid; gap: 8px; margin: 0 0 6px; padding: 0; list-style: none; font: var(--tw) calc(15px * var(--xk)) / 1.6 var(--text); }
+.nots li { position: relative; padding-left: 30px; }
+.nots li::before { content: "×"; position: absolute; left: 0; top: -1px; width: 21px; height: 21px; display: grid; place-items: center; background: var(--sk-ink); color: var(--sk-surface); font: 700 15px/1 var(--mono); }
+.ship { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px 22px; padding: 16px; border: var(--ln) solid var(--sk-ink); background: var(--sk-paper); }
 
 /* ---------- theming ---------- */
 .pal-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--g); margin-bottom: var(--g); }
@@ -252,7 +347,7 @@ main .sk-table th { font: 400 calc(1em * var(--hk)) / 1.3 var(--head); letter-sp
 .api-table td:first-child { white-space: nowrap; }
 footer { padding: 6px 4px 0; font: var(--tw) calc(13px * var(--xk)) / 1.5 var(--text); }
 .tbc { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
-.tbc b { font: 400 28px / 1 var(--tag); letter-spacing: 0.1em; }
+.tbc b { font: 400 28px / 1 var(--tag); letter-spacing: 0.04em; }
 :lang(ja) .tbc b { display: none; }
 footer p { margin: 8px 0 0; text-align: right; opacity: 0.75; }
 

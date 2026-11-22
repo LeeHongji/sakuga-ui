@@ -15,9 +15,9 @@ const TPL = {
 };
 
 export class SkLoader extends SkElement {
-  static props = { variant: [String, 'ball'], text: [String, 'LOADING'], tips: String, label: [String, 'Loading'] };
+  static props = { variant: [String, 'ball'], text: [String, 'Loading'], tips: String, label: [String, 'Loading'] };
   static styles = css`
-:host{display:inline-flex;flex-direction:column;align-items:center;gap:.5em;vertical-align:middle;font:italic 800 15px/1.2 var(--sk-font);color:var(--sk-ink);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+:host{display:inline-flex;flex-direction:column;align-items:center;gap:.5em;vertical-align:middle;font:400 17px/1.2 var(--sk-font-head);color:var(--sk-ink);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 .st{position:relative;font-size:1em}
 .lbl{min-height:1.2em;text-align:center}.lbl:empty{display:none}
 /* ---- ball ---- */
@@ -28,7 +28,7 @@ export class SkLoader extends SkElement {
 .bl{display:block;width:1.4em;height:1.4em;border-radius:50%;border:var(--sk-bw) solid var(--sk-ink);background:radial-gradient(circle at 32% 30%,var(--sk-fxw) 0 12%,transparent 13%),var(--sk-pink);transform-origin:50% 100%;animation:sk-l-sq .62s infinite}
 .pf{position:absolute;bottom:.3em;left:50%;width:.5em;height:.5em;border-radius:50%;border:2px solid var(--sk-violet);background:var(--sk-fxw);opacity:0;animation:sk-l-pf .62s infinite}
 .pf.b{--dx:-1.7em}.pf.a{--dx:1.2em}
-.combo{position:absolute;right:-.2em;top:0;padding:.1em .4em;border:2.5px solid var(--sk-ink);border-radius:999px;background:var(--sk-surface);font:italic 900 .8em/1 var(--sk-font);rotate:8deg}
+.combo{position:absolute;right:-.2em;top:0;padding:.1em .4em;border:2.5px solid var(--sk-ink);border-radius:999px;background:var(--sk-surface);font:400 .92em/1 var(--sk-font-head);rotate:8deg}
 .combo[hidden]{display:none}
 @keyframes sk-l-y{0%,100%{translate:0 0}6%{translate:0 0;animation-timing-function:cubic-bezier(.2,.7,.4,1)}50%{translate:0 -2.3em;animation-timing-function:cubic-bezier(.6,0,.8,.3)}}
 @keyframes sk-l-sq{0%,6%,100%{scale:1.28 .7}15%{scale:.86 1.16}32%,70%{scale:1 1}90%{scale:.86 1.18}}
@@ -47,7 +47,7 @@ export class SkLoader extends SkElement {
 @keyframes sk-l-flip{0%{transform:rotateX(0);opacity:1}14%{transform:rotateX(-50deg);opacity:.9}28%{transform:rotateX(-86deg) translateY(-.2em);opacity:.3}29%,100%{transform:rotateX(-86deg);opacity:0}}
 @keyframes sk-l-turn{0%{rotate:0deg;scale:1}12.5%{rotate:18deg;scale:.9 1.1}25%{rotate:36deg;scale:1.1 .9}37.5%{rotate:54deg;scale:1}50%{rotate:72deg;scale:.9 1.1}62.5%{rotate:90deg;scale:1.1 .9}75%{rotate:108deg;scale:1}87.5%{rotate:126deg;scale:.92 1.08}}
 /* ---- wave ---- */
-.wave{display:flex;font:italic 900 1.5em/1.3 var(--sk-font);letter-spacing:.02em;padding-top:.4em}
+.wave{display:flex;font:400 1.72em/1.3 var(--sk-font-head);letter-spacing:.02em;padding-top:.4em}
 .wave i{display:inline-block;font-style:inherit;text-shadow:.07em .07em 0 var(--sk-lav);transform-origin:50% 100%;animation:sk-l-hop 1.15s calc(var(--i)*.075s) infinite}
 .wave i:nth-child(3n+1){color:var(--sk-pink)}
 @keyframes sk-l-hop{0%,46%,100%{translate:0 0;scale:1}12%{translate:0 -.5em;scale:.9 1.14;animation-timing-function:cubic-bezier(.6,0,.8,.3)}26%{translate:0 0;scale:1.22 .76}36%{translate:0 0;scale:.96 1.05}}

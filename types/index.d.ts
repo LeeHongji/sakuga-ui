@@ -75,14 +75,56 @@ export function anchor(pop: HTMLElement, ref: Element, o?: { side?: 'bottom' | '
 export function crownLayer<T extends Element>(el: T, rank: number): T;
 export const BARE: string;
 
+/* ---------- screentone ---------- */
+export type ToneKind = 'dots' | 'grad' | 'lines' | 'hatch' | 'rope' | 'sand' | 'stipple' | 'sparkle' | 'bubble';
+export interface ToneOptions { pct?: number; pitch?: number; angle?: 0 | 45 | 90 | 135; level?: 1 | 2 | 3 | 4; from?: number; to?: number; len?: number; weight?: number; seed?: number; n?: number; falloff?: number; color?: string }
+export interface Tone { kind: string; w: number; h: number; repeat: string; size: string; body: string; url: string; css: string }
+/** One repeating tile of screentone. `css` paints a layer element with it in --sk-ink; `url` is the tile as a CSS image. */
+export function tone(kind: ToneKind, o?: ToneOptions): Tone;
+/** The same tile as an SVG <pattern>, for fills inside inline SVG. */
+export function tonePattern(id: string, kind: ToneKind, o?: ToneOptions): string;
+export const TONES: ToneKind[];
+
 /* ---------- effects, sound, combined moves (advanced) ---------- */
+/** A box in page space, as rectOf() measures it. */
+export interface FxBox { l: number; t: number; w: number; h: number }
+/** A live effect. end() lets one held with life: Infinity leave; kill() removes it at once. */
+export interface FxItem { life: number; end(fade?: number): void; kill(): void }
 export namespace FX {
   const C: Record<string, string>;
-  function add(item: object): void;
+  function add(item: object): FxItem;
+  /** Run fn; every effect it spawns is clipped to the inside of el, the way a drawing stays inside its panel. */
+  function within<T>(el: Element, fn: () => T): T;
   function puff(o: object): void; function shard(o: object): void; function burst(o: object): void;
   function ring(o: object): void; function ticks(o: object): void; function lines(o: object): void;
   function sparkle(o: object): void; function slash(o: object): void; function arcs(o: object): void;
   function drop(o: object): void; function sticker(o: object): void;
+  /** The manga shelf. Each is a named drawing technique; options are documented above each function in src/core/fx-manga.js. */
+  function focus(o: { x: number; y: number; r?: number; len?: number; n?: number; mode?: 'in' | 'out'; bundle?: boolean; white?: boolean | string; swirl?: number; rag?: number; w?: number; sx?: number; sy?: number; color?: string; behind?: Element; life?: number }): FxItem;
+  function uni(o: { x: number; y: number; rx?: number; ry?: number; n?: number; hair?: number; both?: boolean; rot?: number; color?: string; fill?: string; behind?: Element; life?: number }): FxItem;
+  function bolt(o: { x: number; y: number; x2?: number; y2?: number; angle?: number; len?: number; w?: number; segs?: number; zig?: number; branches?: number; edge?: number; life?: number }): FxItem;
+  function tare(o: { x: number; y: number; w: number; len?: number; n?: number; kind?: 'line' | 'wavy' | 'drip'; lean?: number; lw?: number; color?: string; life?: number }): FxItem;
+  function odoro(o: { x: number; y: number; rx?: number; ry?: number; len?: number; n?: number; w?: number; inward?: boolean; color?: string; behind?: Element; life?: number }): FxItem;
+  function wobble(o: { x: number; y: number; w?: number; h?: number; pad?: number; n?: number; period?: number; amp?: number; len?: number; color?: string; life?: number }): FxItem;
+  function ghost(o: { from: FxBox; to: FxBox; n?: number; radius?: number; lw?: number; hollow?: boolean; behind?: Element; life?: number }): FxItem;
+  function trail(o: { pts: [number, number][]; w?: number; bulge?: number; life?: number }): FxItem;
+  function bure(o: { x: number; y: number; w: number; h: number; angle: number; n?: number; len?: number; lw?: number; color?: string; life?: number }): FxItem;
+  function crack(o: { x: number; y: number; r?: number; n?: number; w?: number; clip?: FxBox & { radius?: number }; color?: string; life?: number }): FxItem;
+  function shock(o: { x: number; y: number; r?: number; r0?: number; w?: number; n?: number; sy?: number; behind?: Element; life?: number }): FxItem;
+  function crown(o: { x: number; y: number; r?: number; h?: number; n?: number; life?: number }): FxItem;
+  function spatter(o: { x: number; y: number; r?: number; n?: number; size?: number; angle?: number; spread?: number; ink?: boolean; color?: string; behind?: Element; life?: number }): FxItem;
+  function drift(o: { x: number; y: number; w: number; h: number; kind?: 'petal' | 'leaf' | 'dust'; n?: number; wind?: number; life?: number }): FxItem | FxItem[];
+  /** The scene shelf: techniques for the everyday moments of an app (see moves.reveal and the rest). */
+  function rays(o: { x: number; y: number; r0?: number; r?: number; n?: number; spin?: number; rot?: number; color?: string; line?: string; behind?: Element; life?: number }): FxItem;
+  function confetti(o: { x: number; y: number; n?: number; angle?: number; spread?: number; speed?: number; colors?: string[]; life?: number }): FxItem[];
+  /** Burns as a stream of rising cells under screentone, stepped on twos; .end() lets the last cells rise away. */
+  function flame(o: { x: number; y: number; w: number; h?: number; lean?: number; color?: string; behind?: Element; life?: number }): FxItem;
+  function steam(o: { x: number; y: number; w?: number; h?: number; n?: number; lw?: number; color?: string; life?: number }): FxItem[];
+  function frost(o: { box?: FxBox; el?: Element; life?: number }): FxItem;
+  function rush(o: { x: number; y: number; w: number; h: number; angle?: number; n?: number; len?: number; color?: string; behind?: Element; life?: number }): FxItem;
+  function gust(o: { x: number; y: number; len?: number; dir?: 1 | -1; n?: number; h?: number; leaves?: number; lw?: number; color?: string; behind?: Element; life?: number }): FxItem[];
+  function spotlight(o: { x: number; y: number; r?: number; box?: FxBox; from?: [number, number]; pitch?: number; life?: number }): FxItem;
+  function notes(o: { x: number; y: number; n?: number; size?: number; life?: number }): FxItem[];
   function stats(): { items: number; quality: number; fps: number; dropped: number };
   function redraw(): void;
 }
@@ -95,6 +137,7 @@ export namespace SND {
   const words: Record<string, unknown>;
   function state(): string;
 }
+export interface MangaMoveOptions { word?: string; voice?: string; size?: number }
 export namespace moves {
   function say(word: string, o?: SfxOptions): SfxHandle;
   function tap(el: Element, sound?: string): void;
@@ -109,6 +152,29 @@ export namespace moves {
   function cut(q: object, o?: object): void;
   function shower(x: number, y: number, shape?: string, n?: number, o?: object): void;
   function hop(a: Element, b: Element, o?: object): void;
+  /** Moves built on the manga shelf. Each brings its sound word; pass { word: '' } to play a plain sound instead. */
+  function notice(el: Element, o?: MangaMoveOptions): object;
+  function gloom(el: Element, o?: MangaMoveOptions & { kind?: 'line' | 'wavy' | 'drip'; lean?: number; life?: number }): FxItem;
+  function vanish(el: Element, o?: MangaMoveOptions): object;
+  function zap(el: Element, o?: MangaMoveOptions & { scale?: number }): object;
+  function bloom(el: Element, o?: MangaMoveOptions): object;
+  function shiver(el: Element, o?: MangaMoveOptions & { period?: number; life?: number }): FxItem;
+  function afterimage(el: Element, from: FxBox, o?: { n?: number; radius?: number; lines?: number; silent?: boolean }): object;
+  function crackAt(el: Element, x?: number, y?: number, o?: MangaMoveOptions & { n?: number; radius?: number; life?: number }): FxItem;
+  function stomp(x: number, y: number, o?: MangaMoveOptions & { scale?: number }): void;
+  function focusOn(el: Element, o?: { len?: number; n?: number; bundle?: boolean; white?: boolean; life?: number; silent?: boolean }): FxItem;
+  function dread(el: Element, o?: MangaMoveOptions & { len?: number; n?: number; life?: number }): FxItem;
+  /** The scene moves. o.word replaces the word ('' for the sound alone); o.hold keeps blaze, freeze and spotlight on until .end(). */
+  function reveal(el: Element, o?: MangaMoveOptions & { hold?: boolean; life?: number }): FxItem;
+  function celebrate(el: Element, o?: MangaMoveOptions & { n?: number }): FxItem[];
+  function blaze(el: Element, o?: MangaMoveOptions & { hold?: boolean; life?: number }): FxItem;
+  function fresh(el: Element, o?: MangaMoveOptions): FxItem[];
+  function freeze(el: Element, o?: MangaMoveOptions & { hold?: boolean; life?: number }): FxItem;
+  function dash(el: Element, o?: MangaMoveOptions & { angle?: number; life?: number }): FxItem;
+  /** With o.out the element is blown away too: the returned Animation finishes when it is gone. */
+  function blowAway(el: Element, o?: MangaMoveOptions & { dir?: 1 | -1; out?: boolean }): FxItem[] | Animation | null;
+  function spotlight(el: Element, o?: MangaMoveOptions & { hold?: boolean; life?: number; box?: FxBox; from?: [number, number] }): FxItem;
+  function sing(el: Element, o?: MangaMoveOptions & { n?: number }): FxItem[];
 }
 
 /* ---------- writing your own components ---------- */

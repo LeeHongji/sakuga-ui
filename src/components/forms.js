@@ -1,6 +1,6 @@
 /* Forms: switch, theme-switch, checkbox, radio-group, slider, input, textarea, select, stepper, rating, otp. */
 import { SkElement, define, css, FX, SND, moves, anim, play, spring, shake, rectOf, rnd, clamp, lerp, E, TAU, level, setTheme, getTheme, lift, lower, anchor, config } from '../core/index.js';
-import { CHEVRON, STAR, X_ICON, roll, ROLL_CSS } from './_parts.js';
+import { CHEVRON, STAR, X_ICON, roll, ROLL_CSS, DT, jelly, jellyStep, stretchOf, shapeOf, slam } from './_parts.js';
 
 /* ---------------- sk-switch ----------------
    Idle state is plain CSS. The splash is drawn on a canvas that exists only while the switch is animating,
@@ -237,20 +237,18 @@ button[data-snap],button[data-snap] .orb,button[data-snap] .orb::after,button[da
     this.btn.addEventListener('click', () => {
       const dark = getTheme() !== 'dark', q = rectOf(this.btn), k = q.w / 142;
       this.btn.setAttribute('aria-checked', dark);
-      // the orb stretches only in the direction it is travelling, so it never pokes out of the track behind it
-      // one animation carries the orb across: stretched, its leading edge is exactly where the resting orb's edge will be,
-      // so no part of it ever leaves the track; then it squashes against that side and settles
-      const orb = this.$('.orb'), w = orb.offsetWidth, D = 64 * (q.w / 132), s = dark ? 1 : -1;
-      const a = play(orb, [
-        { transform: `translateX(${-s * D}px) scale(1,1)` },
-        { transform: `translateX(${-s * 0.275 * w}px) scale(1.55,.68)`, offset: 0.42 },
-        { transform: `translateX(${s * 0.03 * w}px) scale(.9,1)`, offset: 0.72 },
-        { transform: 'translateX(0) scale(1,1)' },
-      ], { duration: 300, easing: 'linear' });
+      // The orb is thrown into the far end of the track: it stretches with its speed, trailing behind its front edge,
+      // stops dead against the end, squashes and wobbles round. The size changes, not the scale, so its outline and the
+      // moon's bite keep their weight; the front edge leads, so no part of it leaves the track.
+      const orb = this.$('.orb'), w = orb.offsetWidth, D = 64 * (q.w / 132), s = dark ? 1 : -1, { frames, hit } = slam(D, w);
+      const a = play(orb, frames.map(f => {
+        const W = w * f.sx, H = w * f.sy;
+        return { transform: `translate(${(s > 0 ? f.x + w - W : -f.x).toFixed(2)}px,${((w - H) / 2).toFixed(2)}px)`, width: W + 'px', height: H + 'px' };
+      }), { duration: (frames.length - 1) * 1000 / 60, easing: 'linear' });
       if (a) { orb.style.transition = 'background-color .1s .2s'; a.onfinish = () => { orb.style.transition = ''; }; }
       moves.streak(q.cx, q.t - 8, dark ? Math.PI : 0, 60 * k, 3, { spread: 10 }); moves.streak(q.cx, q.b + 8, dark ? Math.PI : 0, 60 * k, 3, { spread: 10 });
       SND.play('whoosh');
-      this.at(190, () => {
+      this.at(hit, () => {
         // The page wipe shows a snapshot for its whole length. The switch jumps to its final look just before that
         // snapshot is taken, or its own delayed colour changes would sit frozen inside the wipe and pop at the end.
         this.btn.toggleAttribute('data-snap', true); this.at(640, () => this.btn.removeAttribute('data-snap'));
@@ -362,13 +360,16 @@ export class SkRadioGroup extends SkElement {
     if (prev === r) return;
     this._hopping = true; this.value = r.value; this._hopping = false;
     this.radios.forEach(x => { x.checked = x === r; x.removeAttribute('data-on'); });
-    const land = () => { if (this.value !== r.value) return; r.toggleAttribute('data-on', true); anim(r.ring, 'land'); const b = rectOf(r.ring); moves.dust(b.cx, b.b, 5, b.w / 2 + 2); FX.ticks({ x: b.cx, y: b.t - 2, angle: -Math.PI / 2, len: 4, dist: 1, life: 0.3 }); SND.play('land'); };
+    // the ball lands in the ring (the ring gives a little, all round, so its outline stays even) and settles before
+    // the ring's own dot takes over from it
+    const thump = () => { if (this.value !== r.value) return; anim(r.ring, 'dip'); const b = rectOf(r.ring); moves.dust(b.cx, b.b, 5, b.w / 2 + 2); SND.play('land'); };
+    const show = () => { if (this.value === r.value) r.toggleAttribute('data-on', true); };
     if (prev && level()) {
       const a = rectOf(prev.ring), b = rectOf(r.ring), vertical = Math.abs(b.cy - a.cy) > Math.abs(b.cx - a.cx);
       FX.puff({ x: a.cx, y: a.cy + 4, r: 6, n: 3, vy: 16, life: 0.4 });
       moves.say('ピョン', { voice: 'pop', color: 'violet', x: vertical ? a.l - 40 : (a.cx + b.cx) / 2, y: vertical ? (a.cy + b.cy) / 2 - 22 : a.t - 44, size: 20, hold: 220 });
-      moves.hop({ x: a.cx, y: a.cy }, { x: b.cx, y: b.cy }, { height: 34 + Math.hypot(b.cx - a.cx, b.cy - a.cy) * 0.18, r: 6, side: vertical ? 'x' : 'y', done: land });
-    } else land();
+      moves.hop({ x: a.cx, y: a.cy }, { x: b.cx, y: b.cy }, { height: 34 + Math.hypot(b.cx - a.cx, b.cy - a.cy) * 0.18, r: 6, side: vertical ? 'x' : 'y', hit: thump, done: show });
+    } else { show(); thump(); }
     this.emit('change', { value: this.value });
   }
 }
@@ -380,12 +381,12 @@ export class SkSlider extends SkElement {
   static props = { value: [Number, 50], min: [Number, 0], max: [Number, 100], step: [Number, 1], disabled: Boolean, suffix: [String, '%'] };
   static styles = css`
 :host{display:inline-block;vertical-align:middle;width:220px;padding:34px 12px 6px}
-.s{position:relative;height:30px;cursor:grab;touch-action:none;--x:0px;outline:none}
+.s{position:relative;height:30px;cursor:grab;touch-action:none;--x:0px;outline:none;contain:layout style}
 .s:active{cursor:grabbing}
 .track{position:absolute;left:-8px;right:-8px;top:50%;height:14px;translate:0 -50%;border:var(--sk-bw) solid var(--sk-ink);border-radius:9px;background:var(--sk-surface);overflow:hidden}
 .fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--sk-peri);transform-origin:0 50%;transform:scaleX(var(--p,0))}
 .knob{position:absolute;left:0;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border:var(--sk-bw) solid var(--sk-ink);border-radius:50%;background:var(--sk-surface);translate:var(--x) 0}
-.tip{position:absolute;left:0;bottom:100%;translate:calc(var(--x) - 50%) -3px;transform-origin:50% 150%;border:var(--sk-bw) solid var(--sk-ink);border-radius:9px;background:var(--sk-surface);padding:3px 7px;font:700 12px/1 var(--sk-font);white-space:nowrap}
+.tip{position:absolute;left:0;bottom:100%;translate:calc(var(--x) - 50%) -3px;transform-origin:50% 150%;border:var(--sk-bw) solid var(--sk-ink);border-radius:9px;background:var(--sk-surface);padding:3px 7px;font:400 14px/1 var(--sk-font-head);white-space:nowrap}
 .tip::after{content:"";position:absolute;left:50%;top:100%;translate:-50% 1px;border:4px solid transparent;border-top:5px solid var(--sk-ink)}
 .knob,.tip{transition:scale var(--sk-bounce-t) var(--sk-bounce)}
 .s[data-grab] .knob{scale:1}
@@ -396,62 +397,100 @@ export class SkSlider extends SkElement {
   setup() {
     const s = this.s = this.$('.s'); this.knob = this.$('.knob'); this.tip = this.$('.tip');
     this.pos = null; this.target = null; this.raf = 0;
-    const fromEvent = e => { const b = this.box, raw = (e.clientX - b.left) / b.width; this.target = clamp(raw, 0, 1); this.band = raw < 0 ? raw : raw > 1 ? raw - 1 : 0; };
-    s.addEventListener('pointerdown', e => { if (this.disabled) return; this.drag = true; s.toggleAttribute('data-grab', true); s.setPointerCapture(e.pointerId); this.box = s.getBoundingClientRect(); this.q = rectOf(s); fromEvent(e); this.wake(); });
+    const fromEvent = e => { const b = this.box, raw = (e.clientX - b.left) / b.width; this.aim(clamp(raw, 0, 1)); this.band = raw < 0 ? raw : raw > 1 ? raw - 1 : 0; };
+    s.addEventListener('pointerdown', e => {
+      if (this.disabled) return;
+      this.drag = true; this.thrown = false; s.toggleAttribute('data-grab', true); s.setPointerCapture(e.pointerId); this.box = s.getBoundingClientRect(); this.q = rectOf(s);
+      // pressed away from the knob: it travels there on its own spring before it takes the finger
+      this.leap = this.pos != null && Math.abs(e.clientX - this.box.left - this.pos * this.box.width) > 14;
+      fromEvent(e); this.wake();
+    });
     s.addEventListener('pointermove', e => { if (this.drag) fromEvent(e); });
-    const up = () => { if (this.drag) { this.drag = false; this.band = 0; s.removeAttribute('data-grab'); this.emit('change', { value: this.value }); } };
+    const up = () => { if (this.drag) { this.drag = false; this.thrown = !this.leap; this.band = 0; s.removeAttribute('data-grab'); this.emit('change', { value: this.value }); } };
     s.addEventListener('pointerup', up); s.addEventListener('pointercancel', up);
     s.addEventListener('keydown', e => {
       const span = this.max - this.min, st = this.step / span;
       const d = { ArrowRight: st, ArrowUp: st, ArrowLeft: -st, ArrowDown: -st, PageUp: 0.1, PageDown: -0.1 }[e.key];
-      if (d) this.target = clamp(this.target + d, 0, 1); else if (e.key === 'Home') this.target = 0; else if (e.key === 'End') this.target = 1; else return;
+      if (d) this.aim(clamp(this.target + d, 0, 1)); else if (e.key === 'Home') this.aim(0); else if (e.key === 'End') this.aim(1); else return;
       e.preventDefault(); this.q = rectOf(s); this.wake(); this.emit('change', { value: this.value });
     });
   }
+  // The value is where the hand put it, at once; the knob catches up on its own time and never reports its overshoot
+  aim(f) {
+    this.target = f; this.from = this.pos;
+    const v = this.snap(f);
+    if (v !== this.value) { this._own = true; this.value = v; this._own = false; this.setForm(String(v)); this.s.setAttribute('aria-valuenow', v); this.emit('input', { value: v }); }
+  }
   frac(v) { return clamp((v - this.min) / (this.max - this.min || 1), 0, 1); }
   layout() {
-    const w = this.s.clientWidth, p = this.pos;
-    this.s.style.setProperty('--x', p * w + (this.ov || 0) + 'px'); this.s.style.setProperty('--p', p);
-    const v = this.snap(p); this.tip.textContent = v + this.suffix;
-    this.s.setAttribute('aria-valuenow', v);
+    const w = this.s.clientWidth, p = this.pos, t = this.target;
+    this.s.style.setProperty('--x', p * w + (this.ov || 0) + 'px'); this.s.style.setProperty('--p', clamp(p, 0, 1));
+    // the label rolls with the knob on the way, and holds the target while the knob swings past it
+    const past = this.from != null && (p - t) * (this.from - t) < 0;
+    this.tip.textContent = this.snap(past ? t : clamp(p, 0, 1)) + this.suffix;
   }
   snap(p) { const st = this.step || 1, v = this.min + p * (this.max - this.min); return +(Math.round(v / st) * st).toFixed(4); }
   sync(name) {
-    this.s.setAttribute('aria-valuemin', this.min); this.s.setAttribute('aria-valuemax', this.max);
+    this.s.setAttribute('aria-valuemin', this.min); this.s.setAttribute('aria-valuemax', this.max); this.s.setAttribute('aria-valuenow', this.value);
     if (name === 'value' && this._own) return;
     const f = this.frac(this.value);
-    if (this.pos == null || !this.raf) { this.pos = this.target = f; this.layout(); } else this.target = f;
+    if (this.pos == null || !this.raf) { this.pos = this.target = f; this.from = null; this.layout(); } else { this.target = f; this.from = this.pos; }
     this.setForm(String(this.value));
   }
-  wake() { if (!this.raf) { this.last = 0; this.px = null; this.vx = 0; this.tilt = this.tiltV = 0; this.st = 1; this.sub = 0; this.acc = 0; this.cool = 0; this.ov = this.ovV = 0; this.banded = false; this.hum = SND.loop('drag'); this.raf = requestAnimationFrame(t => this.loop(t)); } }
+  wake() {
+    if (this.raf) return;
+    this.last = 0; this.v = 0; this.vx = 0; this.tilt = this.tiltV = 0; this.j = jelly(); this.dir = 1; this.D = this.knob.offsetWidth || 26;
+    this.acc = 0; this.cool = 0; this.ov = this.ovV = 0; this.banded = false; this.hum = SND.loop('drag'); this.raf = requestAnimationFrame(t => this.loop(t));
+  }
   disconnected() { cancelAnimationFrame(this.raf); this.raf = 0; this.hum && this.hum.stop(); }
+  // the knob as an elastic body (see _parts.js): where it is, and what shape it has
+  shape(fx) {
+    const k = this.knob;
+    if (!fx) { k.style.cssText = ''; return; }
+    const D = this.D, [sx, sy] = shapeOf(this.j.e), w = D * sx, h = D * sy, d = this.dir;
+    // the front edge stays where the knob really is: a stretch trails behind it, a squash presses toward it
+    const egg = 50 + 14 * clamp(this.j.e / 0.6, 0, 1), back = d > 0 ? egg : 100 - egg;
+    k.style.cssText = `width:${w.toFixed(2)}px;height:${h.toFixed(2)}px;margin:${(-h / 2).toFixed(2)}px 0 0 ${(-w / 2).toFixed(2)}px;transform:translateX(${(-d * (w - D) / 2).toFixed(2)}px);border-radius:${back}% ${100 - back}% ${100 - back}% ${back}% / 50%`;
+  }
   loop(tms) {
-    // everything below is integrated against real time, so it behaves the same at 60, 120 or 30 Hz
-    const dt = clamp(this.last ? (tms - this.last) / 1000 : 1 / 60, 0.001, 0.05), f = dt * 60, mix = r => 1 - Math.pow(1 - r, f); this.last = tms;
-    this.sub = (this.sub || 0) + f; const steps = Math.floor(this.sub); this.sub -= steps;   // whole 60 Hz steps for the two little springs
-    this.pos += (this.target - this.pos) * mix(this.drag ? 0.5 : 0.28);
-    if (Math.abs(this.target - this.pos) < 0.0005) this.pos = this.target;
+    // integrated against real time in fixed 240 Hz steps, so it behaves the same at 60, 120 or 30 Hz
+    const dt = clamp(this.last ? (tms - this.last) / 1000 : 1 / 60, 0.001, 0.05), f = dt * 60; this.last = tms;
+    const w = this.q.w || this.s.clientWidth || 1, D = this.D, fx = level() > 0;
+    // held: the knob is dragged on a spring, not glued to the finger. It trails behind a fast hand (about 30 px at
+    // 800 px/s), stretched back into its teardrop, and when the hand stops it swings a little past and comes back.
+    // Let go after a drag and it is thrown: a looser spring, so a flick carries it on past where it was let go and it
+    // springs back. On its own otherwise (a press away from it, keys, a new value), a spring in between. The value is always where the hand put it; only the drawing lags
+    if (this.leap && Math.abs(this.target - this.pos) * w < 3) this.leap = false;
+    const held = this.drag && !this.leap, W = held ? 30 : this.thrown ? 17 : 24, Z = held ? 0.62 : this.thrown ? 0.48 : 0.55;
     // pulling past either end stretches like a rubber band and springs back on release
     const bt = this.drag && this.band ? Math.sign(this.band) * 16 * (1 - Math.exp(-Math.abs(this.band) * 5)) : 0;
-    for (let i = 0; i < steps; i++) { this.ovV += (bt - this.ov) * 0.3; this.ovV *= 0.6; this.ov += this.ovV; }
-    if (this.band && !this.banded) { this.banded = true; const e = this.band > 0 ? this.q.r : this.q.l; FX.ticks({ x: e + Math.sign(this.band) * 14, y: this.q.cy, angle: this.band > 0 ? 0 : Math.PI, len: 9, life: 0.3 }); SND.play('land'); }
+    for (let n = Math.ceil(dt / DT), i = 0; i < n; i++) {
+      this.v += (W * W * (this.target - this.pos) - 2 * Z * W * this.v) * DT; this.pos += this.v * DT;
+      // the ends of the track are walls: what swings into one stops dead, and the speed goes into a squash
+      if ((this.pos > 1 && this.v > 0) || (this.pos < 0 && this.v < 0)) {
+        const hit = Math.abs(this.v) * w / D;
+        this.pos = clamp(this.pos, 0, 1); this.v = 0; this.dir = this.pos > 0.5 ? 1 : -1;
+        if (fx) { this.j.v -= Math.min(22, hit * 0.45); if (hit > 12) { FX.ticks({ x: this.pos > 0.5 ? this.q.r + 10 : this.q.l - 10, y: this.q.cy, angle: this.pos > 0.5 ? 0 : Math.PI, len: 8, life: 0.3 }); SND.play('land'); } }
+      }
+      const sp = Math.abs(this.v) * w;
+      if (sp > 30) this.dir = Math.sign(this.v);
+      jellyStep(this.j, stretchOf(sp / D, 30));
+      this.ovV += ((bt - this.ov) * 1080 - this.ovV * 24) * DT; this.ov += this.ovV * DT;
+    }
+    if (this.band && !this.banded) { this.banded = true; SND.play('land'); }
     else if (!this.band) this.banded = false;
     this.layout();
-    const v = this.snap(this.pos);
-    if (v !== this.value) { this._own = true; this.value = v; this._own = false; this.setForm(String(v)); this.emit('input', { value: v }); }
-    const w = this.q.w, x = this.pos * w, inst = this.px == null ? 0 : (x - this.px) / dt; this.px = x;
-    this.vx = lerp(this.vx, inst, mix(0.45));
-    const sp = Math.abs(this.vx), dir = Math.sign(this.vx) || 1, fx = level() > 0;
+    this.vx = this.v * w;
+    const sp = Math.abs(this.vx), dir = this.dir, x = clamp(this.pos, 0, 1) * w;
+    this.shape(fx);
     if (fx) {
-      this.st += (1 + Math.min(sp / 6000, 0.04) - this.st) * mix(0.45);
-      this.knob.style.transform = `scale(${this.st.toFixed(3)},${(1 / Math.sqrt(this.st)).toFixed(3)})`;
-      for (let i = 0; i < steps; i++) { this.tiltV += (clamp(-this.vx * 0.014, -16, 16) - this.tilt) * 0.22; this.tiltV *= 0.72; this.tilt += this.tiltV; }
+      for (let i = 0, n = Math.round(f); i < n; i++) { this.tiltV += (clamp(-this.vx * 0.014, -16, 16) - this.tilt) * 0.22; this.tiltV *= 0.72; this.tilt += this.tiltV; }
       this.tip.style.transform = `rotate(${this.tilt.toFixed(2)}deg)`;
     }
     const kx = this.q.l + x, ky = this.q.cy;
     this.hum.set(clamp(sp / 900, 0, 1));
     if (sp > 160 && fx) {
-      this.acc += Math.abs(inst * dt);
+      this.acc += sp * dt;
       while (this.acc > 7) {
         this.acc -= 7;
         // the plume is sized from the track: it should stand about a third of the track's width tall behind the knob
@@ -463,8 +502,8 @@ export class SkSlider extends SkElement {
       this.cool -= dt;
       if (sp > Math.min(340, Math.max(220, w * 1.25)) && this.cool <= 0) { this.cool = 1.2; moves.say('シュッ', { voice: 'swish', x: kx - dir * w * 0.2, y: ky - w * 0.42, size: clamp(w * 0.2, 26, 48), hold: 440 }); }
     } else this.cool = Math.max(0, this.cool - dt);
-    const settled = !this.drag && this.pos === this.target && sp < 4 && Math.abs(this.st - 1) < 0.004 && Math.abs(this.tilt) < 0.1 && Math.abs(this.tiltV) < 0.1 && Math.abs(this.ov) < 0.2 && Math.abs(this.ovV) < 0.2;
-    if (settled) { this.ov = 0; this.layout(); this.knob.style.transform = ''; this.tip.style.transform = ''; this.raf = 0; this.hum.stop(); SND.play('land'); return; }
+    const settled = !this.drag && Math.abs(this.target - this.pos) * w < 0.3 && sp < 3 && Math.abs(this.j.e) < 0.004 && Math.abs(this.j.v) < 0.05 && Math.abs(this.tilt) < 0.1 && Math.abs(this.tiltV) < 0.1 && Math.abs(this.ov) < 0.2 && Math.abs(this.ovV) < 2;
+    if (settled) { this.pos = this.target; this.from = null; this.thrown = false; this.ov = 0; this.layout(); this.knob.style.cssText = ''; this.tip.style.transform = ''; this.raf = 0; this.hum.stop(); SND.play('land'); return; }
     this.raf = requestAnimationFrame(t => this.loop(t));
   }
 }
@@ -478,7 +517,7 @@ export class SkInput extends SkElement {
   static delegatesFocus = true;
   static styles = css`
 :host{display:inline-block;vertical-align:middle;width:240px}
-.lbl{display:block;margin:0 0 6px 2px;font:italic 700 13px/1.2 var(--sk-font)}
+.lbl{display:block;margin:0 0 6px 2px;font:400 15px/1.2 var(--sk-font-head)}
 .lbl:empty{display:none}
 .lbl{transition:translate var(--sk-spring-t) var(--sk-spring),color .1s;width:max-content}
 :host(:focus-within) .lbl{translate:5px -2px;color:var(--sk-violet)}
@@ -488,9 +527,9 @@ input:focus-visible,textarea:focus-visible{outline:none}
 .clr{display:none;flex:none;border:0;background:var(--sk-ink);color:var(--sk-surface);width:20px;height:20px;border-radius:50%;padding:0;font-size:8px;line-height:0;cursor:pointer;place-items:center}
 :host([clearable][data-has]) .clr{display:grid}
 :host([invalid]) .field{border-color:var(--sk-pink);box-shadow:var(--sk-sh) var(--sk-sh) 0 var(--sk-pink)}
-input,textarea{flex:1;min-width:0;border:0;outline:0;background:none;color:inherit;font:500 16px/1.4 var(--sk-font);padding:9px 0;resize:vertical}
+input,textarea{flex:1;min-width:0;border:0;outline:0;background:none;color:inherit;font:700 16px/1.4 var(--sk-font);padding:9px 0;resize:vertical}
 ::placeholder{color:var(--sk-muted);opacity:1}
-.hint{margin:6px 0 0 2px;font:500 12px/1.3 var(--sk-font);color:var(--sk-muted)}
+.hint{margin:6px 0 0 2px;font:700 12px/1.3 var(--sk-font);color:var(--sk-muted)}
 .hint:empty{display:none}
 :host([invalid]) .hint{color:var(--sk-pink);font-weight:700}`;
   static template = `<label class="lbl" for="c" part="label"></label><div class="field box" part="base"><slot name="prefix"></slot><input id="c" part="input"><button class="clr press" tabindex="-1" aria-label="clear">${X_ICON}</button><slot name="suffix"></slot></div><div class="hint" part="hint"></div>`;
@@ -506,8 +545,6 @@ input,textarea{flex:1;min-width:0;border:0;outline:0;background:none;color:inher
     });
     c.addEventListener('focus', () => {
       if (!level()) return;
-      const q = rectOf(f);
-      FX.ticks({ x: q.l + 2, y: q.t - 2, angle: -2.36, len: 8, n: 2, life: 0.3 }); FX.ticks({ x: q.r - 2, y: q.t - 2, angle: -0.78, len: 8, n: 2, life: 0.3 });
       SND.play('tap');
     });
     c.addEventListener('input', () => {
@@ -519,7 +556,7 @@ input,textarea{flex:1;min-width:0;border:0;outline:0;background:none;color:inher
         if (!measure) measure = document.createElement('canvas').getContext('2d');
         measure.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
         const line = c.value.slice(c.value.lastIndexOf('\n') + 1), x = q.l + Math.min(q.w - 4, measure.measureText(c.type === 'password' ? '•'.repeat(line.length) : line).width);
-        FX.ticks({ x: x + 2, y: c.tagName === 'TEXTAREA' ? q.b - 12 : q.cy - 9, angle: -1.2, len: 6, n: 2, dist: 1, life: 0.2, color: FX.C.violet });
+        FX.puff({ x: x + 3, y: c.tagName === 'TEXTAREA' ? q.b - 10 : q.cy + 6, r: 3.2, n: 2, vx: 14, vy: -26, life: 0.3, lw: 1.3 });   // a little dust kicked up at the caret
       }
       this.emit('input', { value: c.value });
     });
@@ -552,7 +589,7 @@ input,textarea{flex:1;min-width:0;border:0;outline:0;background:none;color:inher
     const q = rectOf(this.field);
     anim(this.field, 'nope');
     moves.say('ブブッ', { voice: 'rumble', x: q.r - 30, y: q.t - 22, size: 20, hold: 240 });
-    FX.arcs({ x: q.l - 8, y: q.cy, dir: -1, n: 3 }); FX.arcs({ x: q.r + 8, y: q.cy, dir: 1, n: 3 });
+    FX.arcs({ el: this.field });   // it shakes its head: ghosts of it either side, and motion strokes
   }
   focus() { this.ctl.focus(); }
 }
@@ -575,9 +612,9 @@ export class SkSelect extends SkElement {
 .chev{transition:rotate .16s cubic-bezier(.3,1.8,.5,1)}
 :host([data-open]) .chev{rotate:180deg}
 .pop{padding:5px;--sk-sh:4px;max-height:240px;overflow:auto}
-.opt{position:relative;padding:8px 10px;border-radius:8px;font:600 15px/1.2 var(--sk-font);cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.opt{position:relative;padding:8px 10px;border-radius:8px;font:700 15px/1.2 var(--sk-font);cursor:pointer;display:flex;justify-content:space-between;gap:8px}
 .hl{position:absolute;left:5px;right:5px;top:0;height:0;border-radius:8px;background:color-mix(in srgb,var(--sk-lav) 55%,transparent);transition:translate var(--sk-snap-t) var(--sk-snap),height var(--sk-snap-t) var(--sk-snap)}
-.opt[aria-selected=true]{font-style:italic;font-weight:800}
+.opt[aria-selected=true]{font-family:var(--sk-font-head);font-weight:400}
 .opt[aria-selected=true]::after{content:"✓";color:var(--sk-pink)}
 .ph{color:var(--sk-muted)}${ROLL_CSS}`;
   static template = `<button class="trig box press" aria-haspopup="listbox" part="base"><span class="roll"><b></b></span>${CHEVRON}</button><div class="pop float box" role="listbox" hidden part="popup"></div>`;
@@ -639,7 +676,6 @@ export class SkSelect extends SkElement {
     this.txt.lastElementChild.classList.remove('ph'); roll(this.txt, o.label, dir);
     this.txt.lastElementChild.classList.remove('ph');
     moves.say('ピッ', { voice: 'click', x: q.r - 16, y: q.t - 20, size: 18, enter: 'whole', hold: 200, exitMs: 50 });
-    FX.ticks({ x: q.r - 16, y: q.t - 4, angle: -0.9, len: 8, n: 2, life: 0.3 });
     this.emit('change', { value: v });
   }
 }
@@ -656,7 +692,7 @@ button{width:36px;height:36px;padding:0;border-radius:11px;cursor:pointer;displa
 button svg{width:16px;height:16px;display:block}
 button path{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round}
 button:active{translate:2px 2px;box-shadow:1px 1px 0 var(--sk-lav)}
-.val{min-width:52px;height:44px;padding:0 8px 2px;border-radius:11px;display:grid;place-items:center;font:italic 900 24px/1 var(--sk-font);--sk-sh:0px;box-shadow:none}${ROLL_CSS}`;
+.val{min-width:52px;height:44px;padding:0 8px 2px;border-radius:11px;display:grid;place-items:center;font:400 27.5px/1 var(--sk-font-head);--sk-sh:0px;box-shadow:none}${ROLL_CSS}`;
   static template = `<div class="w" role="group" part="base"><button class="box press" data-d="-1" aria-label="decrease"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15"/></svg></button><div class="val box roll" aria-live="polite"><b></b></div><button class="box press" data-d="1" aria-label="increase"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15M12 4.5v15"/></svg></button></div>`;
   setup() {
     this.val = this.$('.val');
@@ -680,14 +716,13 @@ button:active{translate:2px 2px;box-shadow:1px 1px 0 var(--sk-lav)}
     if (nn < this.min || nn > this.max) {
       shake(this, 6, 260);
       moves.say('ガッ', { voice: 'impact', x: q.cx + d * 44, y: q.t - 30, size: 34, rot: d > 0 ? 4 : -12, hold: 360 });
-      FX.arcs({ x: q.l - 52, y: q.cy, dir: -1, n: 3 }); FX.arcs({ x: q.r + 52, y: q.cy, dir: 1, n: 3 });
+      FX.arcs({ box: rectOf(this) });   // it knocks on its limit: motion strokes off its ends (no ghosts: they would cross the buttons beside the number)
       return false;
     }
     this._own = true; this.value = nn; this._own = false;
     roll(this.val, nn, d); SND.play('tick', { f: d > 0 ? 1500 : 1000 }); anim(this.val, 'squish');
     if (d > 0) {
       moves.say('ポン!', { voice: 'pop', x: q.cx + 30, y: q.t - 20, size: 18, hold: 180 });
-      FX.ticks({ x: q.cx, y: q.t - 4, angle: -Math.PI / 2, len: 6, n: 2, life: 0.3 });
     } else {
       moves.say('スッ', { voice: 'swish', x: q.cx - 22, y: q.t - 20, size: 18, hold: 180 });
       FX.lines({ x: q.cx, y: q.b + 6, angle: Math.PI / 2, n: 3, len: 20, spread: 34, dist: 16, life: 0.28 });
@@ -739,7 +774,6 @@ button.on path{fill:var(--sk-pink)}`;
       for (let k = from; k < target; k++) this.at((k - from) * 70, () => {
         const x = stars[k], q = rectOf(x);
         x.classList.add('on'); SND.play('note', { k: Math.min(k, 4) }); anim(x, 'pulse');
-        FX.ticks({ x: q.cx, y: q.t, angle: -Math.PI / 2, len: 8, life: 0.3 });
         FX.sticker({ shape: 'star', x: q.cx, y: q.cy, vx: rnd(-70, 70), vy: -rnd(160, 240), size: 4.5, fill: FX.C.fxw, stroke: FX.C.fxo, life: 0.6 });
       });
       this.at((target - from) * 70 + 50, () => {
@@ -764,7 +798,7 @@ export class SkOtp extends SkElement {
   static styles = css`
 :host{display:inline-flex;vertical-align:middle}
 .w{display:inline-flex;gap:8px}
-input{width:40px;height:48px;padding:0;text-align:center;border-radius:11px;font:italic 900 22px/1 var(--sk-font);color:inherit;--sk-sh:4px;caret-color:var(--sk-pink)}
+input{width:40px;height:48px;padding:0;text-align:center;border-radius:11px;font:400 25.5px/1 var(--sk-font-head);color:inherit;--sk-sh:4px;caret-color:var(--sk-pink)}
 input:focus{outline:0;translate:-2px -2px;box-shadow:6px 6px 0 var(--sk-peri)}`;
   static template = `<div class="w" part="base"></div>`;
   setup() {
@@ -772,7 +806,7 @@ input:focus{outline:0;translate:-2px -2px;box-shadow:6px 6px 0 var(--sk-peri)}`;
     this.w.addEventListener('input', e => {
       const i = this.cells.indexOf(e.target), c = e.target;
       c.value = c.value.slice(-1);
-      if (c.value) { anim(c, 'pulse'); SND.play('key'); const q = rectOf(c); FX.ticks({ x: q.cx, y: q.t - 3, angle: -Math.PI / 2, len: 7, n: 2, life: 0.25 }); if (this.cells[i + 1]) this.cells[i + 1].focus(); }
+      if (c.value) { anim(c, 'pulse'); SND.play('key'); if (this.cells[i + 1]) this.cells[i + 1].focus(); }
       this.commit();
     });
     this.w.addEventListener('keydown', e => {
@@ -795,7 +829,7 @@ input:focus{outline:0;translate:-2px -2px;box-shadow:6px 6px 0 var(--sk-peri)}`;
   /* wrong code: shake, buzz, clear and refocus */
   reject() {
     const q = rectOf(this.w);
-    anim(this.w, 'nope'); moves.say('ブブッ', { voice: 'rumble', x: q.r - 10, y: q.t - 22, size: 20, hold: 220 });
+    anim(this.w, 'nope'); FX.arcs({ el: this.w }); moves.say('ブブッ', { voice: 'rumble', x: q.r - 10, y: q.t - 22, size: 20, hold: 220 });
     this.cells.forEach(c => { c.value = ''; }); this._done = null; this.commit(); this.cells[0].focus();
   }
   commit() {

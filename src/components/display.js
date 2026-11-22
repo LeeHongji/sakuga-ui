@@ -12,8 +12,8 @@ export class SkCard extends SkElement {
 :host([tilt]) .c{transform:rotateX(calc(var(--ry,0)*1deg)) rotateY(calc(var(--rx,0)*1deg));transition:transform var(--sk-spring-t) var(--sk-spring),translate .08s steps(2),box-shadow .08s steps(2)}
 :host([interactive]) .c{cursor:pointer}
 :host([interactive]) .c:hover{translate:-2px -2px;box-shadow:calc(var(--sk-sh) + 2px) calc(var(--sk-sh) + 2px) 0 var(--sk-peri)}
-.h{padding:12px 16px 0;font:italic 800 18px/1.25 var(--sk-font)}
-.b{padding:10px 16px 16px;font:500 15px/1.5 var(--sk-font);flex:1}
+.h{padding:12px 16px 0;font:400 20.5px/1.25 var(--sk-font-head)}
+.b{padding:10px 16px 16px;font:700 15px/1.5 var(--sk-font);flex:1}
 .f{padding:0 16px 16px;display:flex;gap:10px;align-items:center}
 .m ::slotted(*){display:block;width:100%;border-bottom:var(--sk-bw) solid var(--sk-ink)}
 .h:not(:has(::slotted(*))),.f:not(:has(::slotted(*))){display:none}`;
@@ -40,7 +40,7 @@ export class SkAvatar extends SkElement {
   static styles = css`
 :host{display:inline-block;vertical-align:middle;position:relative}
 :host(:hover) .a{rotate:-8deg;scale:1.1}
-.a{transition:rotate var(--sk-bounce-t) var(--sk-bounce),scale var(--sk-bounce-t) var(--sk-bounce);display:grid;place-items:center;border:var(--sk-bw) solid var(--sk-ink);border-radius:50%;overflow:hidden;padding-bottom:.05em;font:italic 800 1em/1 var(--sk-font);color:var(--sk-ink);box-shadow:3px 3px 0 var(--sk-lav)}
+.a{transition:rotate var(--sk-bounce-t) var(--sk-bounce),scale var(--sk-bounce-t) var(--sk-bounce);display:grid;place-items:center;border:var(--sk-bw) solid var(--sk-ink);border-radius:50%;overflow:hidden;padding-bottom:.05em;font:400 1.15em/1 var(--sk-font-head);color:var(--sk-ink);box-shadow:3px 3px 0 var(--sk-lav)}
 img{width:100%;height:100%;object-fit:cover}
 .s{position:absolute;right:-2px;bottom:-2px;width:30%;height:30%;min-width:10px;min-height:10px;border-radius:50%;border:2.5px solid var(--sk-ink);background:#5fd38a}
 :host([status=busy]) .s{background:var(--sk-pink)}:host([status=away]) .s{background:#ffb938}
@@ -61,7 +61,7 @@ define('sk-avatar', SkAvatar);
 export class SkDivider extends SkElement {
   static props = { variant: [String, 'line'] };
   static styles = css`
-:host{display:flex;align-items:center;gap:12px;margin:14px 0;font:italic 700 13px/1 var(--sk-font);color:var(--sk-muted)}
+:host{display:flex;align-items:center;gap:12px;margin:14px 0;font:400 15px/1 var(--sk-font-head);color:var(--sk-muted)}
 i{flex:1;height:3px;background:var(--sk-ink);border-radius:2px}
 :host([variant=dots]) i{height:8px;background:radial-gradient(var(--sk-ink) 1.6px,transparent 2px) 0 0/8px 8px}
 :host([variant=zig]) i{height:9px;background:linear-gradient(135deg,transparent 33%,var(--sk-ink) 33% 50%,transparent 50%) 0 0/12px 9px,linear-gradient(225deg,transparent 33%,var(--sk-ink) 33% 50%,transparent 50%) 0 0/12px 9px}
@@ -94,7 +94,7 @@ kbd[data-down]{translate:0 3px;box-shadow:0 0 0 var(--sk-ink);background:var(--s
   disconnected() { kbds.delete(this); }
   press(down) {
     const k = this.$('kbd'); k.toggleAttribute('data-down', down);
-    if (down) { SND.play('key'); const q = rectOf(k); FX.ticks({ x: q.cx, y: q.t - 3, angle: -Math.PI / 2, len: 6, n: 2, life: 0.22 }); }
+    if (down) SND.play('key');
   }
 }
 define('sk-kbd', SkKbd);
@@ -106,7 +106,7 @@ export class SkBubble extends SkElement {
   static styles = css`
 :host{display:inline-block;position:relative;max-width:320px;margin:0 0 16px;transition:rotate var(--sk-bounce-t) var(--sk-bounce),scale var(--sk-bounce-t) var(--sk-bounce)}
 :host(:hover){rotate:-2deg;scale:1.04}
-.b{position:relative;padding:12px 18px;border:var(--sk-bw) solid var(--sk-ink);border-radius:26px;background:var(--sk-surface);font:600 15px/1.45 var(--sk-font)}
+.b{position:relative;padding:12px 18px;border:var(--sk-bw) solid var(--sk-ink);border-radius:26px;background:var(--sk-surface);font:700 15px/1.45 var(--sk-font)}
 .b::after{content:"";position:absolute;left:26px;bottom:-11px;width:16px;height:16px;background:var(--sk-surface);border:solid var(--sk-ink);border-width:0 var(--sk-bw) var(--sk-bw) 0;transform:skewX(28deg) rotate(45deg)}
 :host([tail=right]) .b::after{left:auto;right:26px;transform:skewX(-28deg) rotate(45deg)}
 :host([tail=none]) .b::after{display:none}
@@ -114,7 +114,7 @@ svg{display:none;position:absolute;inset:-14px -18px;width:calc(100% + 36px);hei
 path{fill:var(--sk-surface);stroke:var(--sk-ink);stroke-width:var(--sk-bw);stroke-linejoin:miter;vector-effect:non-scaling-stroke}
 :host([variant=shout]){margin:14px 18px 22px}
 :host([variant=shout]) svg{display:block}
-:host([variant=shout]) .b{border-color:transparent;background:none;font-style:italic;font-weight:800}
+:host([variant=shout]) .b{border-color:transparent;background:none;font-family:var(--sk-font-head);font-weight:400}
 :host([variant=shout]) .b::after{display:none}
 :host([variant=think]) .b{border-radius:999px;border-style:solid}
 :host([variant=think]) .b::after{left:22px;bottom:-16px;width:11px;height:11px;border:var(--sk-bw) solid var(--sk-ink);border-radius:50%;transform:none;box-shadow:-12px 12px 0 -3px var(--sk-surface),-12px 12px 0 0 var(--sk-ink)}
@@ -131,7 +131,7 @@ define('sk-bubble', SkBubble);
 /* ---------------- sk-counter: a number that counts to its value on stepped frames ---------------- */
 export class SkCounter extends SkElement {
   static props = { value: [Number, 0], duration: [Number, 900], prefix: [String, ''], suffix: [String, ''], decimals: [Number, 0] };
-  static styles = css`:host{display:inline-block;font:italic 900 1em/1 var(--sk-font);font-variant-numeric:tabular-nums}`;
+  static styles = css`:host{display:inline-block;font:400 1.15em/1 var(--sk-font-head);font-variant-numeric:tabular-nums}`;
   static template = `<span part="base"></span>`;
   fmt(v) { return this.prefix + v.toLocaleString(undefined, { minimumFractionDigits: this.decimals, maximumFractionDigits: this.decimals }) + this.suffix; }
   disconnected() { cancelAnimationFrame(this.raf); }
@@ -144,7 +144,7 @@ export class SkCounter extends SkElement {
       const u = clamp((t - t0) / dur, 0, 1), f = Math.floor(u * dur / 1000 * fps);
       if (f !== last || u === 1) { last = f; this.shown = from + (to - from) * (1 - Math.pow(1 - u, 3)); el.textContent = this.fmt(u === 1 ? to : this.shown); if (u < 1) SND.play('tick', { f: 900 + 700 * u }); }
       if (u < 1) this.raf = requestAnimationFrame(tick);
-      else { this.shown = to; play(this, [{ scale: '1 1' }, { scale: '1.07 .9', offset: 0.35 }, { scale: '.97 1.04', offset: 0.7 }, { scale: '1 1' }], { duration: 200 }); const q = this.rect; FX.ticks({ x: q.r + 4, y: q.t, angle: -0.8, len: 9, life: 0.3 }); SND.play('pop'); }
+      else { this.shown = to; play(this, [{ scale: '1 1' }, { scale: '1.07 .9', offset: 0.35 }, { scale: '.97 1.04', offset: 0.7 }, { scale: '1 1' }], { duration: 200 }); SND.play('pop'); }
     };
     this.raf = requestAnimationFrame(tick);
   }
@@ -160,17 +160,17 @@ export class SkCalendar extends SkElement {
 :host{display:inline-block;vertical-align:middle}
 .c{padding:12px;width:286px}
 .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.h b{font:italic 800 16px/1 var(--sk-font)}
-.h button{width:30px;height:30px;border:var(--sk-bw) solid var(--sk-ink);border-radius:8px;background:var(--sk-surface);font:900 16px/1 var(--sk-font);cursor:pointer;padding:0 0 2px}
+.h b{font:400 18.5px/1 var(--sk-font-head)}
+.h button{width:30px;height:30px;border:var(--sk-bw) solid var(--sk-ink);border-radius:8px;background:var(--sk-surface);font:400 18.5px/1 var(--sk-font-head);cursor:pointer;padding:0 0 2px}
 .g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;overflow:hidden}
-.w{font:italic 700 11px/2 var(--sk-font);text-align:center;color:var(--sk-muted)}
-.d{aspect-ratio:1;border:0;background:none;border-radius:50%;font:600 13px/1 var(--sk-font);cursor:pointer;padding:0;color:inherit}
+.w{font:400 12.5px/2 var(--sk-font-head);text-align:center;color:var(--sk-muted)}
+.d{aspect-ratio:1;border:0;background:none;border-radius:50%;font:400 15px/1 var(--sk-font-head);cursor:pointer;padding:0;color:inherit}
 .d{transition:scale var(--sk-bounce-t) var(--sk-bounce)}
 .d:active{scale:.78;transition:scale 70ms}
 .d:hover{background:color-mix(in srgb,var(--sk-lav) 50%,transparent)}
 .d[data-out]{color:var(--sk-muted);opacity:.55}
 .d[data-today]{outline:2px dashed var(--sk-violet);outline-offset:-3px}
-.d[aria-selected=true]{background:var(--sk-pink);color:var(--sk-on-hot);font-style:italic;font-weight:900;box-shadow:inset 0 0 0 2.5px var(--sk-ink)}`;
+.d[aria-selected=true]{background:var(--sk-pink);color:var(--sk-on-hot);font-family:var(--sk-font-head);font-weight:400;box-shadow:inset 0 0 0 2.5px var(--sk-ink)}`;
   static template = `<div class="c box" part="base"><div class="h"><button class="press" data-m="-1" aria-label="previous month">‹</button><b></b><button class="press" data-m="1" aria-label="next month">›</button></div><div class="g wk"></div><div class="g days" role="grid"></div></div>`;
   setup() {
     this.days = this.$('.days');
@@ -197,7 +197,7 @@ export class SkCalendar extends SkElement {
     this.value = s;
     if (s.slice(0, 7) !== `${this.view.getFullYear()}-${String(this.view.getMonth() + 1).padStart(2, '0')}`) this.month = s.slice(0, 7);
     const b = this.days.querySelector(`[data-d="${s}"]`);
-    if (b) { const q = rectOf(b); anim(b, 'land'); SND.play('stamp'); FX.ticks({ x: q.cx, y: q.t - 2, angle: -Math.PI / 2, len: 7, life: 0.3 }); moves.dust(q.cx, q.b, 4, 10); }
+    if (b) { const q = rectOf(b); anim(b, 'land'); SND.play('stamp'); moves.dust(q.cx, q.b, 4, 10); }
     this.emit('change', { value: s });
   }
 }

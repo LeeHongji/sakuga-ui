@@ -1,4 +1,5 @@
 // Small shared helpers. Nothing here touches the DOM at import time.
+import { enter, leave } from './config.js';
 export const TAU = Math.PI * 2;
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const lerp = (a, b, t) => a + (b - a) * t;
@@ -23,10 +24,10 @@ export function rectOf(el) {
   const b = el.getBoundingClientRect(), x = scrollX, y = scrollY;
   return { l: b.left + x, t: b.top + y, r: b.right + x, b: b.bottom + y, w: b.width, h: b.height, cx: b.left + x + b.width / 2, cy: b.top + y + b.height / 2 };
 }
-// a cancellable list of timeouts: at(ms, fn), at.clear()
-export function timeline() {
+// a cancellable list of timeouts: at(ms, fn), at.clear(). With a host, each callback runs under that element's effect region
+export function timeline(host) {
   let ts = [];
-  const at = (ms, fn) => { ts.push(setTimeout(fn, ms)); };
+  const at = (ms, fn) => { ts.push(setTimeout(host ? () => { const was = enter(host); try { fn(); } finally { leave(was); } } : fn, ms)); };
   at.clear = () => { ts.forEach(clearTimeout); ts = []; };
   return at;
 }

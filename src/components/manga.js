@@ -39,7 +39,7 @@ function seal(root, text, left, top) {
   const s = document.createElement('span');
   s.className = 'seal'; s.textContent = text; s.setAttribute('aria-hidden', 'true'); s.style.left = left; s.style.top = top;
   root.appendChild(s);
-  play(s, [{ opacity: 0, transform: 'scale(2.2)' }, { opacity: 1, transform: 'scale(.86)', offset: 0.55 }, { opacity: 1, transform: 'scale(1.04)', offset: 0.8 }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.7,.3,1)' });
+  play(s, [{ transform: 'scale(2.2)' }, { transform: 'scale(.86)', offset: 0.55 }, { transform: 'scale(1.04)', offset: 0.8 }, { transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.7,.3,1)' });
   SND.play('stamp');
   return s;
 }
@@ -47,7 +47,7 @@ function seal(root, text, left, top) {
 /* ---------------- sk-koma + sk-koma-panel: tabs laid out as manga panels ---------------- */
 export class SkKomaPanel extends SkElement {
   static props = { value: String, label: String, count: String, active: Boolean };
-  static styles = css`:host{display:none;box-sizing:border-box;height:100%;padding:16px 20px;overflow:hidden;font:500 15px/1.5 var(--sk-font)}:host([active]){display:block}`;
+  static styles = css`:host{display:none;box-sizing:border-box;height:100%;padding:16px 20px;overflow:hidden;font:700 15px/1.5 var(--sk-font)}:host([active]){display:block}`;
   setup() { this.setAttribute('role', 'tabpanel'); }
   sync(name) { if ((name === 'label' || name === 'count') && this.parentElement && this.parentElement.build) this.parentElement.build(); }
 }
@@ -63,8 +63,8 @@ export class SkKoma extends SkElement {
 .bg{position:absolute;inset:0;background:${TONE('lav')}}
 .pn[aria-selected=true] .bg{opacity:.55;background:repeating-conic-gradient(from 0deg at 100% 100%,transparent 0 2.4deg,color-mix(in srgb,var(--sk-lav) 70%,transparent) 2.4deg 3deg);-webkit-mask:radial-gradient(circle at 100% 100%,#000 0,transparent 70%);mask:radial-gradient(circle at 100% 100%,#000 0,transparent 70%)}
 .strip{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:translate var(--sk-bounce-t) var(--sk-bounce)}
-.strip b{writing-mode:vertical-rl;font:italic 800 19px/1 var(--sk-font);letter-spacing:.1em;white-space:nowrap}
-.strip i{font:italic 900 15px/1 var(--sk-font);color:var(--sk-violet)}
+.strip b{writing-mode:vertical-rl;font:400 22px/1 var(--sk-font-head);letter-spacing:.1em;white-space:nowrap}
+.strip i{font:400 17px/1 var(--sk-font-head);color:var(--sk-violet)}
 @media (hover:hover){.pn:hover .strip{translate:0 -3px}.pn:hover .strip b{color:var(--sk-violet)}}
 .pn:focus-visible{outline:none}.pn:focus-visible .strip b{color:var(--sk-pink)}
 .view{position:absolute;top:0;bottom:0;overflow:hidden}
@@ -141,7 +141,6 @@ path{fill:none;stroke:var(--sk-ink);stroke-width:var(--sk-bw);stroke-linejoin:ro
     this.value = ps[i].value || String(i);
     if (this.cur !== i) { this.cur = i; this.sync(); }
     play(this.body, [{ transform: 'translateX(-14px)' }, { transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.9,.3,1.2)' });
-    const q = this.rect; FX.ticks({ x: q.l + (this.gut[i - 1] ? this.gut[i - 1].t : 0) + 30, y: q.t - 5, angle: -Math.PI / 2, len: 9, life: 0.3 });
     SND.play('flip');
     if (user) this.emit('change', { value: this.value });
   }
@@ -305,10 +304,10 @@ svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-ev
 :host(:focus-within) .fo{opacity:1}
 .ink{stroke:var(--sk-ink);stroke-linejoin:round}.paper{fill:var(--sk-surface)}
 .bub circle{fill:var(--sk-surface);stroke:var(--sk-ink);stroke-width:var(--sk-bw)}
-input{position:absolute;left:12%;width:76%;top:50%;height:36px;margin-top:-18px;border:0;outline:0;background:none;padding:0;text-align:center;font:600 17px/36px var(--sk-font);color:var(--sk-ink);transition:font-size .15s}
+input{position:absolute;left:12%;width:76%;top:50%;height:36px;margin-top:-18px;border:0;outline:0;background:none;padding:0;text-align:center;font:700 17px/36px var(--sk-font);color:var(--sk-ink);transition:font-size .15s}
 input:focus-visible{outline:none}
 input::placeholder{color:color-mix(in srgb,var(--sk-muted) 65%,transparent)}
-:host([tone=shout]) input{font-style:italic;font-weight:800;font-size:20px}
+:host([tone=shout]) input{font-family:var(--sk-font-head);font-weight:400;font-size:20px}
 :host([tone=think]) input,:host([tone=sing]) input{color:var(--sk-violet)}
 :host([tone=hush]) input{color:var(--sk-muted);font-size:14.5px;letter-spacing:.05em}
 :host([tone=tremble]) input{animation:sh .12s steps(2) infinite}
@@ -365,7 +364,7 @@ input::placeholder{color:color-mix(in srgb,var(--sk-muted) 65%,transparent)}
   /* send what is written: fires `send` with { value, tone }, then empties the field unless the event is cancelled */
   send() {
     const value = this.value.trim();
-    if (!value) { anim(this, 'nope'); SND.play('buzz'); return false; }
+    if (!value) { anim(this, 'nope'); FX.arcs({ el: this }); SND.play('buzz'); return false; }
     if (this.emit('send', { value, tone: this.tone })) { this.clear(); this.m.Z.kick(-3); SND.play('pop'); }
     return true;
   }
@@ -463,10 +462,10 @@ export class SkFlash extends SkElement {
 svg{position:absolute;inset:0;width:100%;height:100%}
 .bk{fill:var(--sk-ink)}.bu{fill:var(--sk-surface)}
 .q{position:absolute;left:0;right:0;top:40%;translate:0 -50%;padding:0 22%;text-align:center}
-.q b{display:block;font:italic 800 19px/1.25 var(--sk-font)}
-.q span{display:block;margin-top:3px;font:500 13px/1.4 var(--sk-font);color:var(--sk-muted)}
+.q b{display:block;font:400 22px/1.25 var(--sk-font-head)}
+.q span{display:block;margin-top:3px;font:700 13px/1.4 var(--sk-font);color:var(--sk-muted)}
 .acts{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:14px}
-.acts button{min-width:88px;padding:8px 16px;border:var(--sk-bw) solid var(--sk-surface);border-radius:var(--sk-r);font:italic 700 15px/1 var(--sk-font);cursor:pointer}
+.acts button{min-width:88px;padding:8px 16px;border:var(--sk-bw) solid var(--sk-surface);border-radius:var(--sk-r);font:400 17px/1 var(--sk-font-head);cursor:pointer}
 .no{background:var(--sk-ink);color:var(--sk-surface)}.yes{background:var(--sk-pink);color:var(--sk-on-hot)}`;
   static template = `<slot></slot><div class="fl" role="alertdialog" aria-modal="true" part="flash"><svg aria-hidden="true"><rect class="bk" width="100%" height="100%"/><g class="bu"><path/><ellipse/></g></svg>
 <div class="q"><b part="heading"></b><span part="note"></span></div><div class="acts"><button class="no press" part="cancel"></button><button class="yes press" part="confirm"></button></div></div>`;
@@ -495,7 +494,7 @@ svg{position:absolute;inset:0;width:100%;height:100%}
     // the black floods out from where you pressed; the white burst and the question land a beat later
     play(this.fl, [{ clipPath: `circle(0px at ${this.o})` }, { clipPath: `circle(${this.far}px at ${this.o})` }], { duration: 300, easing: 'cubic-bezier(.5,0,.2,1)' });
     play(this.bu, [{ transform: 'scale(.35)' }, { transform: 'scale(.35)', offset: 0.35 }, { transform: 'scale(1.12)', offset: 0.7 }, { transform: 'scale(.97)', offset: 0.85 }, { transform: 'none' }], { duration: 520, easing: 'ease-out' });
-    play(this.q, [{ scale: '.6', opacity: 0 }, { scale: '.6', opacity: 0, offset: 0.4 }, { scale: '1.08', opacity: 1, offset: 0.75 }, { scale: '1', opacity: 1 }], { duration: 480 });
+    play(this.q, [{ scale: '0' }, { scale: '0', offset: 0.4 }, { scale: '.3', offset: 0.41 }, { scale: '1.08', offset: 0.75 }, { scale: '1' }], { duration: 480 });   // full ink from its first frame
     SND.play('doki');
     this.at(120, () => this.no.focus());
     return (this.pending = new Promise(r => { this.done = r; }));
@@ -508,7 +507,13 @@ svg{position:absolute;inset:0;width:100%;height:100%}
       const q = this.rect;
       if (this.word) sfx(this.word, { voice: 'cut', x: q.cx, y: q.t + 34, size: 52, hold: 520 });
       shake(this, 7, 260);
-      const a = play(this.fl, [{ opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0 }], { duration: 460 });
+      // the black holds while the cut lands, then collapses into a thin band along the cut and is gone: it leaves by
+      // thinning, not by fading. The band runs through the middle at the slash's angle, long enough to cross the whole
+      // panel; T0 is the half-width that just covers it, so the thinning shows from its first frame
+      const W = this.offsetWidth, H = this.offsetHeight, L = Math.hypot(W, H), th = -0.36, dx = Math.cos(th), dy = Math.sin(th);
+      const T0 = (W / 2) * Math.abs(dy) + (H / 2) * Math.abs(dx) + 2;
+      const band = t => `polygon(${[[L, t], [L, -t], [-L, -t], [-L, t]].map(([u, v]) => `${(W / 2 + u * dx - v * dy).toFixed(1)}px ${(H / 2 + u * dy + v * dx).toFixed(1)}px`).join(',')})`;
+      const a = play(this.fl, [{ clipPath: band(T0) }, { clipPath: band(T0), offset: 0.5, easing: 'cubic-bezier(.45,0,.75,.6)' }, { clipPath: band(0) }], { duration: 460 });
       a ? (a.onfinish = shut) : shut();
     } else {
       SND.play('puff');
@@ -628,7 +633,7 @@ svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .bg{fill:var(--sk-surface)}.fr{fill:none;stroke:var(--sk-ink);stroke-width:var(--sk-bw)}
 .ly{fill:none;stroke:var(--sk-ink);stroke-width:1.5;stroke-linecap:round}
 .ly path{stroke-dasharray:1;stroke-dashoffset:1}
-.lb{position:absolute;right:2px;bottom:calc(100% + 5px);font:italic 700 13px/1 var(--sk-font);color:var(--sk-muted)}
+.lb{position:absolute;right:2px;bottom:calc(100% + 5px);font:400 15px/1 var(--sk-font-head);color:var(--sk-muted)}
 ${SEAL_CSS}`;
   static template = `<svg aria-hidden="true"></svg><span class="lb" part="label"></span>`;
   setup() { this.svg = this.$('svg'); this.lb = this.$('.lb'); this.ly = []; this.W = 0; this.setAttribute('role', 'meter'); this.ro = new ResizeObserver(() => { if (this.clientWidth !== this.W) { this.build(); this.sync(null); } }); }
@@ -679,12 +684,12 @@ define('sk-hatch', SkHatch);
 export class SkKomaStep extends SkElement {
   static props = { mark: String, label: String, summary: String, state: [String, 'rough'] };
   static styles = css`
-:host{display:flex;position:relative;align-items:center;gap:12px;min-height:0;padding:0 14px 0 10px;overflow:hidden;font:500 14px/1.3 var(--sk-font);--pc:color-mix(in srgb,var(--sk-peri) 78%,var(--sk-surface))}
+:host{display:flex;position:relative;align-items:center;gap:12px;min-height:0;padding:0 14px 0 10px;overflow:hidden;font:700 14px/1.3 var(--sk-font);--pc:color-mix(in srgb,var(--sk-peri) 78%,var(--sk-surface))}
 svg{position:absolute;left:1.5px;top:1.5px;width:calc(100% - 3px);height:calc(100% - 3px);overflow:visible;pointer-events:none}
 rect{fill:none;stroke:var(--sk-ink);stroke-width:var(--sk-bw)}
 .d{display:none;stroke:var(--pc);stroke-width:1.4;transform:rotate(.35deg)}
-.n{flex:none;display:grid;place-items:center;min-width:30px;height:30px;padding:0 4px;border-radius:5px;background:var(--sk-ink);color:var(--sk-surface);font:italic 900 16px/1 var(--sk-font)}
-.t{flex:none;font:italic 800 17px/1.1 var(--sk-font)}
+.n{flex:none;display:grid;place-items:center;min-width:30px;height:30px;padding:0 4px;border-radius:5px;background:var(--sk-ink);color:var(--sk-surface);font:400 18.5px/1 var(--sk-font-head)}
+.t{flex:none;font:400 19.5px/1.1 var(--sk-font-head)}
 .b{display:flex;align-items:center;gap:10px;margin-left:auto}
 .s{display:none;margin-left:auto;padding:3px 10px;border:2px solid var(--sk-ink);border-radius:999px;background:var(--sk-surface);font:700 12.5px/1.2 var(--sk-font)}
 .s::before{content:"✓ ";color:var(--sk-pink)}
@@ -753,9 +758,9 @@ export class SkBreakout extends SkElement {
 .frame{position:absolute;inset:0;border:var(--sk-bw) solid var(--sk-ink);pointer-events:none}
 .sub{position:absolute;inset:0;clip-path:inset(var(--sk-bw));transition:clip-path .1s}
 .fig{position:absolute;left:50%;top:0;bottom:0;display:flex;align-items:flex-start;translate:-50% 0;transform-origin:50% 60%;transition:transform var(--sk-bounce-t) var(--sk-bounce)}
-.tag{position:absolute;left:10px;top:10px;z-index:2;padding:2px 9px 3px;background:var(--sk-pink);color:var(--sk-on-hot);font:italic 900 12px/1.2 var(--sk-font);letter-spacing:.06em;transform:skewX(-10deg)}
+.tag{position:absolute;left:10px;top:10px;z-index:2;padding:2px 9px 3px;background:var(--sk-pink);color:var(--sk-on-hot);font:400 14px/1.2 var(--sk-font-head);letter-spacing:.06em;transform:skewX(-10deg)}
 .tag:empty{display:none}
-.body{padding-top:12px;font:500 14px/1.45 var(--sk-font)}
+.body{padding-top:12px;font:700 14px/1.45 var(--sk-font)}
 .c:focus-visible,.c.hot{translate:-2px -4px;rotate:-1deg;box-shadow:calc(var(--sk-sh) + 3px) calc(var(--sk-sh) + 4px) 0 var(--sk-lav)}
 .c:focus-visible .bg::before,.c.hot .bg::before{opacity:1;scale:1}
 .c:focus-visible .sub,.c.hot .sub{clip-path:inset(-160px -80px var(--sk-bw) -80px)}
@@ -796,7 +801,7 @@ button{display:flex;align-items:center;gap:8px;width:100%;height:38px;padding:0 
 svg{flex:none;overflow:visible}
 text{font-weight:900;font-synthesis:none;stroke-linejoin:miter;stroke-miterlimit:2.6}:host([round]) text{stroke-linejoin:round}
 small{font-size:11.5px;color:var(--sk-muted);white-space:nowrap}:host([pressed]) small{color:var(--sk-lav)}
-.roll{margin-left:auto;padding-left:4px;font:italic 900 15px/1.2 var(--sk-font)}
+.roll{margin-left:auto;padding-left:4px;font:400 17px/1.2 var(--sk-font-head)}
 ${ROLL_CSS}`;
   static template = `<button class="press" part="base"><svg aria-hidden="true"></svg><small part="label"></small><span class="roll"><b></b></span></button>`;
   setup() { this.btn = this.$('button'); this.btn.addEventListener('click', () => this.toggle()); }

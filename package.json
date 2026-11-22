@@ -52,6 +52,7 @@
     "docs": "python3 scripts/serve.py 8823",
     "prepublishOnly": "npm run build",
     "test": "python3 _tools/site_smoke.py && python3 _tools/spring_check.py",
+    "laws": "node scripts/laws.mjs",
     "perf": "python3 _tools/perf.py",
     "audit": "python3 _tools/audit.py",
     "contrast": "python3 _tools/contrast.py",
